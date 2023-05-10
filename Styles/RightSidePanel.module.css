@@ -1,0 +1,219 @@
+.drawer {
+  width: 250px;
+  overflow-x: hidden;
+}
+/* Hidde scroll bar at bottom */
+
+.daddyContainer {
+  height: 100%;
+  background-color: #160028;
+  overflow-x: hidden;
+}
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.topContainer {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.scrollContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100%; */
+  padding: 1rem;
+  background-color: #160028;
+  color: #ffffff;
+  width: 20rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  align-self: center;
+}
+
+.description {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonEuterpe {
+  background-color: #ff890a;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.buttonEuterpe:hover {
+  background-color: #ff9728;
+}
+.buttonCassandra {
+  background-color: #23b9ff;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.buttonCassandra:hover {
+  background-color: #57caff;
+}
+.memoryField {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100px;
+  margin-bottom: 1rem;
+  border: #ffffff 1px solid;
+  outline: none;
+  background-color: #160028;
+  border-radius: 5px;
+  white-space: pre-wrap; /* Ensures newline characters are recognized */
+  word-wrap: break-word; /* Allows text to wrap to the next line */
+}
+.toggleButtonGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: white;
+  align-self: center;
+}
+/* active */
+.euterpeActive {
+  background-color: #ff890a;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  /* padding: 0.5rem 1rem; */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+/* deactivated */
+.euterpe {
+  background-color: #ff890a31;
+  border: #ff890a31 1px solid;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  /* padding: 0.5rem 1rem; */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+/* active */
+.cassandraActive {
+  background-color: #23b9ff;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  /* padding: 0.5rem 1rem; */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+/* deactivated */
+.cassandra {
+  background-color: #23b9ff31;
+  border: #23b9ff31 1px solid;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  /* padding: 0.5rem 1rem; */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.numberInput {
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  border: none;
+  border-bottom: #ffffff 1px solid;
+  outline: none;
+  background-color: #000000;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.settingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100%; */
+  padding: 1rem;
+  background-color: #000000;
+  color: #ffffff;
+  width: 20rem;
+  max-width: 100%;
+}
+.settingTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  align-self: center;
+}
+.settingDescription {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+.backdrop {
+  background-color: transparent;
+  overflow-x: hidden;
+}

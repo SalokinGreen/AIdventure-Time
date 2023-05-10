@@ -1,0 +1,30 @@
+{
+  "name": "aidventure-time",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^4.5.8",
+    "@mui/material": "^5.12.3",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "axios": "^1.4.0",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.1",
+    "libsodium-wrappers-sumo": "^0.7.11",
+    "next": "13.4.1",
+    "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "react-use": "^17.4.0",
+    "styled-components": "^5.3.10",
+    "uuidv4": "^6.2.13"
+  }
+}
