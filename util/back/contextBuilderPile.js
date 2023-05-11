@@ -1,16 +1,16 @@
-import TokenizerService from "./tokenizers/gptTokenizer";
+import Tokenizer from "./tokenizers/PileTokenizer";
 
-export default function contextBuilder(story, type, input, memory, lore) {
+export default function contextBuilderPile(story, type, input, memory, lore) {
   // reverse story
   const reversedStory = story.reverse();
   //build context
   let context = "";
   let loreContext = "";
   let tokens = 3;
-  const maxTokens = 2048;
+  const maxTokens = 4096;
   // add tokens for input
   if (input) {
-    tokens += TokenizerService.encode(input).length;
+    tokens += Tokenizer.encode(input).length;
     if (input === "action" || input === "talk") {
       tokens += 2;
     } else {
@@ -19,35 +19,29 @@ export default function contextBuilder(story, type, input, memory, lore) {
   }
   // add tokens for memory
   if (memory) {
-    tokens += TokenizerService.encode(memory).length + 1;
+    tokens += Tokenizer.encode(memory).length + 1;
   }
   // lore process
   if (lore) {
     lore.map((l) => {
       console.log(l);
-      if (tokens + TokenizerService.encode(l).length + 1 < maxTokens) {
+      if (tokens + Tokenizer.encode(l).length + 1 < maxTokens) {
         loreContext += l + "\n";
-        tokens += TokenizerService.encode(l).length + 1;
+        tokens += Tokenizer.encode(l).length + 1;
       }
     });
   }
   // Go throught the story and add it to the context
   reversedStory.forEach((story) => {
     if (story.type === "action" || story.type === "talk") {
-      if (
-        tokens + TokenizerService.encode("\n> " + story.text).length <
-        maxTokens
-      ) {
+      if (tokens + Tokenizer.encode("\n> " + story.text).length < maxTokens) {
         context = "\n> " + story.text + context;
-        tokens += TokenizerService.encode("\n> " + story.text).length;
+        tokens += Tokenizer.encode("\n> " + story.text).length;
       }
     } else {
-      if (
-        tokens + TokenizerService.encode("\n" + story.text).length <
-        maxTokens
-      ) {
+      if (tokens + Tokenizer.encode("\n" + story.text).length < maxTokens) {
         context = "\n" + story.text + context;
-        tokens += TokenizerService.encode("\n" + story.text).length;
+        tokens += Tokenizer.encode("\n" + story.text).length;
       }
     }
   });

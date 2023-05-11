@@ -11,11 +11,7 @@ export default function LoreCard({
   setActiveLore,
 }) {
   return (
-    <Card
-      sx={{ maxWidth: 345 }}
-      className={styles.card}
-      onClick={() => setActiveLore(id)}
-    >
+    <div className={styles.card} onClick={() => setActiveLore(id)}>
       {image !== "" && (
         <CardMedia
           component="img"
@@ -30,13 +26,18 @@ export default function LoreCard({
         <div className={styles.cardKeywordsArea}>
           {keywords.map((item, index) => {
             return (
-              <Chip label={item} className={styles.keyword} color="info" />
+              <Chip
+                label={item}
+                className={styles.keyword}
+                color="info"
+                key={index}
+              />
             );
           })}
         </div>
 
         <div className={styles.cardContent}>{content}</div>
       </CardContent>
-    </Card>
+    </div>
   );
 }

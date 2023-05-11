@@ -6,9 +6,11 @@ import {
   Slider,
   Drawer,
   IconButton,
+  Button,
 } from "@mui/material";
 import { IoClose } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
+import { AiFillSave } from "react-icons/ai";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import styles from "../Styles/RightSidePanel.module.css";
@@ -56,6 +58,8 @@ export default function RightSidePanel({
   setBans,
   stopSequences,
   setStopSequences,
+  savesOpen,
+  setSavesOpen,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => {
@@ -151,6 +155,18 @@ export default function RightSidePanel({
             </div>
           </div>
           <div className={styles.container}>
+            <div className={styles.title}>Saves</div>
+            <div className={styles.description}>Save your story here!</div>
+            <Button
+              className={styles.buttonSave}
+              variant="contained"
+              color={model === "euterpe-v2" ? "warning" : "info"}
+              onClick={() => setSavesOpen(true)}
+            >
+              <AiFillSave size={"3rem"} />
+            </Button>
+          </div>
+          <div className={styles.container}>
             <div className={styles.title}>Memory</div>
             <div className={styles.description}>
               Jeep everything that is important to you here!
@@ -195,6 +211,7 @@ export default function RightSidePanel({
                 Cassandra
               </ToggleButton>
             </ToggleButtonGroup>
+
             <Groupe
               title={"Bans"}
               description={"Ban words from the generated responses!"}

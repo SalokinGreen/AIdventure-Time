@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import contextBuilder from "@/util/back/contextBuilder";
+import contextBuilderPile from "@/util/back/contextBuilderPile";
 import parametersBuilderEuterpe from "@/util/back/parametersBuilderEuterpe";
+import parametersBuilderCassandra from "@/util/back/parametersBuilderCassandra";
 const parameters = {
   temperature: 0.63,
   max_length: 40,
@@ -260,29 +262,85 @@ const parameters = {
 };
 export async function POST(request) {
   const req = await request.json();
-  const input = contextBuilder(req.story, req.type, req.input, req.memory);
-  console.log(input);
-  const params = parametersBuilderEuterpe(req.parameters);
-  console.log(params);
-  const response = await axios
-    .post(
-      "https://api.novelai.net/ai/generate",
-      {
-        input,
-        parameters: params,
-        model: "euterpe-v2",
-      },
-      {
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-          authorization: `Bearer ${req.key}`,
+
+  if (req.model === "euterpe-v2") {
+    const input = contextBuilder(
+      req.story,
+      req.type,
+      req.input,
+      req.memory,
+      req.lore,
+      req.model
+    );
+    console.log(input);
+    const params = parametersBuilderEuterpe(req.parameters);
+    console.log(params);
+    const response = await axios
+      .post(
+        "https://api.novelai.net/ai/generate",
+        {
+          input,
+          parameters: params,
+          model: "euterpe-v2",
         },
-      }
-    )
-    .catch((err) => {
-      console.log(err);
-    });
-  console.log(response.data);
-  return NextResponse.json(response.data);
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            authorization: `Bearer ${req.key}`,
+          },
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(response.data);
+    return NextResponse.json(response.data.output);
+  } else {
+    const input = contextBuilderPile(
+      req.story,
+      req.type,
+      req.input,
+      req.memory,
+      req.lore,
+      req.model
+    );
+    console.log(input);
+    const params = parametersBuilderCassandra(req.parameters);
+    console.log(params);
+    const response = await axios
+      .post(
+        "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
+        {
+          prompt: input,
+          max_tokens: params.max_length,
+          min_tokens: 1,
+          temperature: params.temperature,
+          top_p: params.top_p,
+          frequency_penalty: params.repetition_penalty_frequency,
+          presence_penalty: params.repetition_penalty_presence,
+          stop: params.stop,
+          logit_bias: params.biases,
+          top_a: params.top_a,
+          repetition_penalty: params.repetition_penalty,
+          repetition_penalty_slope: params.repetition_penalty_slope,
+          repetition_penalty_range: params.repetition_penalty_range,
+          typical_p: params.typical_p,
+          tfs: params.tail_free_sampling,
+          top_k: params.top_k,
+        },
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+            authorization: `Bearer ${process.env.GOOSE_KEY}`,
+          },
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(response.data.choices[0].text);
+    return NextResponse.json(response.data.choices[0].text);
+  }
 }

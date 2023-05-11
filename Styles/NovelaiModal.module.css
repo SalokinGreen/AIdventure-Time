@@ -29,6 +29,7 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+  color: white;
 }
 
 .modalTitle {
@@ -48,6 +49,7 @@
   border-radius: 4px;
   outline: none;
   background-color: #000000;
+  color: white;
 }
 
 .errorMessage {

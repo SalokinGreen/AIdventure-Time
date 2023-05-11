@@ -15,6 +15,11 @@ export default function Lore({
   setOpen,
 }) {
   const [search, setSearch] = useState("");
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
   const handleAdd = () => {
     const newLore = [...lore];
     newLore.push({
@@ -26,10 +31,16 @@ export default function Lore({
       settings: {
         range: 10,
         priority: 1,
+        active: true,
       },
     });
     setLore(newLore);
   };
+
+  const filteredLore = lore.filter((item) =>
+    item.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Modal
       open={open}
@@ -53,10 +64,12 @@ export default function Lore({
                 type="text"
                 placeholder="Search"
                 className={styles.searchInput}
+                value={search}
+                onChange={handleSearch}
               />
             </div>
             <div className={styles.cardArea}>
-              {lore.map((item, index) => {
+              {filteredLore.map((item, index) => {
                 return (
                   <LoreCard
                     title={item.title}
@@ -70,13 +83,13 @@ export default function Lore({
                 );
               })}
             </div>
-            <Button
+            <button
               className={styles.speedDial}
               onClick={handleAdd}
               color="success"
             >
               <ImPlus />
-            </Button>
+            </button>
           </>
         )}
       </div>

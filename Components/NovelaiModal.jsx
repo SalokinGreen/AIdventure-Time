@@ -36,6 +36,7 @@ const NovelaiModal = ({ isOpen, onClose, onSubmit }) => {
           <input
             type="email"
             placeholder="Email"
+            className={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -43,6 +44,7 @@ const NovelaiModal = ({ isOpen, onClose, onSubmit }) => {
           <input
             type="password"
             placeholder="Password"
+            className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

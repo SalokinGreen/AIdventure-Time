@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField, Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import styles from "../../Styles/Lore.module.css";
-
+import Slid from "../Settings/Slid";
 export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
   const [active, setActive] = useState(null);
   const [newKeyword, setNewKeyword] = useState("");
@@ -39,7 +39,17 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
     newKeywords.splice(index, 1);
     setActive({ ...active, keywords: newKeywords });
   };
-
+  const setSetting = (key) => (value) => {
+    setActive({
+      ...active,
+      settings: { ...active.settings, [key]: value },
+    });
+  };
+  const handleDelete = () => {
+    const newLore = lore.filter((item) => item.id !== active.id);
+    setLore(newLore);
+    setActiveLore(null);
+  };
   return (
     active && (
       <div className={styles.editContainer}>
@@ -53,9 +63,9 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
             value={active.title}
             onChange={handleInputChange("title")}
           ></input>
-          <Button onClick={handleActive} className={styles.editActiveButton}>
+          <button onClick={handleActive} className={styles.editActiveButton}>
             {active.settings.active ? "Active" : "Deactivated"}
-          </Button>
+          </button>
         </div>
         <div className={styles.editContentArea}>
           <div
@@ -99,7 +109,53 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
             />
           </div>
         </div>
-        <div className={styles.settingsContainer}></div>
+        <h1 className={styles.settingsTitle}>Settings</h1>
+        <div className={styles.settingsContainer}>
+          <div className={styles.settings}>
+            <Slid
+              title="Range"
+              value={active.settings.range}
+              setValue={setSetting("range")}
+              min={1}
+              max={200}
+              step={1}
+            />
+            <Slid
+              title="Priority"
+              value={active.settings.priority}
+              setValue={setSetting("priority")}
+              min={1}
+              max={200}
+              step={1}
+            />
+          </div>
+        </div>
+        <h1 className={styles.extraTitle}>Extra</h1>
+
+        <div className={styles.extraContainer}>
+          <div className={styles.extra}>
+            <div className={styles.extraItem}>
+              <h2 className={styles.extraItemTitle}>Image</h2>
+              <input
+                type="text"
+                value={active.image}
+                onChange={handleInputChange("image")}
+                className={styles.extraItemInput}
+              />
+            </div>
+          </div>
+          <div className={styles.extra}>
+            <div className={styles.extraItem}>
+              <h2 className={styles.extraItemTitle}></h2>
+              <button
+                onClick={() => handleDelete()}
+                className={styles.deleteButton}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
         <Button onClick={() => setActiveLore(null)}>Back</Button>
       </div>
     )
