@@ -261,6 +261,7 @@ const parameters = {
   order: [2, 1, 3, 0],
 };
 export async function POST(request) {
+  let text, logprobs, verbosityValue;
   const req = await request.json();
 
   if (req.model === "euterpe-v2") {
@@ -303,11 +304,14 @@ export async function POST(request) {
       req.input,
       req.memory,
       req.lore,
-      req.model
+      req.model,
+      req.extra
     );
+    const count = input.split(">").length - 1;
     console.log(input);
-    const params = parametersBuilderCassandra(req.parameters);
-    console.log(params);
+    console.log("count: " + count);
+    const params = parametersBuilderCassandra(req.parameters, count);
+    // console.log(params);
     const response = await axios
       .post(
         "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
@@ -328,6 +332,7 @@ export async function POST(request) {
           typical_p: params.typical_p,
           tfs: params.tail_free_sampling,
           top_k: params.top_k,
+          logprobs: 10,
         },
         {
           headers: {
@@ -340,7 +345,67 @@ export async function POST(request) {
       .catch((err) => {
         console.log(err);
       });
-    console.log(response.data.choices[0].text);
-    return NextResponse.json(response.data.choices[0].text);
+    console.log("First Response: ", response.data.choices[0].text);
+    // if response.data.choices[0].text doesn't end with punctuation, run again
+    if (
+      !response.data.choices[0].text.endsWith(".") ||
+      !response.data.choices[0].text.endsWith("?") ||
+      !response.data.choices[0].text.endsWith("!") ||
+      !response.data.choices[0].text.endsWith("...") ||
+      !response.data.choices[0].text.endsWith("?!") ||
+      !response.data.choices[0].text.endsWith('."') ||
+      !response.data.choices[0].text.endsWith('?"') ||
+      !response.data.choices[0].text.endsWith('!"') ||
+      !response.data.choices[0].text.endsWith('..."')
+    ) {
+      console.log("And again!");
+      const response2 = await axios
+        .post(
+          "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
+          {
+            prompt: input + response.data.choices[0].text,
+            max_tokens: params.max_length,
+            min_tokens: 1,
+            temperature: params.temperature,
+            top_p: params.top_p,
+            frequency_penalty: params.repetition_penalty_frequency,
+            presence_penalty: params.repetition_penalty_presence,
+            stop: ['."', '?"', '!"', '..."', ".", "?", "!", "..."],
+            logit_bias: params.biases,
+            top_a: params.top_a,
+            repetition_penalty: params.repetition_penalty,
+            repetition_penalty_slope: params.repetition_penalty_slope,
+            repetition_penalty_range: params.repetition_penalty_range,
+            typical_p: params.typical_p,
+            tfs: params.tail_free_sampling,
+            top_k: params.top_k,
+            logprobs: 10,
+          },
+          {
+            headers: {
+              accept: "application/json",
+              "Content-Type": "application/json",
+              authorization: `Bearer ${process.env.GOOSE_KEY}`,
+            },
+          }
+        )
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log("Second Response: ", response2.data.choices[0].text);
+      text = response.data.choices[0].text + response2.data.choices[0].text;
+      logprobs = response2.data.choices[0].logprobs;
+    } else {
+      text = response.data.choices[0].text;
+      logprobs = response.data.choices[0].logprobs;
+    }
+    // remove the \n> if it's there
+    text = text.replace("\n>", "");
+    // get last logprob
+    verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];
+    // console.log(logprobs);
+    // console.log(verbosityValue);
+
+    return NextResponse.json({ text, verbosityValue, logprobs });
   }
 }

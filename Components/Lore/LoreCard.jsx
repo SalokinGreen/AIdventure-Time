@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardMedia, Chip } from "@mui/material";
 import styles from "../../Styles/Lore.module.css";
+import ContentEditable from "react-contenteditable";
 
 export default function LoreCard({
   image,
@@ -36,7 +37,13 @@ export default function LoreCard({
           })}
         </div>
 
-        <div className={styles.cardContent}>{content}</div>
+        {/* <div className={styles.cardContent}>{content}</div> */}
+        <ContentEditable
+          html={content}
+          disabled={true}
+          tagName="lore"
+          className={styles.cardContent}
+        />
       </CardContent>
     </div>
   );

@@ -1,11 +1,44 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
-const defaultBans = [];
+const defaultBans = ["58", "685", "29"];
 const defaultBias = [];
-export default function parametersBuilderCassandra(params) {
+function adjustLogprob(verbosity, logprob) {
+  const adjustment = -verbosity * 0.1;
+  const bias = 1.15;
+  const adjustedLogprob = -Math.exp(logprob) * 1 + adjustment + bias;
+
+  return adjustedLogprob;
+}
+
+export default function parametersBuilderCassandra(params, count) {
   let bans = {};
   let bias = {};
   let stop = [];
+  if (params.verbosity === 1) {
+    bias = {
+      198: 0.1 - count * 0.01,
+    };
+  } else if (params.verbosity === 2) {
+    bias = {
+      198: -1.5 - count * 0.01,
+    };
+  } else if (params.verbosity === 3) {
+    bias = {
+      198: -2.5 - count * 0.01,
+    };
+  } else {
+    bias = {
+      198: 0 - count * 0.01,
+    };
+  }
   // bans
+
+  // add default bans
+  if (Array.isArray(defaultBans) && defaultBans.length !== 0) {
+    defaultBans.forEach((x) => {
+      bias[x] = -100;
+    });
+  }
+  // add bans
   if (Array.isArray(params.bans) && params.bans.length !== 0) {
     params.bans.forEach((x) => {
       x.words.forEach((word) => {

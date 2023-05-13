@@ -9,6 +9,7 @@ export default function Saves({
   saveState,
   setSaves,
   loadSave,
+  newGame,
 }) {
   const saves = JSON.parse(localStorage.getItem("saves")) || [];
 
@@ -87,6 +88,14 @@ export default function Saves({
           onClick={triggerImport}
         >
           Import Save
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          className={styles.newGameButton}
+          onClick={newGame}
+        >
+          New Game
         </Button>
       </div>
     </Modal>

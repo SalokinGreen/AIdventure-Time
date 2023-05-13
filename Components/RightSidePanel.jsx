@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import {
-  SwipeableDrawer,
   ToggleButtonGroup,
   ToggleButton,
-  Slider,
   Drawer,
-  IconButton,
+  Tabs,
+  Tab,
   Button,
 } from "@mui/material";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoBody } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
 import { AiFillSave } from "react-icons/ai";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import Counter from "./Front/Counter";
 import styles from "../Styles/RightSidePanel.module.css";
 import NovelaiModal from "./NovelaiModal";
 import getNaiAccessToken from "@/util/front/getNaiAccessToken";
 import Slid from "./Settings/Slid";
 import Order from "./Settings/Order";
 import Groupe from "./Settings/Groupe";
+import HealthBar from "./Front/HealthBar";
 export default function RightSidePanel({
   openSetting,
   setOpenSetting,
@@ -60,6 +60,14 @@ export default function RightSidePanel({
   setStopSequences,
   savesOpen,
   setSavesOpen,
+  verbosity,
+  setVerbosity,
+  score,
+  highScore,
+  location,
+  setLocation,
+  health,
+  setOpenStats,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => {
@@ -67,6 +75,11 @@ export default function RightSidePanel({
   };
   const onBlur = (e) => {
     setMemory(e.target.innerText);
+  };
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
   };
   const getNovelaiAccessKey = async (email, password) => {
     const result = await getNaiAccessToken(email, password);
@@ -126,249 +139,332 @@ export default function RightSidePanel({
             onClick={() => setOpenSetting(false)}
             style={{
               position: "absolute",
-              right: 15,
-              top: 15,
+              right: 30,
+              top: 50,
               background: "none",
               border: "none",
+              color: "white",
             }}
           >
             <IoClose size={24} />
           </button>
         </div>
         <div className={styles.scrollContainer}>
-          <div className={styles.container}>
-            <div className={styles.title}>NovelAI</div>
-            <div className={styles.description}>
-              Get you NAI access key! It's stored locally, don't worry!
-            </div>
-            <div className={styles.buttonContainer}>
-              <button
-                className={
-                  model === "euterpe-v2"
-                    ? styles.buttonEuterpe
-                    : styles.buttonCassandra
-                }
-                onClick={() => setIsOpen(true)}
-              >
-                Get Access Key
-              </button>
-            </div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.title}>Saves</div>
-            <div className={styles.description}>Save your story here!</div>
-            <Button
-              className={styles.buttonSave}
-              variant="contained"
-              color={model === "euterpe-v2" ? "warning" : "info"}
-              onClick={() => setSavesOpen(true)}
-            >
-              <AiFillSave size={"3rem"} />
-            </Button>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.title}>Memory</div>
-            <div className={styles.description}>
-              Jeep everything that is important to you here!
-            </div>
-            <div
-              className={styles.memoryField}
-              contentEditable="true"
-              dangerouslySetInnerHTML={{ __html: memory }}
-              onBlur={(e) => onBlur(e)}
-              onPaste={handlePaste}
-            ></div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.title}>Settings</div>
-            <div className={styles.description}>Change the settings!</div>
-            <ToggleButtonGroup
-              className={styles.toggleButtonGroup}
-              exclusive
-              onChange={handleModelChange}
-              aria-aria-label="Model"
-            >
-              <ToggleButton
-                className={
-                  model === "euterpe-v2" ? styles.euterpeActive : styles.euterpe
-                }
-                value="euterpe-v2"
-                aria-label="euterpe"
-                onClick={() => setModel("euterpe-v2")}
-              >
-                Euterpe
-              </ToggleButton>
-              <ToggleButton
-                className={
-                  model === "cassandra"
-                    ? styles.cassandraActive
-                    : styles.cassandra
-                }
-                value="cassandra"
-                aria-label="cassandra"
-                onClick={() => setModel("cassandra")}
-              >
-                Cassandra
-              </ToggleButton>
-            </ToggleButtonGroup>
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            textColor="secondary"
+            indicatorColor="secondary"
+          >
+            <Tab label="Main" className={styles.tab} />
+            <Tab label="Settings" className={styles.tab} />
+            <Tab label="Advanced" className={styles.tab} />
+          </Tabs>
+          {/* Main */}
+          {tabValue === 0 && (
+            <>
+              <div className={styles.container}>
+                <div className={styles.container}>
+                  <Counter score={score} title="Score" />
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Health</div>
+                  <div className={styles.description}>
+                    Your health is important, take care of yourself!
+                  </div>
+                  <HealthBar health={health} />
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Location</div>
+                  <div className={styles.description}>
+                    Where are you? Physically, not phylosophically.
+                  </div>
+                  <input
+                    className={styles.locationInput}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Stats</div>
+                  <div className={styles.description}>
+                    Your stats are important, take care of yourself!
+                  </div>
+                  <Button
+                    className={styles.buttonSave}
+                    variant="contained"
+                    color={model === "euterpe-v2" ? "warning" : "info"}
+                    onClick={() => setOpenStats(true)}
+                  >
+                    <IoBody size={"3rem"} />
+                  </Button>
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Saves</div>
+                  <div className={styles.description}>
+                    Save your adventure or cry in regret! Just kidding, autosave
+                    saves your butt.
+                  </div>
+                  <Button
+                    className={styles.buttonSave}
+                    variant="contained"
+                    color={model === "euterpe-v2" ? "warning" : "info"}
+                    onClick={() => setSavesOpen(true)}
+                  >
+                    <AiFillSave size={"3rem"} />
+                  </Button>
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Memory</div>
+                  <div className={styles.description}>
+                    Jeep everything that is important to you here!
+                  </div>
+                  <div
+                    className={styles.memoryField}
+                    contentEditable="true"
+                    dangerouslySetInnerHTML={{ __html: memory }}
+                    onBlur={(e) => onBlur(e)}
+                    onPaste={handlePaste}
+                  ></div>
+                </div>
+                <div className={styles.title}>NovelAI</div>
+                <div className={styles.description}>
+                  Get your NAI access key! It's stored locally, don't worry!
+                </div>
+                <div className={styles.buttonContainer}>
+                  <button
+                    className={
+                      model === "euterpe-v2"
+                        ? styles.buttonEuterpe
+                        : styles.buttonCassandra
+                    }
+                    onClick={() => setIsOpen(true)}
+                  >
+                    Get Access Key
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+          {/* Settings */}
+          {tabValue === 1 && (
+            <>
+              <div className={styles.container}>
+                <div className={styles.title}>Settings</div>
+                <div className={styles.description}>Change the settings!</div>
+                <ToggleButtonGroup
+                  className={styles.toggleButtonGroup}
+                  exclusive
+                  onChange={handleModelChange}
+                  aria-aria-label="Model"
+                >
+                  <ToggleButton
+                    className={
+                      model === "euterpe-v2"
+                        ? styles.euterpeActive
+                        : styles.euterpe
+                    }
+                    value="euterpe-v2"
+                    aria-label="euterpe"
+                    onClick={() => setModel("euterpe-v2")}
+                  >
+                    NovelAI
+                  </ToggleButton>
+                  <ToggleButton
+                    className={
+                      model === "cassandra"
+                        ? styles.cassandraActive
+                        : styles.cassandra
+                    }
+                    value="cassandra"
+                    aria-label="cassandra"
+                    onClick={() => setModel("cassandra")}
+                  >
+                    GooseAI
+                  </ToggleButton>
+                </ToggleButtonGroup>
+                <Slid
+                  title="Verbosity"
+                  description="Make your Game Master talk more or less!"
+                  value={verbosity}
+                  setValue={setVerbosity}
+                  min={0}
+                  max={3}
+                  step={1}
+                  model={model}
+                />
+              </div>
+            </>
+          )}
+          {/* Advanced */}
+          {tabValue === 2 && (
+            <>
+              <div className={styles.container}>
+                <Slid
+                  title={"Tokens"}
+                  description={
+                    "Increase the length of the generated responses!"
+                  }
+                  value={tokens}
+                  setValue={setTokens}
+                  min={1}
+                  max={40}
+                  step={1}
+                  model={model}
+                />
 
-            <Groupe
-              title={"Bans"}
-              description={"Ban words from the generated responses!"}
-              groupe={bans}
-              setGroupe={setBans}
-              model={model}
-              bias={false}
-            />
-            <Groupe
-              title={"Biases"}
-              description={"Tell the AI what you like and don't!"}
-              groupe={biases}
-              setGroupe={setBiases}
-              model={model}
-              bias={true}
-            />
-            <Groupe
-              title={"Stop Sequences"}
-              description={"Stop the generated responses at a specific word!"}
-              groupe={stopSequences}
-              setGroupe={setStopSequences}
-              model={model}
-              bias={false}
-            />
-            <Slid
-              title={"Tokens"}
-              description={"Increase the length of the generated responses!"}
-              value={tokens}
-              setValue={setTokens}
-              min={1}
-              max={40}
-              step={1}
-              model={model}
-            />
+                <Slid
+                  title={"Temperature"}
+                  description={
+                    "The higher the value, the more random the output!"
+                  }
+                  value={temperature}
+                  setValue={setTemperature}
+                  min={0.1}
+                  max={2.5}
+                  step={0.01}
+                  model={model}
+                />
+                <Groupe
+                  title={"Bans"}
+                  description={"Ban words from the generated responses!"}
+                  groupe={bans}
+                  setGroupe={setBans}
+                  model={model}
+                  bias={false}
+                />
+                <Groupe
+                  title={"Biases"}
+                  description={"Tell the AI what you like and don't!"}
+                  groupe={biases}
+                  setGroupe={setBiases}
+                  model={model}
+                  bias={true}
+                />
+                <Groupe
+                  title={"Stop Sequences"}
+                  description={
+                    "Stop the generated responses at a specific word!"
+                  }
+                  groupe={stopSequences}
+                  setGroupe={setStopSequences}
+                  model={model}
+                  bias={false}
+                />
+                <Slid
+                  title={"Repetition Penality"}
+                  description={"Higher values make the output less repetitive."}
+                  value={repetitionP}
+                  setValue={setRepetitionP}
+                  min={1}
+                  max={8}
+                  step={0.01}
+                  model={model}
+                />
+                <Slid
+                  title={"Top P"}
+                  description={""}
+                  value={topP}
+                  setValue={setTopP}
+                  min={0.05}
+                  max={1}
+                  step={0.01}
+                  model={model}
+                />
 
-            <Slid
-              title={"Temperature"}
-              description={"The higher the value, the more random the output!"}
-              value={temperature}
-              setValue={setTemperature}
-              min={0.1}
-              max={2.5}
-              step={0.01}
-              model={model}
-            />
-            <Slid
-              title={"Repetition Penality"}
-              description={"Higher values make the output less repetitive."}
-              value={repetitionP}
-              setValue={setRepetitionP}
-              min={1}
-              max={8}
-              step={0.01}
-              model={model}
-            />
-            <Slid
-              title={"Top P"}
-              description={""}
-              value={topP}
-              setValue={setTopP}
-              min={0.05}
-              max={1}
-              step={0.01}
-              model={model}
-            />
+                <Slid
+                  title={"Top K"}
+                  description={""}
+                  value={topK}
+                  setValue={setTopK}
+                  min={1}
+                  max={300}
+                  step={1}
+                  model={model}
+                />
 
-            <Slid
-              title={"Top K"}
-              description={""}
-              value={topK}
-              setValue={setTopK}
-              min={1}
-              max={300}
-              step={1}
-              model={model}
-            />
+                <Slid
+                  title={"Tail-Free Sampeling"}
+                  description={""}
+                  value={tfs}
+                  setValue={setTfs}
+                  min={0.05}
+                  max={1}
+                  step={0.01}
+                  model={model}
+                />
 
-            <Slid
-              title={"Tail-Free Sampeling"}
-              description={""}
-              value={tfs}
-              setValue={setTfs}
-              min={0.05}
-              max={1}
-              step={0.01}
-              model={model}
-            />
+                <Slid
+                  title={"Top A"}
+                  description={""}
+                  value={topA}
+                  setValue={setTopA}
+                  min={0.05}
+                  max={1}
+                  step={0.01}
+                  model={model}
+                />
 
-            <Slid
-              title={"Top A"}
-              description={""}
-              value={topA}
-              setValue={setTopA}
-              min={0.05}
-              max={1}
-              step={0.01}
-              model={model}
-            />
-
-            <Slid
-              title={"Typical P"}
-              description={""}
-              value={typicalP}
-              setValue={setTypicalP}
-              min={0.5}
-              max={1}
-              step={0.01}
-              model={model}
-            />
-            <Order
-              model={model}
-              setOrder={setOrderItems}
-              order={orderItems}
-              title={"Order"}
-              description={"Only works for Euterpe!"}
-            />
-            <Slid
-              title={"Repetition Penality Range"}
-              description={""}
-              value={repetitionPR}
-              setValue={setRepetitionPR}
-              min={0}
-              max={2048}
-              step={1}
-              model={model}
-            />
-            <Slid
-              title={"Slope"}
-              description={""}
-              value={repetitionPS}
-              setValue={setRepetitionPS}
-              min={0}
-              max={9.9}
-              step={0.1}
-              model={model}
-            />
-            <Slid
-              title={"Presence"}
-              description={""}
-              value={presenceP}
-              setValue={setPresenceP}
-              min={0}
-              max={2}
-              step={0.05}
-              model={model}
-            />
-            <Slid
-              title={"Frequency"}
-              description={""}
-              value={frequencyP}
-              setValue={setFrequencyP}
-              min={0}
-              max={1}
-              step={0.05}
-              model={model}
-            />
-          </div>
+                <Slid
+                  title={"Typical P"}
+                  description={""}
+                  value={typicalP}
+                  setValue={setTypicalP}
+                  min={0.5}
+                  max={1}
+                  step={0.01}
+                  model={model}
+                />
+                <Order
+                  model={model}
+                  setOrder={setOrderItems}
+                  order={orderItems}
+                  title={"Order"}
+                  description={"Only works for Euterpe!"}
+                />
+                <Slid
+                  title={"Repetition Penality Range"}
+                  description={""}
+                  value={repetitionPR}
+                  setValue={setRepetitionPR}
+                  min={0}
+                  max={2048}
+                  step={1}
+                  model={model}
+                />
+                <Slid
+                  title={"Slope"}
+                  description={""}
+                  value={repetitionPS}
+                  setValue={setRepetitionPS}
+                  min={0}
+                  max={9.9}
+                  step={0.1}
+                  model={model}
+                />
+                <Slid
+                  title={"Presence"}
+                  description={""}
+                  value={presenceP}
+                  setValue={setPresenceP}
+                  min={0}
+                  max={2}
+                  step={0.05}
+                  model={model}
+                />
+                <Slid
+                  title={"Frequency"}
+                  description={""}
+                  value={frequencyP}
+                  setValue={setFrequencyP}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  model={model}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <NovelaiModal

@@ -1,15 +1,39 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
 
-export default function contextBuilderPile(story, type, input, memory, lore) {
-  // reverse story
-  const reversedStory = story.reverse();
+export default function contextBuilderPile(
+  story,
+  type,
+  input,
+  memory,
+  lore,
+  model,
+  extra
+) {
+  let reversedStory;
+  if (!story) {
+    reversedStory = [];
+  } else {
+    // reverse story
+    reversedStory = story.reverse();
+    // replace <div> with \n and </div> with "" of all lore entries
+    reversedStory = reversedStory.map((s) => {
+      return {
+        text: s.text.replace(/<div>/g, "\n").replace(/<\/div>/g, ""),
+        type: s.type,
+      };
+    });
+  }
+  console.log("extra:", extra);
   //build context
   let context = "";
   let loreContext = "";
+  let checkContext = " ";
   let tokens = 3;
-  const maxTokens = 4096;
+  const maxTokens = 2048;
   // add tokens for input
   if (input) {
+    // replace <div> with \n and </div> with "" of all lore entries
+    input = input.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
     tokens += Tokenizer.encode(input).length;
     if (input === "action" || input === "talk") {
       tokens += 2;
@@ -17,15 +41,28 @@ export default function contextBuilderPile(story, type, input, memory, lore) {
       tokens += 1;
     }
   }
+  // add check if any there
+  if (extra.check && extra.check.outcome != "") {
+    checkContext = "\n[" + extra.check.outcome + "]\n";
+    tokens += Tokenizer.encode(checkContext).length;
+  }
   // add tokens for memory
-  if (memory) {
-    tokens += Tokenizer.encode(memory).length + 1;
+  if (memory && memory !== "") {
+    // replace <div> with \n and </div> with "" of all lore entries
+    memory = memory.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
+    tokens +=
+      Tokenizer.encode(memory).length + Tokenizer.encode("\n> info\n").length;
+    memory = "\n> info\n" + memory;
   }
   // lore process
   if (lore) {
+    // replace <div> with \n and </div> with "" of all lore entries
+    lore = lore.map((l) => {
+      return l.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
+    });
     lore.map((l) => {
       console.log(l);
-      if (tokens + Tokenizer.encode(l).length + 1 < maxTokens) {
+      if (tokens + Tokenizer.encode(l).length + 1 < maxTokens / 2) {
         loreContext += l + "\n";
         tokens += Tokenizer.encode(l).length + 1;
       }
@@ -71,6 +108,8 @@ export default function contextBuilderPile(story, type, input, memory, lore) {
   if (type !== "story" && input) {
     context += "\n";
   }
+  context += checkContext;
+
   // remove all the double new lines
   context = context.replace(/\n\n/g, "\n");
   // remove double spaces

@@ -11,7 +11,7 @@ import { BsFillPlayFill } from "react-icons/bs";
 import { MdReplay } from "react-icons/md";
 import formatInput from "@/util/front/formateInput";
 import { AiFillSetting, AiFillBook } from "react-icons/ai";
-import axios from "axios";
+import formateInput from "@/util/front/formateInput";
 export default function Input({
   story,
   setStory,
@@ -41,29 +41,16 @@ export default function Input({
   };
   const handleEnter = async (e) => {
     const text = e.target.innerText;
-
+    let send = false;
     if (e.key === "Enter") {
-      e.preventDefault();
-      let eingabe = false;
-      let add = true;
       if (generating) return;
-      setGenerating(true);
-      setInput(text);
+      e.preventDefault();
       if (text.match(/[a-z0-9]/i)) {
-        eingabe = formatInput(type, text);
-        setStory((prev) => [...prev, { type, text: eingabe }]);
-        if (type !== "story") {
-          add = false;
-        }
-      }
-      // if last story item is not story, dont add to it
-      if (last !== "story" && type !== "story") {
-        add = false;
+        send = formateInput(type, text);
+        setStory((prev) => [...prev, { type, text: send }]);
       }
       e.target.innerText = "";
-      setInput("");
-      await generate(type, eingabe, add, eingabe, last);
-      setGenerating(false);
+      await generate(send, type, last);
     }
     if (e.shiftKey && e.key === "Tab") {
       e.preventDefault();
@@ -77,27 +64,30 @@ export default function Input({
     }
     // if ctrl + r
     if (e.altKey && e.key === "r") {
-      await handleRetry();
+      let newStory = [...story];
+      newStory.pop();
+      setStory(newStory);
+      await generate(false, false, last, true);
     }
   };
 
   // handle generate button
-  const handleGenerate = () => {
-    let text = false;
-    setStory((prev) => [...prev, { type, text: formatInput(type, input) }]);
-    // text is input if there are letters or numbers in it
-    if (input.match(/[a-z0-9]/i)) {
-      text = formatInput(type, input);
+  const handleGenerate = async () => {
+    if (generating) return;
+    let send = false;
+    if (input !== "" && input && input.match(/[a-z0-9]/i)) {
+      send = formateInput(type, input);
+      setStory((prev) => [...prev, { type, text: send }]);
     }
-    generate(type, text);
-    setGenerating(false);
+    setInput("");
+    await generate(send, type, last);
   };
   // handle retry button
   const handleRetry = async () => {
-    if (generating) return;
-    setGenerating(true);
-    await retry(type);
-    return setGenerating(false);
+    let newStory = [...story];
+    newStory.pop();
+    setStory(newStory);
+    await generate(false, false, last, true);
   };
   // handle paste, only text
   const handlePaste = (e) => {

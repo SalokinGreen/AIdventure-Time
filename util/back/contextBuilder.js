@@ -25,7 +25,7 @@ export default function contextBuilder(story, type, input, memory, lore) {
   if (lore) {
     lore.map((l) => {
       console.log(l);
-      if (tokens + TokenizerService.encode(l).length + 1 < maxTokens) {
+      if (tokens + TokenizerService.encode(l).length + 1 < maxTokens / 2) {
         loreContext += l + "\n";
         tokens += TokenizerService.encode(l).length + 1;
       }

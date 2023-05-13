@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Chip } from "@mui/material";
 import styles from "../../Styles/Lore.module.css";
 import Slid from "../Settings/Slid";
+import ContentEditable from "react-contenteditable";
+
 export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
   const [active, setActive] = useState(null);
   const [newKeyword, setNewKeyword] = useState("");
@@ -32,7 +34,7 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
   };
 
   const handleContentChange = (e) => {
-    setActive({ ...active, content: e.currentTarget.textContent });
+    setActive({ ...active, content: e.target.value });
   };
   const removeChip = (index) => {
     const newKeywords = [...active.keywords];
@@ -68,11 +70,12 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
           </button>
         </div>
         <div className={styles.editContentArea}>
-          <div
+          <ContentEditable
             className={styles.editContent}
-            onBlur={handleContentChange}
-            contentEditable
-            dangerouslySetInnerHTML={{ __html: active.content }}
+            html={active.content}
+            disabled={false}
+            onChange={handleContentChange}
+            tagName="loreEntry"
           />
         </div>
         <div className={styles.editKeywordsArea}>
@@ -84,6 +87,7 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
                   className={styles.keyword}
                   color="info"
                   onClick={() => removeChip(index)}
+                  key={index}
                 />
               );
             })}

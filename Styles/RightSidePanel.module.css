@@ -1,28 +1,33 @@
 .drawer {
-  width: 250px;
+  width: 320px;
+  max-width: 320px;
   overflow-x: hidden;
 }
 /* Hidde scroll bar at bottom */
 
 .daddyContainer {
   height: 100%;
+  max-width: 320px;
   background-color: #160028;
   overflow-x: hidden;
 }
 .flexContainer {
   display: flex;
   flex-direction: column;
+  max-width: 320px;
 }
 
 .topContainer {
   position: sticky;
   top: 0;
   z-index: 10;
+  max-width: 320px;
 }
 
 .scrollContainer {
   overflow-y: auto;
   overflow-x: hidden;
+  max-width: 320px;
 }
 .container {
   display: flex;
@@ -216,4 +221,24 @@
 .backdrop {
   background-color: transparent;
   overflow-x: hidden;
+}
+.tab {
+  color: white;
+}
+.locationInput {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  border: none;
+  border-bottom: #ffffff 1px solid;
+  outline: none;
+  background-color: transparent;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }

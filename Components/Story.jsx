@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { GiBroadsword, GiSpeaker, GiFountainPen } from "react-icons/gi";
 import styles from "../Styles/Story.module.css";
 import { usePrevious } from "react-use";
-export default function Story({ story, setStory, generating }) {
+export default function Story({ story, setStory, generating, setScore }) {
   // Ref for scroll
   const storyRef = useRef();
   //   handle scroll
@@ -17,6 +17,7 @@ export default function Story({ story, setStory, generating }) {
     if (prevStoryLength !== undefined && story.length > prevStoryLength) {
       handleScroll();
     }
+    setScore(story.length);
   }, [story, prevStoryLength]);
   // edit story
   const handleEdit = (e, index) => {
