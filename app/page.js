@@ -20,17 +20,35 @@ import skillCheck from "@/util/front/RPG/skillCheck";
 const defaultStats = [
   {
     name: "Strength",
+    description: "Your physical strength.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "Lift",
+      "Push",
+      "Pull",
+      "Carry",
+      "Bend",
+      "Break",
+      "Crush",
+      "Overpower",
+      "Wrestle",
+      "Strike",
+      "Smash",
+      "Shatter",
+      "Demolish",
+      "Toss",
+      "Grapple",
+      "Squeeze",
+      "Hurl",
+      "Subdue",
+    ],
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "You muster all your strength, but it's not enough to achieve the desired outcome. Your efforts leave you exhausted and disappointed, realizing that you need to further develop your raw power.",
+      failure: "You feel too weak for that, it won't work.",
 
-      success:
-        "You harness your immense strength to overcome the challenge effortlessly. With a show of force, you achieve the desired outcome, leaving no doubt about your exceptional physical power.",
+      success: "Your strength and muscles are outstanding, that will be easy.",
     },
     weapon: {
       weapon: false,
@@ -43,17 +61,37 @@ const defaultStats = [
   },
   {
     name: "Dexterity",
+    description: "Your agility and reflexes.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "Dodge",
+      "Leap",
+      "Tumble",
+      "Balance",
+      "Twist",
+      "Flip",
+      "Maneuver",
+      "Dash",
+      "Weave",
+      "Evade",
+      "Parry",
+      "Finesse",
+      "Dance",
+      "Vault",
+      "Slink",
+      "Scurry",
+      "Swoop",
+      "Dart",
+      "Crouch",
+      "Skim",
+    ],
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "Despite your best efforts, your lack of dexterity becomes evident. Your movements are clumsy and uncoordinated, leading to unintended consequences. It seems your current level of dexterity is not sufficient for this task.",
+      failure: "Your body is very slow, that's too hard for you.",
 
-      success:
-        "Your nimble and precise movements showcase your exceptional dexterity. With graceful finesse, you navigate the challenge flawlessly, leaving no doubt about your remarkable agility and precision. Your mastery of dexterity shines through.",
+      success: "You move with grace and agility, that will be easy for you.",
     },
 
     weapon: {
@@ -67,17 +105,16 @@ const defaultStats = [
   },
   {
     name: "Constitution",
+    description: "Your physical health.",
     level: 0,
     type: "primary",
     triggers: [],
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "You push your body to its limits, but your endurance wanes, and the strain becomes too much to bear. You gasp for breath, feeling your energy deplete, realizing that your current constitution falls short for this demanding task.",
+      failure: "Your body is too weak for that.",
 
-      success:
-        "Drawing upon your unwavering resilience, you push through the challenge with unwavering determination. Your sturdy constitution allows you to withstand the hardships, and you emerge triumphant, knowing that your endurance is unmatched.",
+      success: "Your body and endurance are strong, that's easy for you.",
     },
 
     weapon: {
@@ -91,17 +128,37 @@ const defaultStats = [
   },
   {
     name: "Intelligence",
+    description: "Your mental sharpness.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "Analyze",
+      "Solve",
+      "Discover",
+      "Invent",
+      "Decode",
+      "Calculate",
+      "Research",
+      "Investigate",
+      "Deduce",
+      "Unravel",
+      "Strategize",
+      "Design",
+      "Create",
+      "Decipher",
+      "Conceptualize",
+      "Synthesize",
+      "Brainstorm",
+      "Evaluate",
+      "Innovate",
+      "Formulate",
+    ],
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "Despite your best attempts to unravel the complexities of the situation, your lack of intelligence becomes evident. Your reasoning falls short, and you struggle to comprehend the intricacies. It seems your current level of intelligence is not enough to overcome this intellectual challenge.",
+      failure: "Your mind is not sharp enough for that.",
 
-      success:
-        "Your brilliant mind and vast knowledge come to the forefront. With insightful thinking and logical deductions, you unravel the complexities effortlessly, leaving no doubt about your exceptional intelligence. Your intelligence guides you flawlessly.",
+      success: "That will be easy for your sharp mind.",
     },
     weapon: {
       weapon: false,
@@ -114,17 +171,37 @@ const defaultStats = [
   },
   {
     name: "Wisdom",
+    description: "Your mental health.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "Perceive",
+      "Discern",
+      "Understand",
+      "Intuit",
+      "Foresee",
+      "Judge",
+      "Reflect",
+      "Meditate",
+      "Interpret",
+      "Enlighten",
+      "Grasp",
+      "Learn",
+      "Sense",
+      "Comprehend",
+      "Investigate",
+      "Deliberate",
+      "Gain Insight",
+      "Acquire Knowledge",
+      "Apply Experience",
+      "Drive",
+    ],
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "Despite your best efforts to analyze and interpret the situation, your lack of wisdom becomes apparent. Your judgment is clouded, and your insights fall short. It seems your current level of wisdom is not enough to navigate this complex scenario.",
+      failure: "Your mind isn't sharp enough for that.",
 
-      success:
-        "Drawing upon your keen insight and profound wisdom, you grasp the true nature of the situation. Your discerning thoughts and shrewd decisions lead you to the right path, leaving no doubt about your exceptional wisdom. Your wisdom guides you flawlessly.",
+      success: "Your wisdom will be more than enough for that.",
     },
 
     weapon: {
@@ -138,17 +215,39 @@ const defaultStats = [
   },
   {
     name: "Charisma",
+    description: "Your presence and charisma.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "Persuade",
+      "Charm",
+      "Influence",
+      "Inspire",
+      "Entice",
+      "Captivate",
+      "Convince",
+      "Enchant",
+      "Flatter",
+      "Negotiate",
+      "Connect",
+      "Engage",
+      "Empathize",
+      "Radiate",
+      "Diplomacy",
+      "Mesmerize",
+      "Allure",
+      "Coax",
+      "Enthrall",
+      "Command",
+    ],
     priority: 1,
     co: [],
     outcomes: {
       failure:
-        "Despite your best attempts at persuasion, your lack of charisma becomes evident. Your words fall flat, and your charm fails to make an impact. It seems your current level of charisma is not enough to sway others in this situation.",
+        "Your words are weak and your presence is is below noticable. That will fail.",
 
       success:
-        "Your charismatic demeanor and persuasive skills shine through. With charm and eloquence, you successfully captivate your audience, leaving no doubt about your exceptional charisma. Your words carry weight, and others are swayed by your influence.",
+        "Your words are strong and your presence is is above mersmerizing. That will succeed.",
     },
 
     weapon: {
@@ -162,6 +261,7 @@ const defaultStats = [
   },
   {
     name: "Weapon Proficiency",
+    description: "Your weapon handling.",
     level: 0,
     type: "secondary",
     triggers: [
@@ -189,11 +289,9 @@ const defaultStats = [
     priority: 10,
     co: ["strength"],
     outcomes: {
-      failure:
-        "Despite your best efforts, your lack of weapon proficiency becomes evident. Your strikes lack precision and fail to find their mark. It seems you need further training to improve your skill with weapons.",
+      failure: "Your weapon handling is very poor, that's too hard for you.",
 
-      success:
-        "Your extensive training and mastery of weapons shine through. With precise strikes and fluid movements, you demonstrate exceptional proficiency. Your foes tremble before your skill with weapons.",
+      success: "You're a master of your weapon, that will be easy for you.",
     },
 
     weapon: {
@@ -207,6 +305,7 @@ const defaultStats = [
   },
   {
     name: "Fighting",
+    description: "Your fighting skills.",
     level: 0,
     type: "secondary",
     triggers: [
@@ -230,11 +329,9 @@ const defaultStats = [
     priority: 2,
     co: ["strength"],
     outcomes: {
-      failure:
-        "Despite your best efforts in the fight, your lack of fighting skill becomes evident. Your punches lack power and your strikes are easily evaded. It seems you need further training to improve your fighting abilities.",
+      failure: "Your fighting skills are very poor, that's too hard for you.",
 
-      success:
-        "With your exceptional fighting skills, you deliver powerful punches and swift strikes. Your evasive maneuvers and timely counters make you a formidable opponent. Your proficiency in fighting is undeniable.",
+      success: "Your fighting skills are very good, that will be easy for you.",
     },
 
     weapon: {
@@ -248,25 +345,16 @@ const defaultStats = [
   },
   {
     name: "Athletics",
+    description: "Your ability to perform athletic feats.",
     level: 0,
     type: "secondary",
-    triggers: [
-      "Jump",
-      "Swim",
-      "Balance",
-      "Vault",
-      "Endure",
-      "Lift",
-      "Throw",
-      "Break",
-      "Toss",
-    ],
+    triggers: ["Jump", "Swim", "Lift", "Throw", "Break", "Toss"],
     priority: 2,
     co: ["strength"],
     outcomes: {
       failure: "You feel very weak, too weak for that.",
 
-      success: "You are very strong and that will easily succeed.",
+      success: "You are very strong, that will be easy for you.",
     },
 
     weapon: {
@@ -294,6 +382,7 @@ export default function Home() {
     setLoading(false);
   }, []);
   const [openSetting, setOpenSetting] = useState(false);
+  const [messageNumber, setMessageNumber] = useState(0);
   // AI
   const [generating, setGenerating] = useState(false);
   const [story, setStory] = useState([]);
@@ -311,7 +400,7 @@ export default function Home() {
   const [difficulty, setDifficulty] = useState(1);
   const [stats, setStats] = useState(defaultStats);
   const [health, setHealth] = useState(100);
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("Home");
   const [openStats, setOpenStats] = useState(false);
   // Lore
   const [openLore, setOpenLore] = useState(false);
@@ -433,6 +522,7 @@ export default function Home() {
         location,
         difficulty,
         stats,
+        messageNumber,
       },
     };
 
@@ -483,6 +573,7 @@ export default function Home() {
         location,
         difficulty,
         stats,
+        messageNumber,
       },
     };
 
@@ -521,35 +612,36 @@ export default function Home() {
     setLocation(save.state.location);
     setDifficulty(save.state.difficulty);
     setStats(save.state.stats);
+    setMessageNumber(save.state.messageNumber);
   };
   const newGame = () => {
     setStory([]);
     setMemory("");
     setLore([]);
     setModel("cassandra");
-    setBiases([]);
-    setBans([]);
-    setStopSequences([]);
-    setTemperature(0.5);
-    setTokens(25);
-    setTopP(1);
-    setTopK(0);
-    setTfs(0);
-    setTopA(0);
-    setTypicalP(0);
-    setRepetitionP(0);
-    setPresenceP(0);
-    setFrequencyP(0);
-    setRepetitionPS(0);
-    setRepetitionPR(0);
-    setOrderItems([
-      { name: "Nucleus", active: true, value: 2 },
-      { name: "Top-K", active: true, value: 1 },
-      { name: "Tail-Free Sampling", active: true, value: 3 },
-      { name: "Temperature", active: true, value: 0 },
-      { name: "Top-A", active: false, value: 4 },
-      { name: "Typical Sampling", active: false, value: 5 },
-    ]);
+    // setBiases([]);
+    // setBans([]);
+    // setStopSequences([]);
+    // setTemperature(0.5);
+    // setTokens(25);
+    // setTopP(1);
+    // setTopK(0);
+    // setTfs(0);
+    // setTopA(0);
+    // setTypicalP(0);
+    // setRepetitionP(0);
+    // setPresenceP(0);
+    // setFrequencyP(0);
+    // setRepetitionPS(0);
+    // setRepetitionPR(0);
+    // setOrderItems([
+    //   { name: "Nucleus", active: true, value: 2 },
+    //   { name: "Top-K", active: true, value: 1 },
+    //   { name: "Tail-Free Sampling", active: true, value: 3 },
+    //   { name: "Temperature", active: true, value: 0 },
+    //   { name: "Top-A", active: false, value: 4 },
+    //   { name: "Typical Sampling", active: false, value: 5 },
+    // ]);
     setVerbosity(2);
     setScore(0);
     setHighScore(0);
@@ -562,25 +654,34 @@ export default function Home() {
     });
     setStats(defaultStats);
     setHealth(100);
-    setLocation("home");
+    setLocation("Home");
     setDifficulty(2);
+    setMessageNumber(0);
   };
 
   // Generations
   const addOutput = (input, type, last, gen, story) => {
     if (input && type === "story") {
       // combine input and generation if both are story
-      story.push({ type, text: input + gen });
+      story.push({ type, text: input + gen, index: messageNumber });
+      setMessageNumber(messageNumber + 1);
     } else if (input) {
       // add input and generation to story
-      story.push({ type, text: input }, { type: "story", text: gen });
+      story.push(
+        { type, text: input, index: messageNumber },
+        { type: "story", text: gen, index: messageNumber + 1 }
+      );
+      setMessageNumber(messageNumber + 2);
     } else if (last === "story" && story[story.length - 1].type === "story") {
       // add generation to last story object in story array
       story[story.length - 1].text += gen;
     } else {
       // add generation to story array
-      story.push({ type: "story", text: gen });
+      story.push({ type: "story", text: gen, index: messageNumber });
+      setMessageNumber(messageNumber + 1);
     }
+    // sort story array by index
+    story.sort((a, b) => a.index - b.index);
     // add generation to story array
     setStory(story);
     // change location if last stor object has location
@@ -590,16 +691,16 @@ export default function Home() {
     }
   };
 
-  const generate = async (input, type, last, retry) => {
+  const generate = async (input, type, last, retry, story) => {
     let check = skillCheck(input, stats, difficulty, equipment, health);
-    let newStory = [...story];
+
     if (retry) {
       // remove last story object from story array
-      newStory.pop();
+      story.pop();
       // if the new last story object is an action, reroll the skill Check.
-      if (newStory[newStory.length - 1].type === "action") {
+      if (story[story.length - 1].type === "action") {
         check = skillCheck(
-          newStory[newStory.length - 1].text,
+          story[story.length - 1].text,
           stats,
           difficulty,
           equipment,
@@ -609,7 +710,7 @@ export default function Home() {
     }
     const response = await axios
       .post("/api/generate", {
-        story: newStory,
+        story,
         type,
         input,
         key: localStorage.getItem("nai_access_key"),
@@ -641,14 +742,14 @@ export default function Home() {
           check,
           location,
         },
-        lore: loreBuilder(newStory, lore, input),
+        lore: loreBuilder(story, lore, input),
         model,
       })
       .catch((err) => {
         console.log(err);
       });
     if (response.data) {
-      addOutput(input, type, last, response.data.text, newStory);
+      addOutput(input, type, last, response.data.text, story);
     }
   };
 

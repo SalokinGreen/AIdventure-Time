@@ -50,7 +50,7 @@ export default function Input({
         setStory((prev) => [...prev, { type, text: send }]);
       }
       e.target.innerText = "";
-      await generate(send, type, last);
+      await generate(send, type, last, false, story);
     }
     if (e.shiftKey && e.key === "Tab") {
       e.preventDefault();
@@ -67,7 +67,7 @@ export default function Input({
       let newStory = [...story];
       newStory.pop();
       setStory(newStory);
-      await generate(false, false, last, true);
+      await generate(false, false, last, true, story);
     }
   };
 
@@ -80,14 +80,14 @@ export default function Input({
       setStory((prev) => [...prev, { type, text: send }]);
     }
     setInput("");
-    await generate(send, type, last);
+    await generate(send, type, last, false, story);
   };
   // handle retry button
   const handleRetry = async () => {
     let newStory = [...story];
     newStory.pop();
     setStory(newStory);
-    await generate(false, false, last, true);
+    await generate(false, false, last, true, story);
   };
   // handle paste, only text
   const handlePaste = (e) => {

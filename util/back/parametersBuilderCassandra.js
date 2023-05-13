@@ -1,5 +1,5 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
-const defaultBans = ["58", "685", "29"];
+const defaultBans = ["58", "685", "29", "1875"];
 const defaultBias = [];
 function adjustLogprob(verbosity, logprob) {
   const adjustment = -verbosity * 0.1;

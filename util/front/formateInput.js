@@ -105,6 +105,18 @@ export default function formatInput(type, str) {
     if (str.includes('"!')) {
       str = str.replace('"!', "!");
     }
+    // if " ." is in the string, replace it with "."
+    if (str.includes(" .")) {
+      str = str.replace(" .", ".");
+    }
+    // if " ?" is in the string, replace it with "?"
+    if (str.includes(" ?")) {
+      str = str.replace(" ?", "?");
+    }
+    // if " !" is in the string, replace it with "!"
+    if (str.includes(" !")) {
+      str = str.replace(" !", "!");
+    }
   }
   return str;
 }

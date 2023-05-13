@@ -123,7 +123,7 @@ export default function RightSidePanel({
           setOpenSetting(false);
         }
       }}
-      onOpen={() => setOpenSetting(true)}
+      // onOpen={() => setOpenSetting(true)}
       className={styles.drawer}
       ModalProps={{
         BackdropProps: {
@@ -256,7 +256,7 @@ export default function RightSidePanel({
                   className={styles.toggleButtonGroup}
                   exclusive
                   onChange={handleModelChange}
-                  aria-aria-label="Model"
+                  // aria-aria-label="Model"
                 >
                   <ToggleButton
                     className={
@@ -321,7 +321,7 @@ export default function RightSidePanel({
                   value={temperature}
                   setValue={setTemperature}
                   min={0.1}
-                  max={2.5}
+                  max={3}
                   step={0.01}
                   model={model}
                 />
