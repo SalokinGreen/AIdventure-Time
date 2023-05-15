@@ -42,6 +42,7 @@
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
+
 .numberInput::-webkit-outer-spin-button,
 .numberInput::-webkit-inner-spin-button {
   -webkit-appearance: none;

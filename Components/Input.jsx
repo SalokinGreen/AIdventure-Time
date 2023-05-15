@@ -9,7 +9,7 @@ import {
 } from "react-icons/gi";
 import { BsFillPlayFill } from "react-icons/bs";
 import { MdReplay } from "react-icons/md";
-import formatInput from "@/util/front/formateInput";
+
 import { AiFillSetting, AiFillBook } from "react-icons/ai";
 import formateInput from "@/util/front/formateInput";
 export default function Input({
@@ -23,6 +23,7 @@ export default function Input({
   setGenerating,
   openLore,
   setOpenLore,
+  formate,
 }) {
   const [input, setInput] = useState("");
   const [type, setType] = useState("action");
@@ -46,7 +47,7 @@ export default function Input({
       if (generating) return;
       e.preventDefault();
       if (text.match(/[a-z0-9]/i)) {
-        send = formateInput(type, text);
+        send = formate ? formateInput(type, text) : text;
         setStory((prev) => [...prev, { type, text: send }]);
       }
       e.target.innerText = "";
@@ -76,7 +77,7 @@ export default function Input({
     if (generating) return;
     let send = false;
     if (input !== "" && input && input.match(/[a-z0-9]/i)) {
-      send = formateInput(type, input);
+      send = formate ? formateInput(type, text) : text;
       setStory((prev) => [...prev, { type, text: send }]);
     }
     setInput("");

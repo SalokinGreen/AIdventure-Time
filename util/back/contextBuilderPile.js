@@ -7,7 +7,8 @@ export default function contextBuilderPile(
   memory,
   lore,
   model,
-  extra
+  extra,
+  max_length
 ) {
   let reversedStory;
   if (!story) {
@@ -30,9 +31,13 @@ export default function contextBuilderPile(
   let context = "";
   let loreContext = "";
   let checkContext = "";
+  let memoryContext = "";
+  let locationContext = "";
+  let inputContext = "";
+  let newLocation = "";
   // how many tokens are and can be used
   let tokens = 3;
-  const maxTokens = 2048;
+  const maxTokens = 2048 - max_length - 25;
   // location
   let locationFound = false;
   let locationPut = false;
@@ -59,7 +64,12 @@ export default function contextBuilderPile(
     memory = memory.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
     tokens +=
       Tokenizer.encode(memory).length + Tokenizer.encode("\n> info\n").length;
-    memory = "\n> info\n" + memory;
+    memoryContext = "\n> info\n" + memory;
+  }
+  // add new location if any
+  if (extra.newLocation) {
+    newLocation = "\nLocation:";
+    tokens += Tokenizer.encode(newLocation).length;
   }
   // lore process
   if (lore) {
@@ -89,6 +99,7 @@ export default function contextBuilderPile(
         if (extra.location !== "" && index > locationRange) {
           if (story.text.includes("Location:")) {
             locationFound = true;
+          } else if (!locationFound && index > locationRange) {
             if (
               tokens +
                 Tokenizer.encode(`\nLocation: ${extra.location}`).length <
@@ -105,42 +116,44 @@ export default function contextBuilderPile(
       }
     }
   });
-  // add input
-  if (input) {
-    if (type === "action" || type === "talk") {
-      context += "\n> " + input;
-    } else {
-      context += "\n" + input;
-    }
-  }
 
   // add location if context wasn't long enough
   if (extra.location !== "" && !locationPut && !locationFound) {
     if (
-      tokens + Tokenizer.encode(`\nLocation: ${extra.location}\n`).length <
+      tokens + Tokenizer.encode(`\nLocation: ${extra.location}`).length <
       maxTokens
     ) {
       if (!context.includes("Location:")) {
-        context = `\nLocation: ${extra.location}\n` + context;
-        tokens += Tokenizer.encode(`\nLocation: ${extra.location}\n`).length;
+        locationContext = `\nLocation: ${extra.location}`;
+        tokens += Tokenizer.encode(`\nLocation: ${extra.location}`).length;
       }
     }
   }
-  context = "***\n" + context;
-  // add lore
-  if (loreContext && loreContext !== "") {
-    context = loreContext + "\n" + context;
+
+  // add input
+  if (input) {
+    if (type === "action" || type === "talk") {
+      inputContext += "\n> " + input;
+    } else {
+      inputContext += "\n" + input;
+    }
   }
-  // add memory
-  if (memory || memory !== "") {
-    context = memory + "\n" + context;
-  }
+
   // add new line if not story
   if (type !== "story" && input) {
     context += "\n";
   }
-  context += checkContext;
-  // remove first new line
+
+  // put context together
+  context =
+    "***\n" +
+    memoryContext +
+    loreContext +
+    locationContext +
+    context +
+    inputContext +
+    checkContext +
+    newLocation;
 
   if (context[0] === "\n") {
     context = context.slice(1);

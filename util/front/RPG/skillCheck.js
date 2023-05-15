@@ -46,9 +46,16 @@ function skillCheck(input, stats, difficulty, equipment, health) {
       DC = 10;
   }
 
-  // sort stats by priority
-  stats.sort((a, b) => a.priority - b.priority);
+  // sort stats by priority. 0 is the lowest priority
+  stats.sort((a, b) => b.priority - a.priority);
 
+  // if no weapon or armor, remove stats that require them
+  if (!equipment.weapon || equipment.weapon.length === 0) {
+    stats = stats.filter((x) => !x.weapon?.weapon);
+  }
+  if (!equipment.armor || equipment.armor.length === 0) {
+    stats = stats.filter((x) => !x.armor?.armor);
+  }
   // Find the first stat that matches input triggers
   const stat = stats.find((x) => checkForKeys(input, x.triggers));
 

@@ -10,6 +10,7 @@ import {
 import { IoClose, IoBody } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
 import { AiFillSave } from "react-icons/ai";
+import { BsMapFill } from "react-icons/bs";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Counter from "./Front/Counter";
 import styles from "../Styles/RightSidePanel.module.css";
@@ -19,6 +20,7 @@ import Slid from "./Settings/Slid";
 import Order from "./Settings/Order";
 import Groupe from "./Settings/Groupe";
 import HealthBar from "./Front/HealthBar";
+import Knob from "./Settings/Knob";
 export default function RightSidePanel({
   openSetting,
   setOpenSetting,
@@ -68,6 +70,11 @@ export default function RightSidePanel({
   setLocation,
   health,
   setOpenStats,
+  difficulty,
+  setDifficulty,
+  formate,
+  setFormate,
+  setOpenMap,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => {
@@ -200,6 +207,21 @@ export default function RightSidePanel({
                   </Button>
                 </div>
                 <div className={styles.container}>
+                  <div className={styles.title}>Map</div>
+                  <div className={styles.description}>
+                    Check out the map of the world!
+                  </div>
+                  <Button
+                    className={styles.buttonSave}
+                    variant="contained"
+                    color="info"
+                    onClick={() => setOpenMap(true)}
+                  >
+                    <BsMapFill size={"3rem"} />
+                  </Button>
+                </div>
+
+                <div className={styles.container}>
                   <div className={styles.title}>Saves</div>
                   <div className={styles.description}>
                     Save your adventure or cry in regret! Just kidding, autosave
@@ -227,6 +249,44 @@ export default function RightSidePanel({
                     onPaste={handlePaste}
                   ></div>
                 </div>
+              </div>
+            </>
+          )}
+          {/* Settings */}
+          {tabValue === 1 && (
+            <>
+              <div className={styles.container}>
+                <div className={styles.title}>Settings</div>
+                <div className={styles.description}>
+                  Adjust the game experience to your needs!
+                </div>
+
+                <Slid
+                  title="Verbosity"
+                  description="Make your Game Master talk more or less!"
+                  value={verbosity}
+                  setValue={setVerbosity}
+                  min={0}
+                  max={3}
+                  step={1}
+                  model={model}
+                />
+                <Slid
+                  title="Difficulty"
+                  description="What will it be? Easy, Normal, Hard or Dark Souls?"
+                  value={difficulty}
+                  setValue={setDifficulty}
+                  min={1}
+                  max={4}
+                  step={1}
+                  model={model}
+                />
+                <Knob
+                  title="Input Formating"
+                  description="Do you want your input do be formatted?"
+                  value={formate}
+                  setValue={setFormate}
+                />
                 <div className={styles.title}>NovelAI</div>
                 <div className={styles.description}>
                   Get your NAI access key! It's stored locally, don't worry!
@@ -246,12 +306,15 @@ export default function RightSidePanel({
               </div>
             </>
           )}
-          {/* Settings */}
-          {tabValue === 1 && (
+          {/* Advanced */}
+          {tabValue === 2 && (
             <>
               <div className={styles.container}>
-                <div className={styles.title}>Settings</div>
-                <div className={styles.description}>Change the settings!</div>
+                <div className={styles.title}>Advanced</div>
+                <div className={styles.description}>
+                  For the mad lads that want to go beyond the magic!
+                </div>
+
                 <ToggleButtonGroup
                   className={styles.toggleButtonGroup}
                   exclusive
@@ -283,23 +346,6 @@ export default function RightSidePanel({
                     GooseAI
                   </ToggleButton>
                 </ToggleButtonGroup>
-                <Slid
-                  title="Verbosity"
-                  description="Make your Game Master talk more or less!"
-                  value={verbosity}
-                  setValue={setVerbosity}
-                  min={0}
-                  max={3}
-                  step={1}
-                  model={model}
-                />
-              </div>
-            </>
-          )}
-          {/* Advanced */}
-          {tabValue === 2 && (
-            <>
-              <div className={styles.container}>
                 <Slid
                   title={"Tokens"}
                   description={

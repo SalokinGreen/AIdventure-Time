@@ -78,12 +78,14 @@
   border: 1px solid #1988ff;
   border-radius: 5px;
   background-color: #1988ff36;
+  min-height: 48px;
 }
 
 .talkIcon {
   border: 1px solid #1988ff;
   border-radius: 50px;
   background-color: #1988ff36;
+  min-height: 48px;
 }
 
 .storyText {
@@ -95,4 +97,19 @@
   border: 1px solid #ff00ff;
   border-radius: 50px;
   background-color: #ff00ff36;
+  min-height: 48px;
+}
+@media (max-width: 768px) {
+  .actionText,
+  .talkText,
+  .storyText {
+    max-width: 90%;
+    margin-left: 1rem;
+    margin-top: 1rem;
+  }
+  .storyIcon,
+  .talkIcon,
+  .storyIcon {
+    margin-top: 0.5rem;
+  }
 }

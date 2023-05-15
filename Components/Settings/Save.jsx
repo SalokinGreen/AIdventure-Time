@@ -1,17 +1,25 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@mui/material";
 import styles from "../../Styles/Saves.module.css";
+import db from "@/util/db";
 
-export default function Save({ save, loadSave, index, setSaves }) {
+export default function Save({ save, loadSave, setSaves }) {
   const { date } = save;
   const [name, setName] = useState(save.name);
   const nameRef = useRef(null);
-  const handleDelete = () => {
-    let saves = JSON.parse(localStorage.getItem("saves"));
-    saves = saves.filter((_, i) => i !== index);
-    localStorage.setItem("saves", JSON.stringify(saves));
-    setSaves(saves);
+
+  const handleDelete = async () => {
+    let saves = await db.getItem("saves");
+    const index = saves.findIndex(
+      (s) => s.date === save.date && s.name === save.name
+    );
+    if (index !== -1) {
+      saves.splice(index, 1);
+      await db.setItem("saves", saves);
+      setSaves(saves);
+    }
   };
+
   const handleExport = () => {
     const file = new Blob([JSON.stringify(save)], { type: "application/json" });
     const fileURL = URL.createObjectURL(file);
@@ -20,14 +28,20 @@ export default function Save({ save, loadSave, index, setSaves }) {
     link.download = `${name}.save`;
     link.click();
   };
-  const handleNameChange = () => {
+
+  const handleNameChange = async () => {
     const newName = nameRef.current.innerText;
     setName(newName);
 
-    let saves = JSON.parse(localStorage.getItem("saves"));
-    saves[index].name = newName;
-    localStorage.setItem("saves", JSON.stringify(saves));
-    setSaves(saves);
+    let saves = await db.getItem("saves");
+    const index = saves.findIndex(
+      (s) => s.date === save.date && s.name === save.name
+    ); // find the index of the save
+    if (index !== -1) {
+      saves[index].name = newName; // update the save name
+      await db.setItem("saves", saves);
+      setSaves(saves);
+    }
   };
 
   return (

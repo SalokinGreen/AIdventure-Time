@@ -3,25 +3,36 @@ import { Modal, Box } from "@mui/material";
 import Save from "./Save";
 import { Button } from "@mui/material";
 import styles from "../../Styles/Saves.module.css";
+import db from "@/util/db";
+
 export default function Saves({
   open,
   setOpen,
   saveState,
-  setSaves,
   loadSave,
   newGame,
+  saves,
+  setSaves,
 }) {
-  const saves = JSON.parse(localStorage.getItem("saves")) || [];
-
   useEffect(() => {
-    // get the saves data from local storage when component mounts
-    const savedData = localStorage.getItem("saves");
-    if (savedData) {
-      setSaves(JSON.parse(savedData));
-    }
-  }, []);
+    const fetchSaves = async () => {
+      const savedData = await db.getItem("saves");
+      if (savedData) {
+        setSaves(savedData);
+      }
+    };
+    fetchSaves();
+  }, [setSaves]);
 
-  const handleImport = async (e) => {
+  const handleDelete = async (index) => {
+    let newSaves = [...saves];
+    newSaves.splice(index, 1); // remove the save
+    await db.setItem("saves", newSaves);
+    setLocalSaves(newSaves);
+    setSaves(newSaves);
+  };
+
+  const handleImport = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -35,8 +46,9 @@ export default function Saves({
           return;
         }
         const newSaves = [...saves, parsedSave];
-        localStorage.setItem("saves", JSON.stringify(newSaves));
-        setSaves(newSaves); // This will trigger a re-render
+        await db.setItem("saves", newSaves);
+        setLocalSaves(newSaves);
+        setSaves(newSaves);
       };
       reader.readAsText(file);
     }
@@ -60,9 +72,9 @@ export default function Saves({
             <Save
               key={index}
               save={save}
-              index={index}
               setSaves={setSaves}
               loadSave={loadSave}
+              handleDelete={() => handleDelete(index)}
             />
           ))}
         </div>

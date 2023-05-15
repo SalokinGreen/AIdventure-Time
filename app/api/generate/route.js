@@ -305,7 +305,8 @@ export async function POST(request) {
       req.memory,
       req.lore,
       req.model,
-      req.extra
+      req.extra,
+      req.parameters.tokens
     );
     const count = input.split(">").length - 1;
     console.log(input);
@@ -364,7 +365,7 @@ export async function POST(request) {
           "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
           {
             prompt: input + response.data.choices[0].text,
-            max_tokens: params.max_length,
+            max_tokens: 25,
             min_tokens: 1,
             temperature: params.temperature,
             top_p: params.top_p,
@@ -399,8 +400,10 @@ export async function POST(request) {
       text = response.data.choices[0].text;
       logprobs = response.data.choices[0].logprobs;
     }
-    // remove the \n> if it's there
-    text = text.replace("\n>", "");
+    // add "Location: " to the beginning of the text if newLocation true
+    if (req.extra.newLocation) {
+      text = "Location:" + text;
+    }
     // get last logprob
     verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];
     // console.log(logprobs);

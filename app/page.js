@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Container } from "@mui/material";
+import JSZip from "jszip";
 import Story from "@/Components/Story";
 import Input from "@/Components/Input";
 import RightSidePanel from "@/Components/RightSidePanel";
@@ -17,6 +18,9 @@ import { Box } from "@mui/system";
 import checkLocation from "@/util/front/checkLocation";
 import Stats from "@/Components/Front/Stats";
 import skillCheck from "@/util/front/RPG/skillCheck";
+import checkForKeys from "@/util/front/checkForKeys";
+import Map from "@/Components/RPG/map/Map";
+import db from "@/util/db";
 const defaultStats = [
   {
     name: "Strength",
@@ -243,11 +247,10 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure:
-        "Your words are weak and your presence is is below noticable. That will fail.",
+      failure: "Your words are weak and your presence is is below noticable.",
 
       success:
-        "Your words are strong and your presence is is above mersmerizing. That will succeed.",
+        "Your words are strong and your presence is is above mersmerizing.",
     },
 
     weapon: {
@@ -348,13 +351,22 @@ const defaultStats = [
     description: "Your ability to perform athletic feats.",
     level: 0,
     type: "secondary",
-    triggers: ["Jump", "Swim", "Lift", "Throw", "Break", "Toss"],
+    triggers: [
+      "Jump",
+      "Swim",
+      "Lift",
+      "Throw",
+      "Break",
+      "Toss",
+      "smash",
+      "shatter",
+    ],
     priority: 2,
     co: ["strength"],
     outcomes: {
-      failure: "You feel very weak, too weak for that.",
+      failure: "You're too weak. That will fail.",
 
-      success: "You are very strong, that will be easy for you.",
+      success: "You're strong. That will be easy for you.",
     },
 
     weapon: {
@@ -372,21 +384,27 @@ export default function Home() {
   // Loading
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // if (localStorage.getItem("saves")) {
-    //   setSaves(JSON.parse(localStorage.getItem("saves")));
-    // }
-    const autoSave = JSON.parse(localStorage.getItem("autosave"));
-    if (autoSave) {
-      loadSave(autoSave);
-    }
-    setLoading(false);
+    console.log("Loading");
+    const loadAutoSave = async () => {
+      const autoSave = await db.getItem("autosave");
+      console.log(autoSave);
+      if (autoSave) {
+        loadSave(autoSave);
+      }
+      setLoading(false);
+    };
+
+    loadAutoSave();
   }, []);
   const [openSetting, setOpenSetting] = useState(false);
   const [messageNumber, setMessageNumber] = useState(0);
+  // Background
+  const [bgImage, setBgImage] = useState("https://i.imgur.com/11cQWuD.jpg");
   // AI
   const [generating, setGenerating] = useState(false);
   const [story, setStory] = useState([]);
   const [memory, setMemory] = useState("");
+  const [formate, setFormate] = useState(true);
   // RPG - Text-Adventure
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -402,6 +420,53 @@ export default function Home() {
   const [health, setHealth] = useState(100);
   const [location, setLocation] = useState("Home");
   const [openStats, setOpenStats] = useState(false);
+  const [newLocationArray, setNewLocationArray] = useState([
+    "look around",
+    "check map",
+    "go to",
+    "walk to",
+    "move to",
+    "travel to",
+  ]);
+  const [map, setMap] = useState([
+    [
+      {
+        id: 0,
+        name: "Home",
+        type: "tile",
+        description: "Your home.",
+        subMap: [
+          {
+            id: 0,
+            name: "Home",
+            map: [
+              [
+                {
+                  id: 0,
+                  name: "Room",
+                  type: "tile",
+                  description: "Your room.",
+                  keywords: ["room"],
+                  image: "",
+                  color: "",
+                  subMap: [[]],
+                },
+              ],
+            ],
+          },
+        ],
+        x: 0,
+        y: 0,
+        keywords: ["home", "house", "cabin", "hut", "shack", "shelter"],
+        image: "",
+        color: "",
+      },
+    ],
+  ]);
+  const [currentMap, setCurrentMap] = useState([map[0][0]]);
+  const [selectedSubMap, setSelectedSubMap] = useState(null);
+  const [openMap, setOpenMap] = useState(false);
+  const [time, setTime] = useState(0);
   // Lore
   const [openLore, setOpenLore] = useState(false);
   const [lore, setLore] = useState([]);
@@ -437,7 +502,7 @@ export default function Home() {
   ]);
   // saves
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       autoSaveState();
     }, 5000); // autosave every 5 seconds
 
@@ -480,7 +545,7 @@ export default function Home() {
     stats,
   ]);
 
-  const autoSaveState = () => {
+  const autoSaveState = async () => {
     const autoSave = {
       name: "Autosave",
       date: Date.now(),
@@ -526,11 +591,11 @@ export default function Home() {
       },
     };
 
-    localStorage.setItem("autosave", JSON.stringify(autoSave));
+    await db.setItem("autosave", autoSave);
   };
   const [saves, setSaves] = useState([]);
-  const saveState = () => {
-    let currentSaves = JSON.parse(localStorage.getItem("saves")) || [];
+  const saveState = async () => {
+    let currentSaves = (await db.getItem("saves")) || [];
 
     const newSave = {
       name: `Save ${currentSaves.length + 1}`,
@@ -578,10 +643,10 @@ export default function Home() {
     };
 
     currentSaves.push(newSave);
-    localStorage.setItem("saves", JSON.stringify(currentSaves));
+    await db.setItem("saves", currentSaves);
     setSaves(currentSaves);
   };
-  const loadSave = (save) => {
+  const loadSave = async (save) => {
     setStory(save.state.story);
     setMemory(save.state.memory);
     setLore(save.state.lore);
@@ -687,17 +752,34 @@ export default function Home() {
     // change location if last stor object has location
     if (checkLocation(story[story.length - 1].text)) {
       setLocation(checkLocation(story[story.length - 1].text));
-      console.log(checkLocation(story[story.length - 1].text));
+      generateImage(checkLocation(story[story.length - 1].text));
     }
   };
 
   const generate = async (input, type, last, retry, story) => {
     let check = skillCheck(input, stats, difficulty, equipment, health);
-
+    let newLocation = checkForKeys(input, newLocationArray);
     if (retry) {
       // remove last story object from story array
       story.pop();
       // if the new last story object is an action, reroll the skill Check.
+      if (story[story.length - 1].type === "action") {
+        console.log("text: ", story[story.length - 1].text);
+        check = skillCheck(
+          story[story.length - 1].text,
+          stats,
+          difficulty,
+          equipment,
+          health
+        );
+        // also check for new location
+        newLocation = checkForKeys(
+          story[story.length - 1].text,
+          newLocationArray
+        );
+      }
+    } else if (!input || input === "") {
+      // if last story object is an action, reroll the skill Check.
       if (story[story.length - 1].type === "action") {
         check = skillCheck(
           story[story.length - 1].text,
@@ -705,6 +787,11 @@ export default function Home() {
           difficulty,
           equipment,
           health
+        );
+        // also check for new location
+        newLocation = checkForKeys(
+          story[story.length - 1].text,
+          newLocationArray
         );
       }
     }
@@ -741,6 +828,7 @@ export default function Home() {
           inventory,
           check,
           location,
+          newLocation,
         },
         lore: loreBuilder(story, lore, input),
         model,
@@ -752,7 +840,39 @@ export default function Home() {
       addOutput(input, type, last, response.data.text, story);
     }
   };
+  const generateImage = async (location) => {
+    let error = false;
+    const response = await axios
+      .post(
+        "api/image",
+        {
+          location,
+          key: localStorage.getItem("nai_access_key"),
+        },
+        {
+          responseType: "blob",
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+        error = true;
+      });
+    if (!error && response.data) {
+      console.log(response);
+      const jszip = new JSZip();
+      const zip = await jszip.loadAsync(response.data);
+      console.log(zip);
+      if (zip.files["image_0.png"]) {
+        const imageData = await zip.file("image_0.png").async("blob");
 
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          setBgImage(reader.result); // reader.result contains the base64 data.
+        };
+        reader.readAsDataURL(imageData);
+      }
+    }
+  };
   if (loading) {
     return (
       <div className={styles.container}>
@@ -792,6 +912,7 @@ export default function Home() {
             setGenerating={setGenerating}
             openLore={openLore}
             setOpenLore={setOpenLore}
+            formate={formate}
           />
         </main>
         <RightSidePanel
@@ -850,6 +971,12 @@ export default function Home() {
           equipment={equipment}
           setEquipment={setEquipment}
           newGame={newGame}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+          formate={formate}
+          setFormate={setFormate}
+          openMap={openMap}
+          setOpenMap={setOpenMap}
         />
         <Lore
           lore={lore}
@@ -863,12 +990,24 @@ export default function Home() {
           open={savesOpen}
           setOpen={setSavesOpen}
           saveState={saveState}
+          saves={saves}
           setSaves={setSaves}
           loadSave={loadSave}
           newGame={newGame}
         />
-        {/* <Stats open={openStats} setOpen={setOpenStats} /> */}
-        <div className={styles.imageContainer}></div>
+        <Stats open={openStats} setOpen={setOpenStats} />
+        <Map
+          map={selectedSubMap ? selectedSubMap.map : map}
+          setMap={setMap}
+          open={openMap}
+          setOpen={setOpenMap}
+          selectedSubMap={selectedSubMap}
+          setSelectedSubMap={setSelectedSubMap}
+        />
+        <div
+          className={styles.imageContainer}
+          style={{ backgroundImage: `url(${bgImage})` }}
+        ></div>
       </div>
     );
   }

@@ -1,5 +1,4 @@
 .main {
-  /* center in the middle of screen horinzontaly */
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
@@ -12,9 +11,6 @@
   overflow-x: hidden;
 }
 
-/* background-size: repeat scroll 0% 0%;
-background-position: center; */
-
 .container {
   position: relative;
   width: 100%;
@@ -24,39 +20,34 @@ background-position: center; */
 }
 
 .imageContainer {
-  position: absolute; /* Positions the background-image div relative to the container */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-image: url(https://i.imgur.com/11cQWuD.jpg);
 
-  background-size: cover; /* Ensures the background image covers the entire div */
-  background-position: center; /* Centers the background image */
-  opacity: 0.5; /* Adjust the opacity to make the image darker or lighter */
-  z-index: -1; /* Positions the background-image div behind the content */
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.5s ease-in-out;
+  opacity: 2;
+  z-index: -1;
   overflow-x: hidden;
 }
 .imageContainer::before {
-  content: ""; /* Required for the pseudo-element to be generated */
-  position: absolute; /* Positions the pseudo-element relative to the imageContainer */
+  content: "";
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.6
-  ); /* Semi-transparent black overlay with 50% opacity */
-  z-index: 1; /* Positions the pseudo-element between the imageContainer's background and its content */
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
   overflow-x: hidden;
 }
 
-/* Add this style if you have content inside the imageContainer */
 .imageContainer > * {
   position: relative;
-  z-index: 2; /* Positions the content above the pseudo-element */
+  z-index: 2;
   overflow-x: hidden;
 }

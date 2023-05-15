@@ -71,9 +71,10 @@ export default function Story({ story, setStory, generating, setScore }) {
       document.execCommand("insertText", false, pastedData);
     }
   };
+  const sortedStory = story.sort((a, b) => a.messageNumber - b.messageNumber);
   return (
     <div className={styles.allContainer} ref={storyRef}>
-      {story.map((part, index) => {
+      {sortedStory.map((part, index) => {
         if (part.type === "action") {
           return (
             <div className={styles.actionContainer} key={index}>
