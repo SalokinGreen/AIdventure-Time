@@ -403,6 +403,8 @@ export async function POST(request) {
     // add "Location: " to the beginning of the text if newLocation true
     if (req.extra.newLocation) {
       text = "Location:" + text;
+    } else if (req.extra.check && !req.extra.check.result) {
+      text = req.extra.failMessage + text;
     }
     // get last logprob
     verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];

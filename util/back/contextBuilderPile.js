@@ -14,9 +14,9 @@ export default function contextBuilderPile(
   if (!story) {
     reversedStory = [];
   } else {
-    // sort story from biggest messageNumber to smallest
+    // sort story from biggest index to smallest
     reversedStory = story.sort((a, b) => {
-      return b.messageNumber - a.messageNumber;
+      return b.index - a.index;
     });
     // replace <div> with \n and </div> with "" of all lore entries
     reversedStory = reversedStory.map((s) => {
@@ -35,6 +35,7 @@ export default function contextBuilderPile(
   let locationContext = "";
   let inputContext = "";
   let newLocation = "";
+  let failureContext = "";
   // how many tokens are and can be used
   let tokens = 3;
   const maxTokens = 2048 - max_length - 25;
@@ -55,8 +56,15 @@ export default function contextBuilderPile(
   }
   // add check if any there
   if (extra.check && extra.check.outcome != "") {
-    checkContext = "\n[" + extra.check.outcome + "]\n";
+    checkContext = "\n" + extra.check.outcome;
     tokens += Tokenizer.encode(checkContext).length;
+    if (
+      !extra.check.result &&
+      Tokenizer.encode(`\n ${extra.failMessage}`).length
+    ) {
+      tokens += Tokenizer.encode(`\n ${extra.failMessage}`).length;
+      failureContext = `\n${extra.failMessage}`;
+    }
   }
   // add tokens for memory
   if (memory && memory !== "") {
@@ -153,11 +161,13 @@ export default function contextBuilderPile(
     context +
     inputContext +
     checkContext +
-    newLocation;
+    newLocation +
+    failureContext;
 
   if (context[0] === "\n") {
     context = context.slice(1);
   }
+
   // remove all the double new lines
   context = context.replace(/\n\n/g, "\n");
   // remove double spaces

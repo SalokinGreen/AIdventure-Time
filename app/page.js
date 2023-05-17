@@ -20,11 +20,13 @@ import Stats from "@/Components/Front/Stats";
 import skillCheck from "@/util/front/RPG/skillCheck";
 import checkForKeys from "@/util/front/checkForKeys";
 import Map from "@/Components/RPG/map/Map";
+import pickUp from "@/util/front/RPG/pickUp";
 import db from "@/util/db";
 const defaultStats = [
   {
     name: "Strength",
-    description: "Your physical strength.",
+    description:
+      "Your strength determines how hard you can hit, how well you can use melee weapons, and how much force you can apply. You can lift heavier objects, break through barriers, or crush your enemies with ease. Strength is important for combat and many activities where you use your body.",
     level: 0,
     type: "primary",
     triggers: [
@@ -50,9 +52,9 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure: "You feel too weak for that, it won't work.",
+      failure: "[ Your body is too weak for this. ]",
 
-      success: "Your strength and muscles are outstanding, that will be easy.",
+      success: "[ You're strong enough for this. ]",
     },
     weapon: {
       weapon: false,
@@ -65,7 +67,8 @@ const defaultStats = [
   },
   {
     name: "Dexterity",
-    description: "Your agility and reflexes.",
+    description:
+      "Your dexterity determines how well you move, how you're with ranged weapons, and if you can perform acrobatic maneuvers. Dexterity helps in many situations outside combat, like driving and stealth.",
     level: 0,
     type: "primary",
     triggers: [
@@ -93,7 +96,7 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure: "Your body is very slow, that's too hard for you.",
+      failure: "[ Your movements and reaction time are too slow for this. ]",
 
       success: "You move with grace and agility, that will be easy for you.",
     },
@@ -109,16 +112,28 @@ const defaultStats = [
   },
   {
     name: "Constitution",
-    description: "Your physical health.",
+    description:
+      "Your constitution affects how fast you recover from injuries, and how well you take hits. It also affects your ability to resist diseases and poisons. A higher constitution means a faster regeneration rate.",
     level: 0,
     type: "primary",
-    triggers: [],
+    triggers: [
+      "survive",
+      "endure",
+      "persist",
+      "withstand",
+      "tolerate",
+      "sustain",
+      "persevere",
+      "resist",
+      "toughen",
+      "recover",
+    ],
     priority: 1,
     co: [],
     outcomes: {
-      failure: "Your body is too weak for that.",
+      failure: "[ Your body is too weak for that. ]",
 
-      success: "Your body and endurance are strong, that's easy for you.",
+      success: "[ That's easy for your body. ]",
     },
 
     weapon: {
@@ -132,7 +147,8 @@ const defaultStats = [
   },
   {
     name: "Intelligence",
-    description: "Your mental sharpness.",
+    description:
+      "Your intelligence affects your mental abilities and how good you are at using magic and spells. Your mana pool increases based on your Intelligence stat, and you learn new spells quicker. Intelligence also affects how much mana you gain when leveling up.",
     level: 0,
     type: "primary",
     triggers: [
@@ -160,9 +176,9 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure: "Your mind is not sharp enough for that.",
+      failure: "[ Your mind is not sharp enough for that. ]",
 
-      success: "That will be easy for your sharp mind.",
+      success: "[ That's easy for your mind. ]",
     },
     weapon: {
       weapon: false,
@@ -175,7 +191,8 @@ const defaultStats = [
   },
   {
     name: "Wisdom",
-    description: "Your mental health.",
+    description:
+      "Your wisdom determines how well you understand things, including people and animals. It's used for determining spell effects and success rates. It also helps you avoid traps, detect traps, and read runes and ancient texts. Higher wisdom makes it easier to understand others.",
     level: 0,
     type: "primary",
     triggers: [
@@ -203,9 +220,9 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure: "Your mind isn't sharp enough for that.",
+      failure: "[ You mind isn't sharp enough for that. ]",
 
-      success: "Your wisdom will be more than enough for that.",
+      success: "[ You can do that easily. ]",
     },
 
     weapon: {
@@ -219,7 +236,8 @@ const defaultStats = [
   },
   {
     name: "Charisma",
-    description: "Your presence and charisma.",
+    description:
+      "Your charisma affects how well you interact with others and persuades them into doing what you want. Charisma influences whether people trust you or fear you.",
     level: 0,
     type: "primary",
     triggers: [
@@ -247,10 +265,9 @@ const defaultStats = [
     priority: 1,
     co: [],
     outcomes: {
-      failure: "Your words are weak and your presence is is below noticable.",
+      failure: "[ Your words and body language are weak. ]",
 
-      success:
-        "Your words are strong and your presence is is above mersmerizing.",
+      success: "[ Your words are sweat, and your presence is mesmerizing. ]",
     },
 
     weapon: {
@@ -264,7 +281,8 @@ const defaultStats = [
   },
   {
     name: "Weapon Proficiency",
-    description: "Your weapon handling.",
+    description:
+      "Weapon proficiency improves your ability to wield different melee weaponry. You need a weapon to use this skill.",
     level: 0,
     type: "secondary",
     triggers: [
@@ -292,9 +310,9 @@ const defaultStats = [
     priority: 10,
     co: ["strength"],
     outcomes: {
-      failure: "Your weapon handling is very poor, that's too hard for you.",
+      failure: "[ You're not skilled with this kind of weapon yet. ]",
 
-      success: "You're a master of your weapon, that will be easy for you.",
+      success: "[ You're a master of your weapon. ]",
     },
 
     weapon: {
@@ -308,7 +326,8 @@ const defaultStats = [
   },
   {
     name: "Fighting",
-    description: "Your fighting skills.",
+    description:
+      "Fighting helps with unarmed combat. This skill is wonderful for when you don't have a weapon on you.",
     level: 0,
     type: "secondary",
     triggers: [
@@ -332,9 +351,9 @@ const defaultStats = [
     priority: 2,
     co: ["strength"],
     outcomes: {
-      failure: "Your fighting skills are very poor, that's too hard for you.",
+      failure: "[ Your fighting skill is terrible. ]",
 
-      success: "Your fighting skills are very good, that will be easy for you.",
+      success: "[ You're a strong, and great at fighting. ]",
     },
 
     weapon: {
@@ -348,7 +367,8 @@ const defaultStats = [
   },
   {
     name: "Athletics",
-    description: "Your ability to perform athletic feats.",
+    description:
+      "Athletics helps you with anything that requires your physical strength outside of combat, such as climbing, swimming, jumping, etc.",
     level: 0,
     type: "secondary",
     triggers: [
@@ -360,13 +380,15 @@ const defaultStats = [
       "Toss",
       "smash",
       "shatter",
+      "hold",
+      "climb",
     ],
     priority: 2,
     co: ["strength"],
     outcomes: {
-      failure: "You're too weak. That will fail.",
+      failure: "[ You're not fit enough for this. ]",
 
-      success: "You're strong. That will be easy for you.",
+      success: "[ You're more than strong enough for this. ]",
     },
 
     weapon: {
@@ -417,8 +439,22 @@ export default function Home() {
   });
   const [difficulty, setDifficulty] = useState(1);
   const [stats, setStats] = useState(defaultStats);
+  const [failMessages, setFailMessages] = useState([
+    "You try",
+    "You're trying",
+    "You attempt",
+    "You're attempting",
+    "You fail",
+    "You're failing",
+    "You can't",
+    "You can not",
+    "You are unable",
+    "You're unable",
+    "Despite your best efforts",
+  ]);
   const [health, setHealth] = useState(100);
-  const [location, setLocation] = useState("Home");
+  const [location, setLocation] = useState("home");
+  const [locationName, setLocationName] = useState("Home");
   const [openStats, setOpenStats] = useState(false);
   const [newLocationArray, setNewLocationArray] = useState([
     "look around",
@@ -429,42 +465,27 @@ export default function Home() {
     "travel to",
   ]);
   const [map, setMap] = useState([
-    [
-      {
-        id: 0,
-        name: "Home",
-        type: "tile",
-        description: "Your home.",
-        subMap: [
-          {
-            id: 0,
-            name: "Home",
-            map: [
-              [
-                {
-                  id: 0,
-                  name: "Room",
-                  type: "tile",
-                  description: "Your room.",
-                  keywords: ["room"],
-                  image: "",
-                  color: "",
-                  subMap: [[]],
-                },
-              ],
-            ],
-          },
-        ],
-        x: 0,
-        y: 0,
-        keywords: ["home", "house", "cabin", "hut", "shack", "shelter"],
-        image: "",
-        color: "",
-      },
-    ],
+    {
+      name: "Home",
+      address: "home",
+      description: "Your home.",
+      keywords: [
+        "go home",
+        "go to home",
+        "walk home",
+        "drive home",
+        "travel home",
+        "go back home",
+      ],
+      id: 0,
+      image: "",
+      imagePrompt: "",
+      links: [],
+      order: 0,
+      prompts: [],
+    },
   ]);
-  const [currentMap, setCurrentMap] = useState([map[0][0]]);
-  const [selectedSubMap, setSelectedSubMap] = useState(null);
+  const [locationHistory, setLocationHistory] = useState(["home"]);
   const [openMap, setOpenMap] = useState(false);
   const [time, setTime] = useState(0);
   // Lore
@@ -757,9 +778,47 @@ export default function Home() {
   };
 
   const generate = async (input, type, last, retry, story) => {
-    let check = skillCheck(input, stats, difficulty, equipment, health);
-    let newLocation = checkForKeys(input, newLocationArray);
-    if (retry) {
+    let check, newLocation, pick, link, movingTo;
+    // console.log("change: ", checkForLinks(input));
+    if (input && input !== "") {
+      check = skillCheck(input, stats, difficulty, equipment, health);
+      if (!check) {
+        // check if item is being picked up
+        pick = pickUp(input);
+        if (pick) {
+          console.log("pick-up:", pick);
+          // send request to server to pick up item
+          const pickUpResponse = await axios
+            .post("/api/eval", {
+              type: "pickUp",
+              story,
+              extra: pick,
+              model,
+            })
+            .catch((err) => console.log(err));
+
+          const output = pickUpResponse.data.output;
+          // get name from first line
+          const name = output.match(/.*/g)[0];
+          // get type from "Type: " lines
+          const type = output.match(/(?<=Type: ).*/g)[0];
+          console.log("name: ", name, "type: ", type);
+        } else if (!pick) {
+          // add check for links here to see if they're moving somewhere specific
+          link = checkForLinks(input);
+          // if not moving somewhere specific, check if the new locations exists
+          if (!link) {
+            movingTo = map.find((location) => {
+              return checkForKeys(input, location.keywords);
+            });
+            // if the location doesn't exist, check if moving happens at all
+            if (!movingTo) {
+              newLocation = checkForKeys(input, newLocationArray);
+            }
+          }
+        }
+      }
+    } else if (retry) {
       // remove last story object from story array
       story.pop();
       // if the new last story object is an action, reroll the skill Check.
@@ -795,6 +854,7 @@ export default function Home() {
         );
       }
     }
+    console.log(check);
     const response = await axios
       .post("/api/generate", {
         story,
@@ -827,8 +887,11 @@ export default function Home() {
           equipment,
           inventory,
           check,
-          location,
+          location: locationName,
           newLocation,
+          failMessage:
+            failMessages[Math.floor(Math.random() * failMessages.length)],
+          pickUp,
         },
         lore: loreBuilder(story, lore, input),
         model,
@@ -841,6 +904,7 @@ export default function Home() {
     }
   };
   const generateImage = async (location) => {
+    // change location to prompt later
     let error = false;
     const response = await axios
       .post(
@@ -872,6 +936,28 @@ export default function Home() {
         reader.readAsDataURL(imageData);
       }
     }
+  };
+  const checkForLinks = (input) => {
+    // find current location in map where the address is the current location
+    const currentLocation = map.find(
+      (mapLocation) =>
+        mapLocation.address.toLowerCase() === location.toLowerCase()
+    );
+
+    // Go through it's links
+    let found = false;
+    currentLocation.links.forEach((link) => {
+      // if the input matches a keyword of the link, change found to the address of the link
+      if (checkForKeys(input, link.keywords)) {
+        found = link.address;
+      }
+      // stop searching if found
+      if (found) {
+        return;
+      }
+    });
+    // return found
+    return found;
   };
   if (loading) {
     return (
@@ -960,7 +1046,7 @@ export default function Home() {
           setVerbosity={setVerbosity}
           score={score}
           highScore={highScore}
-          location={location}
+          location={locationName}
           setLocation={setLocation}
           health={health}
           setOpenStats={setOpenStats}
@@ -996,14 +1082,7 @@ export default function Home() {
           newGame={newGame}
         />
         <Stats open={openStats} setOpen={setOpenStats} />
-        <Map
-          map={selectedSubMap ? selectedSubMap.map : map}
-          setMap={setMap}
-          open={openMap}
-          setOpen={setOpenMap}
-          selectedSubMap={selectedSubMap}
-          setSelectedSubMap={setSelectedSubMap}
-        />
+        <Map map={map} setMap={setMap} open={openMap} setOpen={setOpenMap} />
         <div
           className={styles.imageContainer}
           style={{ backgroundImage: `url(${bgImage})` }}

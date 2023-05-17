@@ -48,7 +48,10 @@ export default function Input({
       e.preventDefault();
       if (text.match(/[a-z0-9]/i)) {
         send = formate ? formateInput(type, text) : text;
-        setStory((prev) => [...prev, { type, text: send }]);
+        // order by messageNumber
+        let newStory = [...story];
+        newStory.sort((a, b) => a.messageNumber - b.messageNumber);
+        setStory([...newStory, { type, text: send }]);
       }
       e.target.innerText = "";
       await generate(send, type, last, false, story);
@@ -66,6 +69,7 @@ export default function Input({
     // if ctrl + r
     if (e.altKey && e.key === "r") {
       let newStory = [...story];
+      newStory.sort((a, b) => a.messageNumber - b.messageNumber);
       newStory.pop();
       setStory(newStory);
       await generate(false, false, last, true, story);
@@ -78,7 +82,10 @@ export default function Input({
     let send = false;
     if (input !== "" && input && input.match(/[a-z0-9]/i)) {
       send = formate ? formateInput(type, text) : text;
-      setStory((prev) => [...prev, { type, text: send }]);
+      // order by messageNumber
+      let newStory = [...story];
+      newStory.sort((a, b) => a.messageNumber - b.messageNumber);
+      setStory([...newStory, { type, text: send }]);
     }
     setInput("");
     await generate(send, type, last, false, story);
@@ -86,6 +93,8 @@ export default function Input({
   // handle retry button
   const handleRetry = async () => {
     let newStory = [...story];
+    newStory.sort((a, b) => a.messageNumber - b.messageNumber);
+
     newStory.pop();
     setStory(newStory);
     await generate(false, false, last, true, story);

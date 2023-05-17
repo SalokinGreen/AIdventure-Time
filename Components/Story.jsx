@@ -19,6 +19,9 @@ export default function Story({ story, setStory, generating, setScore }) {
     }
     setScore(story.length);
   }, [story, prevStoryLength]);
+  useEffect(() => {
+    handleScroll();
+  }, []);
   // edit story
   const handleEdit = (e, index) => {
     const newText = e.target.innerText.replace(/^\n/, "");

@@ -11,6 +11,7 @@ import { IoClose, IoBody } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
 import { AiFillSave } from "react-icons/ai";
 import { BsMapFill } from "react-icons/bs";
+import { GiBackpack } from "react-icons/gi";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Counter from "./Front/Counter";
 import styles from "../Styles/RightSidePanel.module.css";
@@ -186,16 +187,12 @@ export default function RightSidePanel({
                   <div className={styles.description}>
                     Where are you? Physically, not phylosophically.
                   </div>
-                  <input
-                    className={styles.locationInput}
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                  />
+                  <div className={styles.locationInput}>{location}</div>
                 </div>
                 <div className={styles.container}>
                   <div className={styles.title}>Stats</div>
                   <div className={styles.description}>
-                    Your stats are important, take care of yourself!
+                    What can you do, what can't you do?
                   </div>
                   <Button
                     className={styles.buttonSave}
@@ -204,6 +201,20 @@ export default function RightSidePanel({
                     onClick={() => setOpenStats(true)}
                   >
                     <IoBody size={"3rem"} />
+                  </Button>
+                </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Inventory</div>
+                  <div className={styles.description}>
+                    What's in your bag? What's in your bag?!
+                  </div>
+                  <Button
+                    className={styles.buttonSave}
+                    variant="contained"
+                    color={model === "euterpe-v2" ? "warning" : "info"}
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <GiBackpack size={"3rem"} />
                   </Button>
                 </div>
                 <div className={styles.container}>

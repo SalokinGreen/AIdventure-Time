@@ -7,7 +7,7 @@ function skillCheck(input, stats, difficulty, equipment, health) {
   }
 
   let disadvantage = false;
-  let DC = 10;
+  let DC = 15;
   let roll = Math.floor(Math.random() * 20) + 1;
 
   // Add disadvantage to the roll based on health.
@@ -31,19 +31,19 @@ function skillCheck(input, stats, difficulty, equipment, health) {
   // set DC based on difficulty
   switch (difficulty) {
     case 1:
-      DC = 5;
+      DC = 6;
       break;
     case 2:
-      DC = 10;
+      DC = 11;
       break;
     case 3:
-      DC = 15;
+      DC = 21;
       break;
     case 4:
-      DC = 20;
+      DC = 26;
       break;
     default:
-      DC = 10;
+      DC = 15;
   }
 
   // sort stats by priority. 0 is the lowest priority
