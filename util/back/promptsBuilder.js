@@ -9,7 +9,7 @@ export default function promptsBuilder(prompts, model) {
   // context
   let context = "";
   let tokens = 0;
-  let maxTokens = 1700;
+  let maxTokens = 1800;
   if (model === "euterpe-v2") {
   } else {
     // go through prompts

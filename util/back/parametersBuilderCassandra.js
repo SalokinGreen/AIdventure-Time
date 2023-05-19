@@ -101,7 +101,7 @@ export default function parametersBuilderCassandra(params, count) {
     params.typicalP >= 0.05 && params.typicalP <= 1 ? params.typicalP : 1;
   const repetition_penalty =
     params.repetitionP >= 1 && params.repetitionP <= 8
-      ? (0.525 * (params.repetitionP - 1)) / 7 + 1
+      ? params.repetitionP
       : 1.148125;
   const parameters = {
     generate_until_sentence: true,

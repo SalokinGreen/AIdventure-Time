@@ -405,6 +405,8 @@ export async function POST(request) {
       text = "Location:" + text;
     } else if (req.extra.check && !req.extra.check.result) {
       text = req.extra.failMessage + text;
+    } else if (req.extra.pick) {
+      text = req.extra.pick.description + text;
     }
     // get last logprob
     verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];

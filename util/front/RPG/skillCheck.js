@@ -1,13 +1,13 @@
 import checkForKeys from "../checkForKeys";
 
-function skillCheck(input, stats, difficulty, equipment, health) {
+function skillCheck(input, stats, difficulty, inventory, health, DC) {
   // return false if no input
   if (!input || input === "") {
     return false;
   }
 
   let disadvantage = false;
-  let DC = 15;
+  let advantage = false;
   let roll = Math.floor(Math.random() * 20) + 1;
 
   // Add disadvantage to the roll based on health.
@@ -15,49 +15,42 @@ function skillCheck(input, stats, difficulty, equipment, health) {
     (difficulty === 1 && health < 25) ||
     (difficulty === 2 && health < 50) ||
     (difficulty === 3 && health < 75) ||
-    (difficulty === 1 && health < 90)
+    (difficulty === 4 && health < 90)
   ) {
     disadvantage = true;
   }
-
+  // sort inventory by priority. 0 is the lowest priority
+  inventory.sort((a, b) => b.priority - a.priority);
+  // Go through inventory to see if there is an item used
+  const item = inventory.find((item) => {
+    return checkForKeys(input, item.keywords);
+  });
+  // if item, give advantage
+  if (item) {
+    advantage = true;
+  }
   // if disadvantage is true, roll again and take the lowest
-  if (disadvantage) {
+  if (disadvantage && !advantage) {
     const roll2 = Math.floor(Math.random() * 20) + 1;
     if (roll2 < roll) {
       roll = roll2;
     }
+  } else if (advantage && !disadvantage) {
+    // if advantage is true, roll again and take the highest
+    const roll2 = Math.floor(Math.random() * 20) + 1;
+    if (roll2 > roll) {
+      roll = roll2;
+    }
   }
 
-  // set DC based on difficulty
-  switch (difficulty) {
-    case 1:
-      DC = 6;
-      break;
-    case 2:
-      DC = 11;
-      break;
-    case 3:
-      DC = 21;
-      break;
-    case 4:
-      DC = 26;
-      break;
-    default:
-      DC = 15;
-  }
+  // // set DC based on difficulty
+  // const DC = dcs[difficulty] || 10;
 
   // sort stats by priority. 0 is the lowest priority
   stats.sort((a, b) => b.priority - a.priority);
 
-  // if no weapon or armor, remove stats that require them
-  if (!equipment.weapon || equipment.weapon.length === 0) {
-    stats = stats.filter((x) => !x.weapon?.weapon);
-  }
-  if (!equipment.armor || equipment.armor.length === 0) {
-    stats = stats.filter((x) => !x.armor?.armor);
-  }
-  // Find the first stat that matches input triggers
-  const stat = stats.find((x) => checkForKeys(input, x.triggers));
+  // Find the first stat that matches input keywords
+  const stat = stats.find((x) => checkForKeys(input, x.keywords));
 
   // if no stat found, return false
   if (!stat) {
@@ -77,26 +70,6 @@ function skillCheck(input, stats, difficulty, equipment, health) {
     });
   }
 
-  // if stat.weapon.weapon is true, check if equipment.weapon is true and equipment.weapon.type is in stat.weapon.type
-  if (stat.weapon?.weapon && equipment.weapon?.length > 0) {
-    const foundWeapon = equipment.weapon.find((x) =>
-      checkForKeys(x.type, [stat.weapon.type])
-    );
-    if (foundWeapon) {
-      roll += foundWeapon.level;
-    }
-  }
-
-  // if stat.armor.armor is true, check if equipment.armor is true and equipment.armor.type is in stat.armor.type
-  if (stat.armor?.armor && equipment.armor?.length > 0) {
-    const foundArmor = equipment.armor.find((x) =>
-      checkForKeys(x.type, [stat.armor.type])
-    );
-    if (foundArmor) {
-      roll += foundArmor.level;
-    }
-  }
-
   // Determine outcome
   const outcome = roll >= DC ? stat.outcomes.success : stat.outcomes.failure;
 
@@ -107,6 +80,7 @@ function skillCheck(input, stats, difficulty, equipment, health) {
     result: roll >= DC,
     outcome,
     skill: stat.name,
+    item,
   };
 }
 

@@ -76,6 +76,7 @@ export default function RightSidePanel({
   formate,
   setFormate,
   setOpenMap,
+  setOpenInventory,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => {
@@ -212,7 +213,7 @@ export default function RightSidePanel({
                     className={styles.buttonSave}
                     variant="contained"
                     color={model === "euterpe-v2" ? "warning" : "info"}
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => setOpenInventory(true)}
                   >
                     <GiBackpack size={"3rem"} />
                   </Button>

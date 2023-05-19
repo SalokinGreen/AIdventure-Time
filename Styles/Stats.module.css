@@ -3,3 +3,41 @@
   align-items: center;
   justify-content: center;
 }
+.modalBox {
+  background-color: #160028;
+  width: 65rem;
+  height: 70rem;
+  overflow: auto;
+  padding: 1rem;
+}
+.tab {
+  color: white;
+}
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.statsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.title h2 {
+  color: white;
+  text-align: center;
+}
+.title p {
+  color: white;
+}
+.title {
+  margin-bottom: 1rem;
+}

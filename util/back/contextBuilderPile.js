@@ -36,6 +36,7 @@ export default function contextBuilderPile(
   let inputContext = "";
   let newLocation = "";
   let failureContext = "";
+  let itemContext = "";
   // how many tokens are and can be used
   let tokens = 3;
   const maxTokens = 2048 - max_length - 25;
@@ -65,6 +66,10 @@ export default function contextBuilderPile(
       tokens += Tokenizer.encode(`\n ${extra.failMessage}`).length;
       failureContext = `\n${extra.failMessage}`;
     }
+  }
+  if (extra.pick) {
+    itemContext = `\n${extra.pick}`;
+    tokens += Tokenizer.encode(itemContext).length;
   }
   // add tokens for memory
   if (memory && memory !== "") {
@@ -162,6 +167,7 @@ export default function contextBuilderPile(
     inputContext +
     checkContext +
     newLocation +
+    itemContext +
     failureContext;
 
   if (context[0] === "\n") {

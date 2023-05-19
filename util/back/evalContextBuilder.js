@@ -6,7 +6,7 @@ export default function evalContextBuilder(story, model) {
   // context
   let context = "";
   let tokens = 0;
-  const maxTokens = 300;
+  const maxTokens = 200;
 
   if (model === "euterpe-v2") {
     reversedStory.forEach((story) => {
