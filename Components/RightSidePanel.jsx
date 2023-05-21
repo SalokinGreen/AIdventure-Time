@@ -6,6 +6,8 @@ import {
   Tabs,
   Tab,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { IoClose, IoBody } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
@@ -22,6 +24,9 @@ import Order from "./Settings/Order";
 import Groupe from "./Settings/Groupe";
 import HealthBar from "./Front/HealthBar";
 import Knob from "./Settings/Knob";
+import GooseaiModal from "./GooseaiModal";
+const gooseModels = ["cassandra-lit-2-8b", "cassandra-lit-6-9b"];
+const novelaiModels = ["euterpe-v2", "krake-v2"];
 export default function RightSidePanel({
   openSetting,
   setOpenSetting,
@@ -77,8 +82,14 @@ export default function RightSidePanel({
   setFormate,
   setOpenMap,
   setOpenInventory,
+  models,
+  setModels,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [gooseOpen, setGooseOpen] = useState(false);
+  const [advanced, setAdvanced] = useState(false);
+  const [samplers, setSamplers] = useState(false);
+  const [groups, setGroups] = useState(false);
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -102,7 +113,7 @@ export default function RightSidePanel({
   };
   const handleModelChange = (event, newModel) => {
     if (newModel !== null) {
-      setModel(newModel);
+      setModels(newModel);
     }
   };
   // handle paste, only text
@@ -188,7 +199,11 @@ export default function RightSidePanel({
                   <div className={styles.description}>
                     Where are you? Physically, not phylosophically.
                   </div>
-                  <div className={styles.locationInput}>{location}</div>
+                  <input
+                    className={styles.locationInput}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  ></input>
                 </div>
                 <div className={styles.container}>
                   <div className={styles.title}>Stats</div>
@@ -299,21 +314,41 @@ export default function RightSidePanel({
                   value={formate}
                   setValue={setFormate}
                 />
-                <div className={styles.title}>NovelAI</div>
-                <div className={styles.description}>
-                  Get your NAI access key! It's stored locally, don't worry!
+                <div className={styles.container}>
+                  <div className={styles.title}>NovelAI</div>
+                  <div className={styles.description}>
+                    Get your NAI access key! It's stored locally, don't worry!
+                  </div>
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={
+                        model === "euterpe-v2"
+                          ? styles.buttonEuterpe
+                          : styles.buttonCassandra
+                      }
+                      onClick={() => setIsOpen(true)}
+                    >
+                      Get Access Key
+                    </button>
+                  </div>
                 </div>
-                <div className={styles.buttonContainer}>
-                  <button
-                    className={
-                      model === "euterpe-v2"
-                        ? styles.buttonEuterpe
-                        : styles.buttonCassandra
-                    }
-                    onClick={() => setIsOpen(true)}
-                  >
-                    Get Access Key
-                  </button>
+                <div className={styles.container}>
+                  <div className={styles.title}>GooseAI</div>
+                  <div className={styles.description}>
+                    Save your goose key, save the world!
+                  </div>
+                  <div className={styles.buttonContainer}>
+                    <button
+                      className={
+                        model === "euterpe-v2"
+                          ? styles.buttonEuterpe
+                          : styles.buttonCassandra
+                      }
+                      onClick={() => setGooseOpen(true)}
+                    >
+                      Save your goose key
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
@@ -335,29 +370,62 @@ export default function RightSidePanel({
                 >
                   <ToggleButton
                     className={
-                      model === "euterpe-v2"
+                      models === "NovelAI"
                         ? styles.euterpeActive
                         : styles.euterpe
                     }
-                    value="euterpe-v2"
-                    aria-label="euterpe"
-                    onClick={() => setModel("euterpe-v2")}
+                    value="NovelAI"
+                    aria-label="NovelAI"
+                    onClick={() => {
+                      setModels("NovelAI");
+                      setModel("euterpe-v2");
+                    }}
                   >
                     NovelAI
                   </ToggleButton>
                   <ToggleButton
                     className={
-                      model === "cassandra"
+                      models === "GooseAI"
                         ? styles.cassandraActive
                         : styles.cassandra
                     }
-                    value="cassandra"
-                    aria-label="cassandra"
-                    onClick={() => setModel("cassandra")}
+                    value="GooseAI"
+                    aria-label="GooseAI"
+                    onClick={() => {
+                      setModels("GooseAI");
+                      setModel("cassandra-lit-6-9b");
+                    }}
                   >
                     GooseAI
                   </ToggleButton>
                 </ToggleButtonGroup>
+                <Select
+                  value={model}
+                  onChange={(e) => {
+                    setModel(e.target.value);
+                  }}
+                  className={styles.select}
+                >
+                  {models === "NovelAI"
+                    ? novelaiModels.map((currentmodel) => (
+                        <MenuItem
+                          value={currentmodel}
+                          active={currentmodel === model}
+                          className={styles.selectItem}
+                        >
+                          {currentmodel}
+                        </MenuItem>
+                      ))
+                    : gooseModels.map((currentmodel) => (
+                        <MenuItem
+                          value={currentmodel}
+                          active={currentmodel === model}
+                          className={styles.selectItem}
+                        >
+                          {currentmodel}
+                        </MenuItem>
+                      ))}
+                </Select>
                 <Slid
                   title={"Tokens"}
                   description={
@@ -366,7 +434,7 @@ export default function RightSidePanel({
                   value={tokens}
                   setValue={setTokens}
                   min={1}
-                  max={40}
+                  max={100}
                   step={1}
                   model={model}
                 />
@@ -383,6 +451,12 @@ export default function RightSidePanel({
                   step={0.01}
                   model={model}
                 />
+                <div
+                  className={styles.header}
+                  onClick={() => setGroups(!groups)}
+                >
+                  Groups
+                </div>
                 <Groupe
                   title={"Bans"}
                   description={"Ban words from the generated responses!"}
@@ -486,7 +560,7 @@ export default function RightSidePanel({
                   value={repetitionPR}
                   setValue={setRepetitionPR}
                   min={0}
-                  max={2048}
+                  max={4096}
                   step={1}
                   model={model}
                 />
@@ -530,6 +604,7 @@ export default function RightSidePanel({
         onClose={closeModal}
         onSubmit={getNovelaiAccessKey}
       />
+      <GooseaiModal open={gooseOpen} setOpen={setGooseOpen} />
     </Drawer>
   );
 }

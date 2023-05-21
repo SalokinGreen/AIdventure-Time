@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { GiBroadsword, GiSpeaker, GiFountainPen } from "react-icons/gi";
 import styles from "../Styles/Story.module.css";
 import { usePrevious } from "react-use";
+import { LinearProgress, CircularProgress } from "@mui/material";
 export default function Story({ story, setStory, generating, setScore }) {
   // Ref for scroll
   const storyRef = useRef();

@@ -260,11 +260,12 @@ const parameters = {
   num_logprobs: 10,
   order: [2, 1, 3, 0],
 };
+const novelAIlist = ["krake-v2", "euterpe-v2"];
 export async function POST(request) {
   let text, logprobs, verbosityValue;
   const req = await request.json();
 
-  if (req.model === "euterpe-v2") {
+  if (novelAIlist.includes(req.model)) {
     const input = contextBuilder(
       req.story,
       req.type,
@@ -282,7 +283,7 @@ export async function POST(request) {
         {
           input,
           parameters: params,
-          model: "euterpe-v2",
+          model: req.model,
         },
         {
           headers: {
@@ -315,7 +316,7 @@ export async function POST(request) {
     // console.log(params);
     const response = await axios
       .post(
-        "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
+        "https://api.goose.ai/v1/engines/cassandra-lit-6-9b/completions",
         {
           prompt: input,
           max_tokens: params.max_length,
@@ -339,11 +340,12 @@ export async function POST(request) {
           headers: {
             accept: "application/json",
             "Content-Type": "application/json",
-            authorization: `Bearer ${process.env.GOOSE_KEY}`,
+            authorization: `Bearer ${req.key}`,
           },
         }
       )
       .catch((err) => {
+        console.log("ERROR:");
         console.log(err);
       });
     console.log("First Response: ", response.data.choices[0].text);
@@ -362,7 +364,7 @@ export async function POST(request) {
       console.log("And again!");
       const response2 = await axios
         .post(
-          "https://api.goose.ai/v1/engines/cassandra-lit-e2-6-7b/completions",
+          `https://api.goose.ai/v1/engines/${req.model}/completions`,
           {
             prompt: input + response.data.choices[0].text,
             max_tokens: 25,
@@ -386,7 +388,7 @@ export async function POST(request) {
             headers: {
               accept: "application/json",
               "Content-Type": "application/json",
-              authorization: `Bearer ${process.env.GOOSE_KEY}`,
+              authorization: `Bearer ${req.key}`,
             },
           }
         )

@@ -2,13 +2,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: auto;
 }
 .modalBox {
   background-color: #160028;
   width: 65rem;
   height: 70rem;
-  overflow: auto;
   padding: 1rem;
+  overflow: auto;
+  border: white 1px solid;
+  position: relative;
+  overflow: auto;
 }
 .tab {
   color: white;
@@ -18,16 +22,19 @@
   flex-direction: column;
   justify-content: space-around;
   margin-bottom: 2rem;
+  overflow: auto;
 }
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: auto;
+  margin-top: 1rem;
 }
 .statsContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -37,7 +44,178 @@
 }
 .title p {
   color: white;
+  text-align: center;
 }
 .title {
   margin-bottom: 1rem;
+}
+.stat {
+  height: fit-content;
+  width: 100%;
+  background-color: #160028;
+  color: white;
+  border: white 1px solid;
+  padding: 0.5rem;
+}
+.accordionSummary {
+  background-color: #160028;
+  color: white;
+  border: white 1px solid;
+}
+.statLevel {
+  display: flex;
+  flex-direction: row;
+}
+.statDescription {
+  margin: 0 0 1rem 0;
+}
+.statKeywords {
+  margin: 0 0 1rem 0;
+}
+.statLevel {
+  display: flex;
+  align-items: flex-end;
+  /* border-bottom: white 1px solid; */
+  width: fit-content;
+}
+.levelTitle {
+  font-size: 2rem;
+}
+.number {
+  font-size: 2rem;
+}
+.icon {
+  font-size: x-small;
+  cursor: pointer;
+  border: white 1px solid;
+  border-radius: 50%;
+  padding: 0.1rem;
+  font-size: 1rem;
+  color: white;
+}
+.icon:hover,
+.icon:focus,
+.icon:active {
+  background-color: white;
+  color: #160028;
+}
+.levelArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 0.5rem;
+  gap: 0.2rem;
+}
+.keyword {
+  margin: 0.1rem 0.1rem;
+}
+.closeIcon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #ffffff;
+  z-index: 100000;
+}
+.tableTitle {
+  color: white;
+}
+.header {
+  margin-top: 1rem;
+}
+.textField {
+  color: white !important;
+  border: #ffffff 1px solid;
+  outline: none;
+  width: 100%;
+}
+.textField input {
+  color: white;
+}
+.select {
+  color: white !important;
+  border: #ffffff 1px solid;
+  outline: none;
+}
+.select svg {
+  color: white;
+}
+@media (max-width: 768px) {
+  .modalBox {
+    width: 100%;
+    height: 100%;
+  }
+  .tabContainer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    overflow: auto;
+  }
+  .closeIcon {
+    top: 5px;
+    right: 5px;
+  }
+}
+
+/* Settings */
+.settingsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 5rem;
+
+  margin-top: 1rem;
+}
+.settings {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+}
+.sideMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  margin-top: 1rem;
+}
+.sideMenuButton {
+  background-color: #160028;
+  color: white;
+  border: white 1px solid;
+  padding: 0.5rem;
+  width: 10rem;
+  /* margin-bottom: 1rem; */
+  cursor: pointer;
+}
+.sideMenuButton:hover,
+.sideMenuButton:focus,
+.sideMenuButton:active {
+  background-color: white;
+  color: #160028;
+}
+.openSideMenu {
+  margin-right: -6rem;
+  z-index: 20000;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .settingsContainer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    overflow: hidden;
+    margin-top: 1rem;
+  }
+  .sideMenu {
+    display: none;
+  }
+  .openSideMenu {
+    margin-right: 0;
+  }
 }

@@ -242,3 +242,24 @@
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
+.select {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  border: none;
+  border-bottom: #ffffff 1px solid;
+  outline: none;
+  background-color: transparent;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.selectItem {
+  background-color: #ffffff;
+  color: #0fa0bd;
+}

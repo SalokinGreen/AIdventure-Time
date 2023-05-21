@@ -26,7 +26,7 @@ export default function contextBuilderPile(
       };
     });
   }
-  console.log("extra:", extra);
+  // console.log("extra:", extra);
   //build context
   let context = "";
   let loreContext = "";
@@ -37,6 +37,8 @@ export default function contextBuilderPile(
   let newLocation = "";
   let failureContext = "";
   let itemContext = "";
+  let ATTG = "[ ";
+  let profileContext = "----\nprotagonist\n";
   // how many tokens are and can be used
   let tokens = 3;
   const maxTokens = 2048 - max_length - 25;
@@ -71,6 +73,49 @@ export default function contextBuilderPile(
     itemContext = `\n${extra.pick}`;
     tokens += Tokenizer.encode(itemContext).length;
   }
+
+  // build attg
+  // author
+  if (extra.attg.author && extra.attg.author !== "") {
+    ATTG += `Author: ${extra.attg.author}; `;
+  }
+  // title
+  if (extra.attg.title && extra.attg.title !== "") {
+    ATTG += `Title: ${extra.attg.title}; `;
+  }
+  // genre
+  ATTG += `Genre: ${extra.attg.genre} ]\n`;
+  // add tokens
+  tokens += Tokenizer.encode(ATTG).length;
+
+  // profile builder
+  // name
+  if (extra.profile.name && extra.profile.name !== "") {
+    profileContext += `Name: ${extra.profile.name}\n`;
+  }
+  // race
+  if (extra.profile.race && extra.profile.race !== "") {
+    profileContext += `Race: ${extra.profile.race}\n`;
+  }
+  // occupation
+  if (extra.profile.occupation && extra.profile.occupation !== "") {
+    profileContext += `Occupation: ${extra.profile.occupation}\n`;
+  }
+  // mental
+  if (extra.profile.mental && extra.profile.mental !== "") {
+    profileContext += `Mental: ${extra.profile.mental}\n`;
+  }
+  // physical
+  if (extra.profile.physical && extra.profile.physical !== "") {
+    profileContext += `Physical: ${extra.profile.physical}\n`;
+  }
+  // appearance
+  if (extra.profile.appearance && extra.profile.appearance !== "") {
+    profileContext += `Appearance: ${extra.profile.appearance}\n`;
+  }
+  // add tokens
+  tokens += Tokenizer.encode(profileContext).length;
+
   // add tokens for memory
   if (memory && memory !== "") {
     // replace <div> with \n and </div> with "" of all lore entries
@@ -90,8 +135,8 @@ export default function contextBuilderPile(
     lore = lore.map((l) => {
       return l.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
     });
+
     lore.map((l) => {
-      console.log(l);
       if (tokens + Tokenizer.encode(l).length + 1 < maxTokens / 2) {
         loreContext += l + "\n";
         tokens += Tokenizer.encode(l).length + 1;
@@ -159,9 +204,11 @@ export default function contextBuilderPile(
 
   // put context together
   context =
-    "***\n" +
+    ATTG +
+    profileContext +
     memoryContext +
     loreContext +
+    "***\n" +
     locationContext +
     context +
     inputContext +
@@ -175,11 +222,21 @@ export default function contextBuilderPile(
   }
 
   // remove all the double new lines
-  context = context.replace(/\n\n/g, "\n");
+  while (context.includes("\n\n")) {
+    context = context.replace("\n\n", "\n");
+  }
   // remove double spaces
-  context = context.replace(/\s\s+/g, "");
-  // remove spaces attached to new lines
-  context = context.replace(/\n\s+/g, "\n");
+  while (context.includes("  ")) {
+    context = context.replace("  ", " ");
+  }
+  // remove space after newline
+  context = context.replace(/\n /g, "\n");
+  // remove space before newline
+  context = context.replace(/ \n/g, "\n");
+  // remove space if first character
+  if (context[0] === " ") {
+    context = context.slice(1);
+  }
   // return context
   console.log(tokens);
   return context;

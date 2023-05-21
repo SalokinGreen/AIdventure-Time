@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../Styles/Input.module.css";
-import { Chip } from "@mui/material";
+import { Chip, LinearProgress } from "@mui/material";
 import {
   GiBroadsword,
   GiSpeaker,
@@ -153,14 +153,18 @@ export default function Input({
         </div>
       </div>
       <div className={styles.inputContainer}>
-        <div
-          contentEditable="true"
-          className={styles[type]}
-          onBlur={handleInput}
-          onKeyDown={handleEnter}
-          onPaste={handlePaste}
-        ></div>
-
+        <div className={styles.inputBarContainer}>
+          {generating && (
+            <LinearProgress color="info" className={styles.progress} />
+          )}
+          <div
+            contentEditable="true"
+            className={styles[type]}
+            onBlur={handleInput}
+            onKeyDown={handleEnter}
+            onPaste={handlePaste}
+          ></div>
+        </div>
         <div className={styles.buttonContainer}>
           <button className={styles[last]} onClick={() => handleRetry()}>
             <MdReplay size="3rem" />

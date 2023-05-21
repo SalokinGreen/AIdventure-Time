@@ -25,7 +25,8 @@ import db from "@/util/db";
 import itemLevelGenerator from "@/util/front/RPG/itemLevelGenerator";
 import getItemUses from "@/util/front/RPG/getItemUses";
 import { uuid } from "uuidv4";
-
+import calculateDamage from "@/util/front/RPG/calculateDamage";
+import Inventory from "@/Components/RPG/Inventory";
 const defaultStats = [
   {
     name: "Strength",
@@ -371,10 +372,35 @@ export default function Home() {
   const [memory, setMemory] = useState("");
   const [formate, setFormate] = useState(true);
   const [genre, setGenre] = useState("Fantasy");
+  const [genres, setGenres] = useState([
+    "Fantasy",
+    "Science Fiction",
+    "Drama",
+    "Horror",
+    "Mystery",
+    "Thriller",
+    "Detective Noir",
+    "Romance",
+    "Erotica",
+    "Historical Fiction",
+    "Modern",
+  ]);
+  const [author, setAuthor] = useState("");
+  const [title, setTitle] = useState("");
+  const [profile, setProfile] = useState({
+    name: "James",
+    race: "Human",
+    occupation: "Bard",
+    mental: "You're an adventurous bard who loves to travel and explore.",
+    appearance: "You're quite handsome.",
+    prose: "",
+  });
   // RPG - Text-Adventure
   // message
   const [message, setMessage] = useState("");
   const [messageOpen, setMessageOpen] = useState(false);
+  const [healthMessage, setHealthMessage] = useState("");
+  const [healthMessageOpen, setHealthMessageOpen] = useState(false);
   // prompts
   const [DCPrompts, setDCPrompts] = useState({
     Fantasy: [
@@ -389,7 +415,7 @@ export default function Home() {
       `***\nThe elephant screams at you and stomps its feet angrily on the ground. Its trunk snaps toward you threateningly. The creature's massive bulk towers over you and its sharp tusks point downward toward you like spears aimed directly at your heart.\n> You roll out of harm's way.\nProcess: An elephant is big and dangerous. Rolling away from an angry elephant is DC 20.\nDC: 20`,
       `***\nYou did it, you stole the beholder's tombstone! But now, the alarm is going. You climb upon the roof, but the constructs almost reached you.\n> You run across the tightrope.\nProcess: Running across a tightrope is very hard. Being under stress makes it harder. Running across this tightrope is DC 25.\nDC: 25`,
       `***\nYou roll below the first arrow fired from above, barely missing your head as you dive behind cover. But as your turn around to smile at the archer who fell for your trick, another arrow hits your shoulder this time.\n> You remove the arrow.\nProcess: Removing arrows is difficult without tools or magic items. Your shoulder isn't a dangerous area. Removing an arrow from your shoulder is DC 10.\nDC: 10`,
-      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. AS you drop, you can see that there's a big hole where you hit.
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. A you drop, you can see that there's a big hole where you hit.
       > You stand back up.\nProcess: A golem is very strong. Standing back up after such a powerful hit is DC 20.\nDC: 20`,
       `***\nA snowflake falls onto your face as you drop into the snow. Your heavy breaths are visible as steam clouds in front of you as you try to catch your breath.\n> You march on through the snowstorm.\nProcess: Marching through a snowstorm is very hard. Being exhausted makes it harder. Marching in the deep snow is DC 25.\nDC: 25`,
       `***\n"Does someone remember the name of the town we visited two weeks ago?" asks the bard. "I'm sure I had it written somewhere..."\n> You remember the name of this town.\nProcess: Remembering the name of a town is easy. Remembering something easy is DC 5.\nDC: 5`,
@@ -410,6 +436,150 @@ export default function Home() {
       `***\nYou wake up in a dark forest clearing surrounded by tall trees covered in thick fog. You can barely see anything except for the moonlight shining through the trees above.\n***\n> You enter the potion shop.\nThe door opens up into a large circular room full of shelves holding jars and bottles and bottles of potions of all types. In the center is a counter with several chairs around it and behind it is the shopkeeper, who looks up from her book as she greets you with a smile.\n> You greet her.\n"Welcome to my little store! What can I help you with today?" She asks cheerfully, motioning for you to come closer so she can hear you better.\n> You say, "I want a potion of invisibility."\n"Well," she says, "That would be a rare request indeed!" She sets down her book and walks over to a shelf full of glass bottles and pulls one down. "This potion will make you completely invisible for an hour.\n> Take the potion.\n----\nItem Generator\nAttributes: rare. special, arcane\nName: Potion of Invisibility - Rare Formulation\nVerbs: turn invisible, hide, sneak, unseen, secretly\nItem Description: A rare formulation of potion that makes its user disappear entirely for one hour. Potions may vary in effectiveness based on quality and quantity produced by creator.`,
       `***\nThe kitchen is a long hall with counters running down either side where servants are busy cooking meals for everyone else. There is an enormous fireplace near the end of the hallway and a long table with seats along one wall where you sit down\n> You grab some food from the kitchens.\n----\nItem Generator\nAttributes: legendary, mythic, gnomish\nName: Cooked Steak\nVerbs: with your steak, use your steak, eat your steak\nItem Description: This juicy cut of meat has been cooked perfectly by skilled chefs. It's delicious and tender on the inside!`,
       ,
+    ],
+  });
+  const [loreFinder, setLoreFinder] = useState({
+    Fantasy: [
+      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nLore Finder\nLore: unknown man, common`,
+      `***\nYou're cold as you enter the mansion. You came here to catch the ghost of this dead noblewoman and prove that she was murdered.\n----\nLore Finder\nLore: ghosts, mansion\n`,
+      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.`,
+      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.\n----\nLore Finder\nLore: planes of existence, princess, barbarians, languages`,
+      `***\nA mysterious woman in a dark cloak approaches you as you enter a tavern, her face obscured by shadows cast by lantern light in the tavern windows. Her voice low as she whispers in your ear, "Solve this for the brotherhood."\nShe hands you a note and walks away into the darkness outside as you notice it's written in ancient writing.\n----\nLore Finder\nLore: brotherhood, mysterious woman, ancient writing`,
+      `***\nThe man in front of you looks at you with a sneer on his face and says, "I don't know why I let him talk me into hiring these adventurers. They don't even know what an owlbear is!"\nMark raises his hand. "Are you calling us stupid?"\n----\nLore Finder\nLore: owlbear, Mark, adventurers, stupidity`,
+      `***\nA snowflake falls onto your face as you drop into the snow. Your heavy breaths are visible as steam clouds in front of you as you try to catch your breath.\n----\nLore Finder\nLore: none`,
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nLore Finder\nLore: stone golems, punching holes through walls`,
+      `***\n"Does someone remember the name of the town we visited two weeks ago?" asks the bard. "I'm sure I had it written somewhere..."\n----\nLore Finder\nLore: none`,
+      `***\nYou did it, you stole the beholder's tombstone! But now, the alarm is going. You climb upon the roof, but the constructs almost reached you.\n----\nLore Finder\nLore: beholder, thief, alarm system`,
+      `***\nThe elephant screams at you and stomps its feet angrily on the ground. Its trunk snaps toward you threateningly. The creature's massive bulk towers over you and its sharp tusks point downward toward you like spears aimed directly at your heart.\n----\nLore Finder\nLore: elephants`,
+      `***\nYou've never seen a demon before, but you've heard stories about them being able to control minds and bend people to their will. This one seems pretty docile though - it just sits there watching you. Maybe it won't eat you after all?\n----\nLore Finder\nLore: demons, demons eating habits`,
+      `***\nYou arrive at the destroyed taverns. Countless bodies lie scattered around the place, many of them belonging to adventurers who were unlucky enough to be here when this happened. "What in god's name..." you say.\n----\nLore Finder\nLore: none`,
+      `***\nYou dance with your party until you accidentally bump into the drunk next to you. You try to apologize, but he doesn't seem to listen to anything anyone says. Instead he takes a swing on you.\n----\nLore Finder\nLore: none`,
+      `***\nThe annoying adventurers party chants for their drinks again, this time louder than ever before. The innkeeper stacked all their drinks onto a single tray for you to bring them. "This is too much," you say, but he just shrugs at you.\n----\nLore Finder\nLore: adventurer party, drink chanting, innkeepers`,
+      `***\n"You want me to fight a dragon?! Are you insane?" asks the fighter with tears streaming down her cheeks. She throws herself at your feet begging for mercy. "Please... please kill me instead..." she whimpers pathetically. It would have been funny if it wasn't so pathetic. You kick her out of your room without another word.\n----\nLore Finder\nLore: dragons`,
+      `***\n"What kind of treasure do we expect from this dungeon?" asks the wizard. The barbarian grunts something unintelligible while the ranger laughs at him and shakes her head in disbelief. "It has a dragon lair inside it! How could it not have any treasure?!" she says excitedly. You're not convinced by her words.\n----\nLore Finder\nLore: dungeon, dragon lair`,
+      `***\n"How does it feel to know that your entire village is doomed because of your incompetence?" asks the man behind the desk as he stares coldly at you. He continues to speak even though he knows he isn't going to get a response out of you. "You couldn't save your own wife and daughter, let alone an entire village full of innocent villagers!"\n----\nLore Finder\nLore: none`,
+      `***\n"What is this strange device?" asks the mage as she holds up a strange metal contraption made entirely out of gears and levers that are connected by thin wires and pulleys. "It's obviously magical in nature." she says as she looks closely at it. "But what is it used for?" she wonders aloud as she tries to figure it out by examining it carefully.\n----\nLore Finder\nLore: magic devices`,
+      `***\n"We should take a break," says the barbarian as he pulls out a flask of whiskey and starts drinking from it greedily. "Let's rest up for a bit." He then buries his face into his arm and passes out immediately. "Wake me up when we're done," he moans. His speech slurs and he drools on himself slightly as he sleeps deeply.\n----\nLore Finder\nLore: barbarians, whiskey`,
+      `***\n"I think I can make some money selling this thing to the king," says the wizard proudly as he shows off his creation. He points to a long tube filled with liquid. It's attached to a small tank where he keeps his potions stored safely away. He uses a glass vial to fill a second container with a greenish fluid. Then he pours the contents into a large bottle which he seals tightly before handing it to the knight next to him.\n----\nLore Finder\nLore: potion making`,
+      `***\nThe old woman stands on the street corner looking at you accusingly. Her eyes look like they might start bleeding at any moment due to her age. "I told you I'd be able to find someone better than those fools! What did I tell you?"\n----\nLore Finder\nLore: none`,
+      `***\n"You're lucky that we're in the middle of a city," says the ranger as she looks around at the crowd of people passing through the streets of the city. "Otherwise I'd have killed you already for what you've done." She turns towards you and glares at you with an angry expression on her face. "I'm going to let my companion handle this one," she says as she hands you over to the rogue next to her who looks like he's ready to cut your head off right away.\n----\nLore Finder\nLore: thieves guilds, rogues`,
+    ],
+  });
+  const [loreWriter, setLoreWriter] = useState({
+    Fantasy: [
+      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nLore Writer\nTopic: broken common\nKeywords: broken common\nLore: broken common is a language spoken by a small tribe of goblins on the outskirts of the elven kingdom of Avalon. It was created from bits and pieces of many languages, including elvish, gnomish, and dwarven.`,
+      `***\nYou're cold as you enter the mansion. You came here to catch the ghost of this dead noblewoman and prove that she was murdered.\n----\nLore Writer\nTopic: ghosts\nKeywords: ghosts, ghost\nLore: Ghosts are spirits of deceased creatures that refuse to pass into the afterlife. They remain earthbound and can be summoned through magic rituals. Most people believe ghosts haunt places they were once attached to, such as houses or graves.`,
+      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.\n----\nLore Writer\nTopic: planes of existence\nKeywords: planes of existence\nLore: Planes of Existence is a term used by many wizards and mages to describe different realms of existence. There are four main planes; Prime Material (Earth), Astral, Ethereal, and Shadow.`,
+      `***\nA mysterious woman in a dark cloak approaches you as you enter a tavern, her face obscured by shadows cast by lantern light in the tavern windows. Her voice low as she whispers in your ear, "Solve this for the brotherhood."\nShe hands you a note and walks away into the darkness outside as you notice it's written in ancient writing.\n----\nLore Writer\nTopic: ancient writing\nKeywords: ancient writing\nLore: Ancient writing is the script found on old books, parchments, and stone tablets dating back thousands of years ago. Most scholars agree that the first written records appeared sometime during the Sumerian Empire.`,
+      `***\nThe man in front of you looks at you with a sneer on his face and says, "I don't know why I let him talk me into hiring these adventurers. They don't even know what an owlbear is!"
+      Mark raises his hand. "Are you calling us stupid?"\n----\nLore Writer\nTopic: owlbear\nKeywords: owlbear, owlbears\nLore: An owlbear is a large, bipedal beast resembling both a bear and an owl. They stand about 6 feet tall when standing upright, weighing over 500 pounds.`,
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nLore Writer\nTopic: golem\nKeywords: golem, giant statues made out of rock\nLore: Golems are animated constructs created through powerful magic spells or divine intervention. These creatures are usually made of stone or clay. Some are intelligent enough to speak and carry out simple instructions while others are mindless automatons controlled.`,
+      `***\nYou did it, you stole the beholder's tombstone! But now, the alarm is going. You climb upon the roof, but the constructs almost reached you.\n----\nLore Writer\nTopic: beholder\nKeywords: beholder, eye tyrant\nLore: Beholders are a race of eyestalks who live inside their own gigantic eyeballs located in caverns deep underground. They use magic to control their slaves and other beholders to do their bidding.`,
+      `***\nThe elephant screams at you and stomps its feet angrily on the ground. Its trunk snaps toward you threateningly. The creature's massive bulk towers over you and its sharp tusks point downward toward you like spears aimed directly at your heart.\n----\nLore Writer\nTopic: elephants\nKeywords: elephants, elephant, pachyderm\nLore: Elephants are mammals native to tropical Africa. Their closest relatives are extinct proboscideans from Europe and Asia known as wooly mammoths. Males grow to be 11 feet tall and weigh 10 tons.`,
+      `***\nYou've never seen a demon before, but you've heard stories about them being able to control minds and bend people to their will. This one seems pretty docile though - it just sits there watching you. Maybe it won't eat you after all?\n----\nLore Writer\nTopic: demons\nKeywords: demons, demon, devil spawn\nLore: Demons are evil beings born from corrupted souls trapped within hell. They often serve as servants to devils or worshipers of dark gods. Demons possess great magical powers and are extremely dangerous adversaries.`,
+      `***\nThe annoying adventurers party chants for their drinks again, this time louder than ever before. The innkeeper stacked all their drinks onto a single tray for you to bring them. "This is too much," you say, but he just shrugs at you.\n----\nLore Writer\nTopic: adventurers\nKeywords: adventurers\nLore: Adventurers are skilled warriors who make their living fighting monsters for rewards in the dungeons and wildernesses of the world. They can also be found as mercenaries or bodyguards for nobles and wealthy merchants throughout the world.`,
+      `***\n"You want me to fight a dragon?! Are you insane?" asks the fighter with tears streaming down her cheeks. She throws herself at your feet begging for mercy. "Please... please kill me instead..." she whimpers pathetically. It would have been funny if it wasn't so pathetic. You kick her out of your room without another word.\n----\nLore Writer\nTopic: dragons\nKeywords: dragons, dragon\nLore: Dragons are large reptilian beasts that inhabit the far reaches of the sky and earth. They have long lifespans and can be found on most continents on Earth, with the exception of Antarctica due to the extreme cold climate.`,
+      `***\n"What kind of treasure do we expect from this dungeon?" asks the wizard. The barbarian grunts something unintelligible while the ranger laughs at him and shakes her head in disbelief. "It has a dragon lair inside it! How could it not have any treasure?!" she says excitedly. You're not convinced by her words.\n----\nLore Writer\nTopic: dragon lair\nKeywords: dragon lair, dragon caves, wyrm lair, wyrm caves\nLore: Dragon Lairs are hidden areas beneath mountains and hillsides that contain a number of nests and lairs built by dragons over generations.`,
+      `***\n"What is this strange device?" asks the mage as she holds up a strange metal contraption made entirely out of gears and levers that are connected by thin wires and pulleys. "It's obviously magical in nature." she says as she looks closely at it. "But what is it used for?" she wonders aloud as she tries to figure it out by examining it carefully.\n----\nLore Writer\nTopic: magic devices\nKeywords: magic devices, magic artifacts\nLore: Magic is a supernatural ability that allows its user to perform incredible feats that otherwise seem impossible to those without magic.`,
+      `***\n"We should take a break," says the barbarian as he pulls out a flask of whiskey and starts drinking from it greedily. "Let's rest up for a bit." He then buries his face into his arm and passes out immediately. "Wake me up when we're done," he moans. His speech slurs and he drools on himself slightly as he sleeps deeply.\n----\nLore Writer\nTopic: barbarians\nKeywords: barbarian, barbarians\nLore: Barbarians are fierce, warlike people who live in tribes across the world's wilder regions. They often spend their days hunting game or raiding settlements for supplies, which they trade to other nearby tribes or sell to traveling merchants and caravans that pass through their lands.`,
+      `***\n"I think I can make some money selling this thing to the king," says the wizard proudly as he shows off his creation. He points to a long tube filled with liquid. It's attached to a small tank where he keeps his potions stored safely away. He uses a glass vial to fill a second container with a greenish fluid. Then he pours the contents into a large bottle which he seals tightly before handing it to the knight next to him.\n----\nLore Writer\nTopic: potion making\nKeywords: potion making, alchemy\nLore: Alchemy is the art of creating powerful magical items using natural ingredients and simple tools such as cauldrons, furnaces, mortars, pestles, and alembics. The goal is usually to create an item that has special effects or abilities beyond the scope of normal magic.`,
+      `***\n"You're lucky that we're in the middle of a city," says the ranger as she looks around at the crowd of people passing through the streets of the city. "Otherwise I'd have killed you already for what you've done." She turns towards you and glares at you with an angry expression on her face. "I'm going to let my companion handle this one," she says as she hands you over to the rogue next to her who looks like he's ready to cut your head off right away.\n----\nLore Writer\nTopic: cities\nKeywords: cities, town, urban life\nLore: Cities are densely populated urban areas that house thousands or even millions of people who live together in close quarters in order to share resources and build public works such as schools and libraries.`,
+    ],
+  });
+  const [damageFinder, setDamageFinder] = useState({
+    Fantasy: [
+      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nPlayer Health Detector\nProcess: The player did not fight. The player did not take damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nPlayer Health Detector\nProcess: The player got hit. A golem is very strong. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nYour blade sinks into the throat of the guard, but he still manages to scream out his warning as blood spills down over your armor. Your blade pulls free as his body hits the ground with a wet thud. You wipe it on your shirt and look up at the guardsman.\n----\nPlayer Health Detector\nProcess: The player attacks the guard. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou dodge the first two arrows, but as you turn around, you're not quick enough and take one to the left arm. It makes an annoying little ping noise as it passes through your armor. But then the third arrow flies past your head and strikes the stone wall behind you.\n----\nPlayer Health Detector\nProcess: The player got hit. An arrow is small. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYou jump away from the creature's claws, but they still catch your shoulder and send you spinning to the side. Your sword comes loose from your hand as you fall onto your backside. The creature looms above you, its claws ready to strike again.\n----\nPlayer Health Detector\nProcess: The player got hit. The creature sounds dangerous. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nYour sword slices deep into the creature's belly, and it lets out an awful gurgle as it tries to bring itself upright again. Its claws scrape along the floor as it falls backwards, slamming into the floor hard enough to make the whole room shake.\n----\nPlayer Health Detector\nProcess: The player did the attack. The player dodged all attacks. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou swing your sword upwards just in time to block one of the incoming blows, and feel a jolt run up your arm. Your attacker is so close that you can smell its breath, and it snarls angrily at you, trying to force its way inside your guard.\n----\nPlayer Health Detector\nProcess: The player took damage while blocking. The player blocked damage. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYour opponent's axe smashes into the top of your shoulder, knocking you off balance and forcing you to stagger backwards.\n----\nPlayer Health Detector\nProcess: The player got hit by the weapon. The attack was successful. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\n"So, what are you doing later?" asks the Princess with a spark in her eyes. "I'm sure we could find something fun for us both." You try to think of a witty reply, but all you manage is some incoherent mumbling. She smiles at you and walks away, leaving you alone once more.\n----\nPlayer Health Detector\nProcess: The player talked to the princess. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou duck under the blow aimed at your head and step forward, swinging your hammer at the goblin's legs. It stumbles sideways but doesn't let go of its weapon, which brings you face to face with it.\n----\nPlayer Health Detector\nProcess: The player fought the goblin. The goblin died. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou roll for your life, but you're not faster than the dragon's breath and end up being scorched by its flame instead. You're thrown clear of the flames, only to be knocked aside by the dragon's tail. As you land heavily on your back, you realize that this isn't going to help your situation any.\n----\nPlayer Health Detector\nProcess: The player got attacked by the dragon. The attack was successful. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nYour sword slides across the scorpion's carapace, slicing deep into its hide without penetrating too deeply. It snaps its tail at you but misses.\n----\nPlayer Health Detector\nProcess: The player attacked the scorpion. The scorpion missed its attack on the player. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe drunk runs into you. "Ey, fuck you!" he says before turning around and throwing up on himself again. You grab him by his shirt collar and haul him upright again, giving him a shake to try and make him focus on your words rather than his puke-filled mouth. "Listen here," you say slowly and clearly, but he gives you a right hook.\n----\nPlayer Health Detector\nProcess: The player got attacked by the drunkard. The attack is successful. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nThe goblin's blade cuts deep into your flesh, and blood spills over your armor as it bites deeper, tearing open your skin like butter made from raw meat. You can hear bones cracking within your armor as you struggle to keep hold of your weapon, even as the pain becomes unbearable.\n----\nPlayer Health Detector\nProcess: The player was hit by an enemy weapon. The enemy was a goblin. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nThe annoying village child screams at you again as she kicks your shins with her bare feet and tries to trip you up as you move through town.\n----\nPlayer Health Detector\nProcess: The player was attacked by a small child. A child is weak. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYou raise your shield up just in time to stop the sword strike aimed at your chest and knock it aside with a loud clang! You take a step forward, raising your own blade as another guard steps up beside his injured companion.\n----\nPlayer Health Detector\nProcess: The player fought another guard. The player defeated another guard in melee combat. The damage is none.\nPlayer Damage Taken: none`,
+      `***\n"What do we have here?" asks the man with his hand outstretched towards you. "Looks like we caught ourselves a pretty little thief." He takes your dagger from you as his companion approaches with his sword raised high above his head.\n----\nPlayer Health Detector\nProcess: Nobody attacked anybody else or did anything else interesting. There is no change in state or status information. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe wizard points with his staff at you, chanting a spell as he does so. A ball of fire forms at his fingertip, and it flies through the air straight towards you! You're just able to dive out of the way in time as it explodes against the stone wall behind you, showering sparks everywhere and blasting your away.\n----\nPlayer Health Detector\nProcess: The wizard cast a spell at the player. The wizard's spell hit the player. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nThe guardsman's sword strikes home, driving through your armor and sinking deep into your side with an agonizing stab that nearly knocks the breath from you entirely. You cry out in pain as he withdraws his blade and drives it in again, cutting further into your flesh as blood pours down over your breastplate and onto the floor beneath you.\n----\nPlayer Health Detector\nProcess: The player was attacked by a guardsman's weapon while wearing light armor or unarmored (unarmored). The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nYour sword slices through the goblin's neck with ease, severing its spine in one smooth movement, and leaving a gurgling mess behind you as it falls to the floor, twitching violently before dying completely.\n----\nPlayer Health Detector\nProcess: The player killed a goblin with their sword successfully. The damage is none.\nPlayer Damage Taken: none`,
+    ],
+  });
+  const [damageDetector, setDamageDetector] = useState({
+    Fantasy: [
+      "Attack",
+      "Attacks",
+      "Strike",
+      "Strikes",
+      "Hit",
+      "Hits",
+      "Wound",
+      "Wounds",
+      "Hurt",
+      "Hurts",
+      "Shoot",
+      "Shoots",
+      "Stab",
+      "Stabs",
+      "Slash",
+      "Slashes",
+      "Burn",
+      "Burns",
+      "Freeze",
+      "Freezes",
+      "Blast",
+      "Blasts",
+      "Explode",
+      "Explodes",
+      "Punch",
+      "Punches",
+      "Kick",
+      "Kicks",
+      "Bite",
+      "Bites",
+      "Poison",
+      "Poisons",
+      "Electrocute",
+      "Electrocutes",
+      "Crush",
+      "Crushes",
+      "Cleave",
+      "Cleaves",
+      "Smite",
+      "Smites",
+      "Charge",
+      "Charges",
+      "Cast",
+      "Casts",
+      "Injure",
+      "Injures",
+      "Assault",
+      "Assaults",
+      "Bash",
+      "Bashes",
+      "Claw",
+      "Claws",
+      "Whack",
+      "Whacks",
+      "Pierce",
+      "Pierces",
+      "Thrash",
+      "Thrashes",
+      "Slice",
+      "Slices",
+      "Pain",
+      "Spell",
+      "Arrow",
+      "Arrows",
+      "Fire",
+      "Flame",
+      "Choke",
+      "Chokes",
     ],
   });
   // Player Level
@@ -540,7 +710,17 @@ export default function Home() {
     "take the",
     "take a",
   ]);
-  const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState([
+    {
+      name: "Sword",
+      description: "A simple sword",
+      attributes: "",
+      uses: 10,
+      keywords: ["with sword", "use sword", "using sword", "stab", "slash"],
+      id: uuid(),
+      priority: 0,
+    },
+  ]);
   const [openInventory, setOpenInventory] = useState(false);
 
   const [equipment, setEquipment] = useState({
@@ -620,7 +800,8 @@ export default function Home() {
   const [activeLore, setActiveLore] = useState(null);
   const [savesOpen, setSavesOpen] = useState(false);
   // Main Settings
-  const [model, setModel] = useState("euterpe-v2");
+  const [model, setModel] = useState("cassandra-lit-6-9b");
+  const [models, setModels] = useState("GooseAI");
   const [verbosity, setVerbosity] = useState(0);
   const [verbosityValue, setVerbosityValue] = useState(null);
   // Advanced Settings
@@ -873,6 +1054,8 @@ export default function Home() {
 
   // Eval
   const evalStory = async (prompts, story, input, type) => {
+    const naiKey = localStorage.getItem("nai_access_key");
+    const gooseKey = localStorage.getItem("gooseai-key");
     const response = await axios
       .post("/api/eval", {
         prompts,
@@ -880,6 +1063,8 @@ export default function Home() {
         input,
         model,
         type,
+        gooseKey,
+        naiKey,
       })
       .catch((err) => console.log(err));
     const output = response.data.output;
@@ -919,6 +1104,11 @@ export default function Home() {
   };
 
   const generate = async (input, type, last, retry, story) => {
+    if (generating) {
+      return;
+    } else {
+      setGenerating(true);
+    }
     // the conditions to check for
     let check, pick, link, movingTo, newLocation;
     // if retry remove last generation from story
@@ -1019,11 +1209,16 @@ export default function Home() {
             "\ndesc: ",
             description
           );
+          // remove "Attributes: " from attributes
+          attributes = attributes.replace("Attributes: ", "");
+          // turn keywords into array
+          const keywordsArray = keywords.split(", ");
+
           pick = {
             attributes,
             uses,
             name,
-            keywords,
+            keywords: keywordsArray,
             description,
             id: uuid(),
             priority: inventory.length,
@@ -1031,6 +1226,7 @@ export default function Home() {
           // add item to inventory logic here
           setMessage(`You picked up ${name}!`);
           setMessageOpen(true);
+          setInventory([...inventory, pick]);
         }
       } else if (link) {
         // move to link
@@ -1040,13 +1236,21 @@ export default function Home() {
         // move to new location
       }
     }
+    let key;
+    if (models === "NovelAI") {
+      key = localStorage.getItem("nai_access_key");
+    } else {
+      key = localStorage.getItem("gooseai-key");
+    }
+
     const response = await axios
       .post("/api/generate", {
         story,
         type,
         input,
-        key: localStorage.getItem("nai_access_key"),
+        key,
         memory,
+
         parameters: {
           model,
           biases,
@@ -1080,16 +1284,66 @@ export default function Home() {
           failMessage:
             failMessages[Math.floor(Math.random() * failMessages.length)],
           pickUp,
+          attg: {
+            author,
+            title,
+            tags: [],
+            genre,
+          },
+          profile,
         },
         lore: loreBuilder(story, lore, input),
         model,
+        models,
       })
       .catch((err) => {
         console.log(err);
       });
     if (response.data) {
+      const lastOutput = response.data.text;
+      // check for lore and generate it
+      evalStory(
+        loreFinder[genre],
+        story,
+        lastOutput + "\n----\nLore Finder\nLore:",
+        "Lore Finder"
+      ).then((res) => {
+        // logic for lore creation
+        // get first line which are the keys
+        let keys = res.match(/.*/g)[0];
+        // remove first whitespace if there is one
+        if (keys[0] === " ") {
+          keys = keys.slice(1);
+        }
+        // split keys into array
+        keys = keys.split(", ");
+        console.log("KEYS:", keys);
+        if (keys[0] !== "none") {
+          keys.forEach((key) => {
+            generateLores(key, lastOutput);
+          });
+        }
+      });
+      // check for damage
+      if (checkForKeys(lastOutput, damageDetector[genre])) {
+        // take damage
+        const damage = await takeDamage(lastOutput);
+        if (damage) {
+          setHealth(health - damage);
+          setHealthMessage(`You took ${damage} damage!`);
+          setHealthMessageOpen(true);
+        } else {
+          // heal 1 hp per turn
+
+          setHealth(health + 1);
+        }
+      } else {
+        // heal 1 hp per turn
+        setHealth(health + 1);
+      }
       addOutput(input, type, last, response.data.text, story);
     }
+    setGenerating(false);
   };
   const generateImage = async (location) => {
     // change location to prompt later
@@ -1150,6 +1404,94 @@ export default function Home() {
     // return found
     return found;
   };
+  const generateLores = async (input, lastOutput) => {
+    const exists = lore.find((lore) => {
+      return checkForKeys(input, lore.keywords);
+    });
+    if (!exists) {
+      const newLore = await evalStory(
+        loreWriter[genre],
+        story,
+        lastOutput + `\n----\nLore Writer\nTopic: ${input}\nKeywords:`,
+        "Lore Finder"
+      );
+      console.log(newLore);
+      if (newLore.includes("Lore:")) {
+        // get first line which are the keys
+        let keys = newLore.match(/.*/g)[0];
+        // remove first whitespace if there is one
+        if (keys[0] === " ") {
+          keys = keys.slice(1);
+        }
+        // split keys into array
+        keys = keys.split(", ");
+        // get the "Lore:" line
+        let lore = newLore.split("Lore:")[1];
+        // remove the *** or \n*** at the end, or ---- or \n---- at the end
+        if (lore.includes("\n***")) {
+          lore = lore.split("\n***")[0];
+        } else if (lore.includes("***")) {
+          lore = lore.split("***")[0];
+        } else if (lore.includes("\n----")) {
+          lore = lore.split("\n----")[0];
+        } else if (lore.includes("----")) {
+          lore = lore.split("----")[0];
+        }
+        setMessage(`You learned about ${input}!`);
+        setMessageOpen(true);
+
+        // add lore to lore state
+        setLore((prev) => {
+          return [
+            ...prev,
+            {
+              title: input,
+              id: uuid(),
+              image: "",
+              keywords: keys,
+              content:
+                "----" +
+                `<div>[ Knowledge: ${input} ]</div>` +
+                "<div>" +
+                lore +
+                "</div>",
+              settings: {
+                range: 10,
+                priority: 1,
+                active: true,
+              },
+            },
+          ];
+        });
+      }
+    }
+  };
+  const takeDamage = async (lastOutput) => {
+    console.log("Searching for damage");
+    const response = await evalStory(
+      damageFinder[genre],
+      story,
+      lastOutput + "\n----\nPlayer Health Detector\nProcess:",
+      "Lore Finder"
+    );
+    console.log(response);
+    if (!response.includes("Damage:")) {
+      return false;
+    }
+    // get the "Damage:" line
+    let damage = response.split("Damage Taken: ")[1];
+    // remove the *** or \n*** at the end
+    if (damage.includes("\n***")) {
+      damage = damage.split("\n***")[0];
+    }
+    // remove the *** or \n*** at the end
+    if (damage.includes("***")) {
+      damage = damage.split("***")[0];
+    }
+    damage = calculateDamage(damage, difficulty);
+    return damage;
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -1185,6 +1527,20 @@ export default function Home() {
               sx={{ width: "100%" }}
             >
               {message}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={healthMessageOpen}
+            autoHideDuration={6000}
+            onClose={() => setHealthMessageOpen(false)}
+            anchorOrigin={{ vertical: "top", horizontal: "left" }}
+          >
+            <Alert
+              onClose={() => seHealthtMessageOpen(false)}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              {healthMessage}
             </Alert>
           </Snackbar>
           <Story
@@ -1269,6 +1625,8 @@ export default function Home() {
           openMap={openMap}
           setOpenMap={setOpenMap}
           setOpenInventory={setOpenInventory}
+          models={models}
+          setModels={setModels}
         />
         <Lore
           lore={lore}
@@ -1293,6 +1651,24 @@ export default function Home() {
           stats={stats}
           setStats={setStats}
           XP={XP}
+          setXP={setXP}
+          difficulty={difficulty}
+          genre={genre}
+          setGenre={setGenre}
+          genres={genres}
+          setGenres={setGenres}
+          author={author}
+          setAuthor={setAuthor}
+          title={title}
+          setTitle={setTitle}
+          profile={profile}
+          setProfile={setProfile}
+        />
+        <Inventory
+          open={openInventory}
+          setOpen={setOpenInventory}
+          inventory={inventory}
+          setInventory={setInventory}
         />
         <Map map={map} setMap={setMap} open={openMap} setOpen={setOpenMap} />
 
