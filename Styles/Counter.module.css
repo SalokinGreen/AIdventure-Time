@@ -15,6 +15,7 @@
 
 .counter {
   display: flex;
+  font-family: "Scoore:2000", sans-serif;
 }
 
 .led {
@@ -27,10 +28,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Scoore:2000", sans-serif;
+
   border-radius: 5px;
 }
 
 .ledOn {
   background-color: rgb(0, 0, 0);
   color: rgb(0, 238, 255);
+  font-family: "Scoore:2000", sans-serif;
 }

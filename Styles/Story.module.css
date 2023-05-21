@@ -73,6 +73,7 @@
   border: 1px solid #00ff0d;
   border-radius: 50px;
   background-color: #00ff0d1d;
+  color: white !important;
 }
 .talkText {
   border: 1px solid #1988ff;
@@ -86,6 +87,7 @@
   border-radius: 50px;
   background-color: #1988ff36;
   min-height: 48px;
+  color: white !important;
 }
 
 .storyText {
@@ -98,6 +100,7 @@
   border-radius: 50px;
   background-color: #ff00ff36;
   min-height: 48px;
+  color: white !important;
 }
 @media (max-width: 768px) {
   .actionText,
