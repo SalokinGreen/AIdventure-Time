@@ -115,7 +115,7 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
-  color: white;
+  color: white !important;
   align-self: center;
 }
 /* active */
@@ -147,10 +147,10 @@
 
 /* active */
 .cassandraActive {
-  background-color: #23b9ff;
+  background-color: #23b9ff !important;
   border: none;
   border-radius: 5px;
-  color: #ffffff;
+  color: #ffffff !important;
   cursor: pointer;
   font-size: 1rem;
   /* padding: 0.5rem 1rem; */
@@ -160,10 +160,10 @@
 }
 /* deactivated */
 .cassandra {
-  background-color: #23b9ff31;
+  background-color: #23b9ff31 !important;
   border: #23b9ff31 1px solid;
   border-radius: 5px;
-  color: #ffffff;
+  color: #ffffff !important;
   cursor: pointer;
   font-size: 1rem;
   /* padding: 0.5rem 1rem; */
@@ -176,11 +176,11 @@
   max-width: 100%;
   margin-bottom: 1rem;
   border: none;
-  border-bottom: #ffffff 1px solid;
+  border-bottom: #ffffff 1px solid !important;
   outline: none;
-  background-color: #000000;
+  background-color: #000000 !important;
   border-radius: 5px;
-  color: #ffffff;
+  color: #ffffff !important;
   font-size: 1rem;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
