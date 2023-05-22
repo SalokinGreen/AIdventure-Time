@@ -316,7 +316,7 @@ export async function POST(request) {
     // console.log(params);
     const response = await axios
       .post(
-        "https://api.goose.ai/v1/engines/cassandra-lit-6-9b/completions",
+        `https://api.goose.ai/v1/engines/${req.model}/completions`,
         {
           prompt: input,
           max_tokens: params.max_length,
@@ -394,6 +394,7 @@ export async function POST(request) {
         )
         .catch((err) => {
           console.log(err);
+          return NextResponse.json(err);
         });
       console.log("Second Response: ", response2.data.choices[0].text);
       text = response.data.choices[0].text + response2.data.choices[0].text;

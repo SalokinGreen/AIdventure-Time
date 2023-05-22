@@ -44,7 +44,7 @@ export async function POST(request) {
           top_k: 10,
           temperature: 0.22,
           stop: ["***", "----"],
-          repetition_penalty: 1.42,
+          repetition_penalty: 0.96,
           top_p: 0.9,
           tfs: 0.901,
           top_a: 0.9,
