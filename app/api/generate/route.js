@@ -264,16 +264,17 @@ const novelAIlist = ["krake-v2", "euterpe-v2"];
 export async function POST(request) {
   let text, logprobs, verbosityValue;
   const req = await request.json();
-
+  const input = contextBuilderPile(
+    req.story,
+    req.type,
+    req.input,
+    req.memory,
+    req.lore,
+    req.model,
+    req.extra,
+    req.parameters.tokens
+  );
   if (novelAIlist.includes(req.model)) {
-    const input = contextBuilder(
-      req.story,
-      req.type,
-      req.input,
-      req.memory,
-      req.lore,
-      req.model
-    );
     console.log(input);
     const params = parametersBuilderEuterpe(req.parameters);
     console.log(params);
@@ -295,20 +296,11 @@ export async function POST(request) {
       )
       .catch((err) => {
         console.log(err);
+        return NextResponse.json(err);
       });
     console.log(response.data);
     return NextResponse.json(response.data.output);
   } else {
-    const input = contextBuilderPile(
-      req.story,
-      req.type,
-      req.input,
-      req.memory,
-      req.lore,
-      req.model,
-      req.extra,
-      req.parameters.tokens
-    );
     const count = input.split(">").length - 1;
     console.log(input);
     console.log("count: " + count);
@@ -347,6 +339,7 @@ export async function POST(request) {
       .catch((err) => {
         console.log("ERROR:");
         console.log(err);
+        return NextResponse.json(err);
       });
     console.log("First Response: ", response.data.choices[0].text);
     // if response.data.choices[0].text doesn't end with punctuation, run again

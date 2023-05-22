@@ -48,6 +48,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
           uses: 0,
           priority: 0,
           keywords: [],
+          active: true,
         },
       ];
     });
@@ -218,6 +219,21 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                   setKeyword("");
                 }
               }}
+            />
+            <Typography variant="h5" gutterBottom color={"white"}>
+              Active
+            </Typography>
+            <input
+              type="checkbox"
+              className={styles.checkbox}
+              checked={selectedItem.active}
+              value={selectedItem.active}
+              onChange={(e) =>
+                setSelectedItem({
+                  ...selectedItem,
+                  active: e.target.checked,
+                })
+              }
             />
             <Typography variant="h5" gutterBottom color={"white"}>
               Delete

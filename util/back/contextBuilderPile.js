@@ -1,5 +1,11 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
-
+import TokenizerService from "./tokenizers/gptTokenizer";
+const modelContextSize = {
+  "euterpe-v2": 2048,
+  "krake-v2": 2048,
+  "cassandra-lit-6-9b": 2048,
+  "cassandra-lit-2-8b": 2048,
+};
 export default function contextBuilderPile(
   story,
   type,
@@ -10,6 +16,13 @@ export default function contextBuilderPile(
   extra,
   max_length
 ) {
+  //  determine tokenizer
+  let tokenizer;
+  if (model === "euterpe-v2") {
+    tokenizer = TokenizerService;
+  } else {
+    tokenizer = Tokenizer;
+  }
   let reversedStory;
   if (!story) {
     reversedStory = [];
@@ -41,7 +54,7 @@ export default function contextBuilderPile(
   let profileContext = "----\nprotagonist\n";
   // how many tokens are and can be used
   let tokens = 3;
-  const maxTokens = 2048 - max_length - 25;
+  const maxTokens = modelContextSize[model] - max_length - 25;
   // location
   let locationFound = false;
   let locationPut = false;
@@ -60,18 +73,23 @@ export default function contextBuilderPile(
   // add check if any there
   if (extra.check && extra.check.outcome != "") {
     checkContext = "\n" + extra.check.outcome;
-    tokens += Tokenizer.encode(checkContext).length;
+    tokens += tokenizer.encode(checkContext).length;
     if (
       !extra.check.result &&
-      Tokenizer.encode(`\n ${extra.failMessage}`).length
+      tokenizer.encode(`\n ${extra.failMessage}`).length
     ) {
-      tokens += Tokenizer.encode(`\n ${extra.failMessage}`).length;
+      tokens += tokenizer.encode(`\n ${extra.failMessage}`).length;
       failureContext = `\n${extra.failMessage}`;
+    }
+    // add item if there
+    if (extra.check.item) {
+      itemContext = `\n[ You used ${extra.check.item.name}: ${extra.check.item.description} ]\n`;
+      tokens += tokenizer.encode(itemContext).length;
     }
   }
   if (extra.pick) {
     itemContext = `\n${extra.pick}`;
-    tokens += Tokenizer.encode(itemContext).length;
+    tokens += tokenizer.encode(itemContext).length;
   }
 
   // build attg
@@ -86,7 +104,7 @@ export default function contextBuilderPile(
   // genre
   ATTG += `Genre: ${extra.attg.genre} ]\n`;
   // add tokens
-  tokens += Tokenizer.encode(ATTG).length;
+  tokens += tokenizer.encode(ATTG).length;
 
   // profile builder
   // name
@@ -113,21 +131,25 @@ export default function contextBuilderPile(
   if (extra.profile.appearance && extra.profile.appearance !== "") {
     profileContext += `Appearance: ${extra.profile.appearance}\n`;
   }
+  // prose
+  if (extra.profile.prose && extra.profile.prose !== "") {
+    profileContext += `${extra.profile.prose}\n`;
+  }
   // add tokens
-  tokens += Tokenizer.encode(profileContext).length;
+  tokens += tokenizer.encode(profileContext).length;
 
   // add tokens for memory
   if (memory && memory !== "") {
     // replace <div> with \n and </div> with "" of all lore entries
     memory = memory.replace(/<div>/g, "\n").replace(/<\/div>/g, "");
     tokens +=
-      Tokenizer.encode(memory).length + Tokenizer.encode("\n> info\n").length;
+      tokenizer.encode(memory).length + tokenizer.encode("\n> info\n").length;
     memoryContext = "\n> info\n" + memory;
   }
   // add new location if any
   if (extra.newLocation) {
     newLocation = "\nLocation:";
-    tokens += Tokenizer.encode(newLocation).length;
+    tokens += tokenizer.encode(newLocation).length;
   }
   // lore process
   if (lore) {
@@ -137,34 +159,34 @@ export default function contextBuilderPile(
     });
 
     lore.map((l) => {
-      if (tokens + Tokenizer.encode(l).length + 1 < maxTokens / 2) {
+      if (tokens + tokenizer.encode(l).length + 1 < maxTokens / 2) {
         loreContext += l + "\n";
-        tokens += Tokenizer.encode(l).length + 1;
+        tokens += tokenizer.encode(l).length + 1;
       }
     });
   }
   // Go throught the story and add it to the context
   reversedStory.forEach((story, index) => {
     if (story.type === "action" || story.type === "talk") {
-      if (tokens + Tokenizer.encode("\n> " + story.text).length < maxTokens) {
+      if (tokens + tokenizer.encode("\n> " + story.text).length < maxTokens) {
         context = "\n> " + story.text + context;
-        tokens += Tokenizer.encode("\n> " + story.text).length;
+        tokens += tokenizer.encode("\n> " + story.text).length;
       }
     } else {
-      if (tokens + Tokenizer.encode("\n" + story.text).length < maxTokens) {
+      if (tokens + tokenizer.encode("\n" + story.text).length < maxTokens) {
         context = "\n" + story.text + context;
-        tokens += Tokenizer.encode("\n" + story.text).length;
+        tokens += tokenizer.encode("\n" + story.text).length;
         if (extra.location !== "" && index > locationRange) {
           if (story.text.includes("Location:")) {
             locationFound = true;
           } else if (!locationFound && index > locationRange) {
             if (
               tokens +
-                Tokenizer.encode(`\nLocation: ${extra.location}`).length <
+                tokenizer.encode(`\nLocation: ${extra.location}`).length <
               maxTokens
             ) {
               context = `\nLocation: ${extra.location}` + context;
-              tokens += Tokenizer.encode(
+              tokens += tokenizer.encode(
                 `\nLocation: ${extra.location}`
               ).length;
               locationPut = true;
@@ -178,12 +200,12 @@ export default function contextBuilderPile(
   // add location if context wasn't long enough
   if (extra.location !== "" && !locationPut && !locationFound) {
     if (
-      tokens + Tokenizer.encode(`\nLocation: ${extra.location}`).length <
+      tokens + tokenizer.encode(`\nLocation: ${extra.location}`).length <
       maxTokens
     ) {
       if (!context.includes("Location:")) {
         locationContext = `\nLocation: ${extra.location}`;
-        tokens += Tokenizer.encode(`\nLocation: ${extra.location}`).length;
+        tokens += tokenizer.encode(`\nLocation: ${extra.location}`).length;
       }
     }
   }

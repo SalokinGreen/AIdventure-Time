@@ -385,6 +385,31 @@ export default function Stats({
                       />
                     </TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell className={styles.tableCell}>
+                      <Typography
+                        varian="h2"
+                        className={styles.tableTitle}
+                        color={"white"}
+                      >
+                        Prose
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        variant="filled"
+                        size="small"
+                        className={styles.textField}
+                        color="info"
+                        multiline
+                        rows={4}
+                        value={profile.prose}
+                        onChange={(e) =>
+                          setProfile({ ...profile, prose: e.target.value })
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>

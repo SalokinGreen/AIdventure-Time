@@ -130,7 +130,8 @@
   outline: none;
   width: 100%;
 }
-.textField input {
+.textField input,
+.textField textarea {
   color: white;
 }
 .select {

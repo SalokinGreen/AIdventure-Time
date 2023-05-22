@@ -81,6 +81,13 @@
 .delete:focus {
   background-color: #ff0000;
 }
+.checkbox {
+  margin-bottom: 1rem;
+  width: 1rem;
+  cursor: pointer;
+  /* make the checkbox bigger */
+  transform: scale(1.5);
+}
 /* mobile view */
 @media (max-width: 768px) {
   .modalContent {

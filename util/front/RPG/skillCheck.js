@@ -22,13 +22,15 @@ function skillCheck(input, stats, difficulty, inventory, health, DC) {
   // sort inventory by priority. 0 is the lowest priority
   inventory.sort((a, b) => b.priority - a.priority);
   // Go through inventory to see if there is an item used
-  const item = inventory.find((item) => {
-    return checkForKeys(input, item.keywords);
+  let item = inventory.find((item) => {
+    return checkForKeys(input, item.keywords) && item.uses > 0 && item.active;
   });
+
   // if item, give advantage
   if (item) {
     advantage = true;
   }
+
   // if disadvantage is true, roll again and take the lowest
   if (disadvantage && !advantage) {
     const roll2 = Math.floor(Math.random() * 20) + 1;
@@ -72,7 +74,10 @@ function skillCheck(input, stats, difficulty, inventory, health, DC) {
 
   // Determine outcome
   const outcome = roll >= DC ? stat.outcomes.success : stat.outcomes.failure;
-
+  // deactive item if skill check failed
+  if (roll < DC) {
+    item = false;
+  }
   // return the result
   return {
     roll: roll,

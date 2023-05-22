@@ -384,6 +384,8 @@ export default function Home() {
     "Erotica",
     "Historical Fiction",
     "Modern",
+    "Superheroes",
+    "Western",
   ]);
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
@@ -393,7 +395,7 @@ export default function Home() {
     occupation: "Bard",
     mental: "You're an adventurous bard who loves to travel and explore.",
     appearance: "You're quite handsome.",
-    prose: "",
+    prose: "You're James the great Bard.",
   });
   // RPG - Text-Adventure
   // message
@@ -1163,7 +1165,19 @@ export default function Home() {
           console.log("reasoning:", reasoning, "\nDC:", DC);
         }
         check = skillCheck(input, stats, difficulty, inventory, health, DC);
-        console.log(check);
+        if (check.item) {
+          // if item is used, lower its uses by 1
+          setInventory(
+            inventory.map((item) => {
+              if (item.id === check.item.id) {
+                item.uses--;
+              }
+              return item;
+            })
+          );
+          setMessage(`You used ${check.item.name}!`);
+          setMessageOpen(true);
+        }
       } else if (pick) {
         // pick up item
         let attributes = "Attributes:";
@@ -1221,6 +1235,7 @@ export default function Home() {
             description,
             id: uuid(),
             priority: inventory.length,
+            active: true,
           };
           // add item to inventory logic here
           setMessage(`You picked up ${name}!`);
