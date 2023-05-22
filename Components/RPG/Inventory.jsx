@@ -7,6 +7,8 @@ import {
   Typography,
   Chip,
 } from "@mui/material";
+import { uuid } from "uuidv4";
+
 import styles from "../../Styles/Inventory.module.css";
 function Inventory({ open, setOpen, inventory, setInventory }) {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -28,7 +30,33 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
       });
     }
   }, [selectedItem]);
-
+  const handleDelete = (index) => {
+    setSelectedItem({
+      ...selectedItem,
+      keywords: selectedItem.keywords.filter((_, i) => i !== index),
+    });
+  };
+  const handleAddItem = () => {
+    setInventory((prev) => {
+      return [
+        ...prev,
+        {
+          id: uuid(),
+          name: "New Item",
+          description: "Description",
+          attributes: "",
+          uses: 0,
+          priority: 0,
+          keywords: [],
+        },
+      ];
+    });
+  };
+  useEffect(() => {
+    if (!open) {
+      setSelectedItem(null);
+    }
+  }, [open]);
   return (
     <Modal
       open={open}
@@ -58,6 +86,13 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                   <ListItemText primary={item.name} />
                 </ListItem>
               ))}
+              <ListItem
+                button
+                onClick={() => handleAddItem()}
+                className={styles.listItem}
+              >
+                <ListItemText primary="Add Item" />
+              </ListItem>
             </List>
           ) : (
             <List>
@@ -73,7 +108,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
         </div>
         {selectedItem && (
           <div className={styles.item}>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Item Name
             </Typography>
             <input
@@ -86,7 +121,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
               }
               required
             />
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Description
             </Typography>
             <textarea
@@ -102,7 +137,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
               }
               required
             />
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Attributes
             </Typography>
             <input
@@ -117,7 +152,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 })
               }
             />
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Uses
             </Typography>
             <input
@@ -132,7 +167,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 })
               }
             />
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Priority
             </Typography>
             <input
@@ -147,7 +182,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 })
               }
             />
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color={"white"}>
               Keywords
             </Typography>
             <div className={styles.keywords}>
@@ -184,6 +219,20 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 }
               }}
             />
+            <Typography variant="h5" gutterBottom color={"white"}>
+              Delete
+            </Typography>
+            <button
+              className={styles.delete}
+              onClick={() => {
+                setInventory((prev) => {
+                  return prev.filter((item) => item.id !== selectedItem.id);
+                });
+                setSelectedItem(null);
+              }}
+            >
+              Delete Item
+            </button>
           </div>
         )}
       </div>

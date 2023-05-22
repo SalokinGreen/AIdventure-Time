@@ -150,6 +150,7 @@ const Map = ({ open, setOpen, map, setMap }) => {
                     button
                     onClick={() => handleSelectLocation(location)}
                     key={location.id}
+                    className={styles.listItem}
                   >
                     {location.name}
                   </ListItem>
@@ -169,14 +170,14 @@ const Map = ({ open, setOpen, map, setMap }) => {
           >
             {window.innerWidth <= 768 ? (
               isLocationListOpen ? (
-                <BiArrowToTop size="3rem" />
+                <BiArrowToTop size="3rem" className={styles.icon} />
               ) : (
-                <BiArrowFromTop size="3rem" />
+                <BiArrowFromTop size="3rem" className={styles.icon} />
               )
             ) : isLocationListOpen ? (
-              <BiArrowToLeft size="3rem" />
+              <BiArrowToLeft size="3rem" className={styles.icon} />
             ) : (
-              <BiArrowFromLeft size="3rem" />
+              <BiArrowFromLeft size="3rem" className={styles.icon} />
             )}
           </button>
         </div>
@@ -286,8 +287,14 @@ const Map = ({ open, setOpen, map, setMap }) => {
                           </option>
                         ))}
                       </select>
-                      <FaPlus onClick={handleAddPrompt} />
-                      <FaMinus onClick={handleRemovePrompt} />
+                      <FaPlus
+                        onClick={handleAddPrompt}
+                        className={styles.icon}
+                      />
+                      <FaMinus
+                        onClick={handleRemovePrompt}
+                        className={styles.icon}
+                      />
                     </div>
                     {selectedLocation.prompts.map((prompt, i) => (
                       <ContentEditable
@@ -324,8 +331,11 @@ const Map = ({ open, setOpen, map, setMap }) => {
                           </option>
                         ))}
                       </select>
-                      <FaPlus onClick={handleAddLink} />
-                      <FaMinus onClick={handleRemoveLink} />
+                      <FaPlus onClick={handleAddLink} className={styles.icon} />
+                      <FaMinus
+                        onClick={handleRemoveLink}
+                        className={styles.icon}
+                      />
                     </div>
                     {selectedLocation.links.length > 0 && (
                       <div className={styles.adress}>

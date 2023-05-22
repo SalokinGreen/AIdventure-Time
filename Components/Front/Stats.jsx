@@ -179,7 +179,7 @@ export default function Stats({
         )}
         {tab === 1 && (
           <Box>
-            <Typography variant="h6" className={styles.header}>
+            <Typography variant="h6" className={styles.header} color="white">
               ATTG
             </Typography>
             <TableContainer>
@@ -262,7 +262,7 @@ export default function Stats({
                 </TableBody>
               </Table>
             </TableContainer>
-            <Typography variant="h6" className={styles.header}>
+            <Typography variant="h6" className={styles.header} color="white">
               Profile
             </Typography>
             <TableContainer>

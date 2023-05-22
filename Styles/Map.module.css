@@ -183,6 +183,12 @@
   margin: 1rem 0;
   text-align: center;
 }
+.listItem {
+  color: white;
+}
+.icon {
+  color: white;
+}
 /* mobile view */
 @media (max-width: 768px) {
   .modalContent {

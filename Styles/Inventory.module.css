@@ -30,8 +30,13 @@
   color: white;
   border: white 1px solid;
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   cursor: pointer;
+}
+.listItem:hover,
+.listItem:focus {
+  background-color: white;
+  color: #160028;
 }
 .input {
   color: white;
@@ -63,7 +68,19 @@
   margin: 0.1rem;
   /* cursor: pointer; */
 }
-
+.delete {
+  background-color: #160028;
+  color: white;
+  border: white 1px solid;
+  padding: 0.5rem;
+  margin: 0.1rem;
+  cursor: pointer;
+  width: fit-content;
+}
+.delete:hover,
+.delete:focus {
+  background-color: #ff0000;
+}
 /* mobile view */
 @media (max-width: 768px) {
   .modalContent {
