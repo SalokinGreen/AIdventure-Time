@@ -6,11 +6,11 @@ Welcome to AIT, the place where your AI text-adventure dreams come true. Game on
 
 ### Hosting
 
-You can use hosted version of AIT, host it yourself, or run it locally. To run it locally, you only need (node.js)[https://nodejs.org/en/]. To host it yourself, I recommend using (Vercel)[https://vercel.com/].
+You can use hosted version of AIT, host it yourself, or run it locally. To run it locally, you only need [node.js](https://nodejs.org/en/). To host it yourself, I recommend using [Vercel](https://vercel.com/).
 
 ### What you need
 
-Currently AIT support (NovelAI)[https://novelai.net/] and (GooseAI)[https://goose.ai/]. You need to have an account on one of these sites to use AIT. For NovelAI, you need to have a subscription to use the API. For GooseAI, you need to have an account and credits. The future might bring more options.
+Currently AIT support [NovelAI](https://novelai.net/) and [GooseAI](https://goose.ai/). You need to have an account on one of these sites to use AIT. For NovelAI, you need to have a subscription to use the API. For GooseAI, you need to have an account and credits. The future might bring more options.
 
 ### How to use it
 
@@ -20,11 +20,11 @@ You need to to either log in with your NovelAI account, or put in your GooseAI k
 
 ### NovelAI
 
-(NovelAI)[https://novelai.net/] has many amazing models, and you only have to pay once a month for a subscription, which you can use for many other things!
+[NovelAI](https://novelai.net/) has many amazing models, and you only have to pay once a month for a subscription, which you can use for many other things!
 
 ### GooseAI
 
-(GooseAI)[https://goose.ai/], you need to pay for credits, but that's perfect if you don't use it enough to justify a subscription. Currently supporting the amazing Cassandra 2.8B and 6.9B.
+[GooseAI](https://goose.ai/), you need to pay for credits, but that's perfect if you don't use it enough to justify a subscription. Currently supporting the amazing Cassandra 2.8B and 6.9B.
 
 ### AI Settings
 
