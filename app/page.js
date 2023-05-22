@@ -440,29 +440,28 @@ export default function Home() {
   });
   const [loreFinder, setLoreFinder] = useState({
     Fantasy: [
-      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nLore Finder\nLore: unknown man, common`,
-      `***\nYou're cold as you enter the mansion. You came here to catch the ghost of this dead noblewoman and prove that she was murdered.\n----\nLore Finder\nLore: ghosts, mansion\n`,
-      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.`,
-      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.\n----\nLore Finder\nLore: planes of existence, princess, barbarians, languages`,
-      `***\nA mysterious woman in a dark cloak approaches you as you enter a tavern, her face obscured by shadows cast by lantern light in the tavern windows. Her voice low as she whispers in your ear, "Solve this for the brotherhood."\nShe hands you a note and walks away into the darkness outside as you notice it's written in ancient writing.\n----\nLore Finder\nLore: brotherhood, mysterious woman, ancient writing`,
-      `***\nThe man in front of you looks at you with a sneer on his face and says, "I don't know why I let him talk me into hiring these adventurers. They don't even know what an owlbear is!"\nMark raises his hand. "Are you calling us stupid?"\n----\nLore Finder\nLore: owlbear, Mark, adventurers, stupidity`,
-      `***\nA snowflake falls onto your face as you drop into the snow. Your heavy breaths are visible as steam clouds in front of you as you try to catch your breath.\n----\nLore Finder\nLore: none`,
-      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nLore Finder\nLore: stone golems, punching holes through walls`,
-      `***\n"Does someone remember the name of the town we visited two weeks ago?" asks the bard. "I'm sure I had it written somewhere..."\n----\nLore Finder\nLore: none`,
-      `***\nYou did it, you stole the beholder's tombstone! But now, the alarm is going. You climb upon the roof, but the constructs almost reached you.\n----\nLore Finder\nLore: beholder, thief, alarm system`,
-      `***\nThe elephant screams at you and stomps its feet angrily on the ground. Its trunk snaps toward you threateningly. The creature's massive bulk towers over you and its sharp tusks point downward toward you like spears aimed directly at your heart.\n----\nLore Finder\nLore: elephants`,
-      `***\nYou've never seen a demon before, but you've heard stories about them being able to control minds and bend people to their will. This one seems pretty docile though - it just sits there watching you. Maybe it won't eat you after all?\n----\nLore Finder\nLore: demons, demons eating habits`,
-      `***\nYou arrive at the destroyed taverns. Countless bodies lie scattered around the place, many of them belonging to adventurers who were unlucky enough to be here when this happened. "What in god's name..." you say.\n----\nLore Finder\nLore: none`,
-      `***\nYou dance with your party until you accidentally bump into the drunk next to you. You try to apologize, but he doesn't seem to listen to anything anyone says. Instead he takes a swing on you.\n----\nLore Finder\nLore: none`,
-      `***\nThe annoying adventurers party chants for their drinks again, this time louder than ever before. The innkeeper stacked all their drinks onto a single tray for you to bring them. "This is too much," you say, but he just shrugs at you.\n----\nLore Finder\nLore: adventurer party, drink chanting, innkeepers`,
-      `***\n"You want me to fight a dragon?! Are you insane?" asks the fighter with tears streaming down her cheeks. She throws herself at your feet begging for mercy. "Please... please kill me instead..." she whimpers pathetically. It would have been funny if it wasn't so pathetic. You kick her out of your room without another word.\n----\nLore Finder\nLore: dragons`,
-      `***\n"What kind of treasure do we expect from this dungeon?" asks the wizard. The barbarian grunts something unintelligible while the ranger laughs at him and shakes her head in disbelief. "It has a dragon lair inside it! How could it not have any treasure?!" she says excitedly. You're not convinced by her words.\n----\nLore Finder\nLore: dungeon, dragon lair`,
-      `***\n"How does it feel to know that your entire village is doomed because of your incompetence?" asks the man behind the desk as he stares coldly at you. He continues to speak even though he knows he isn't going to get a response out of you. "You couldn't save your own wife and daughter, let alone an entire village full of innocent villagers!"\n----\nLore Finder\nLore: none`,
-      `***\n"What is this strange device?" asks the mage as she holds up a strange metal contraption made entirely out of gears and levers that are connected by thin wires and pulleys. "It's obviously magical in nature." she says as she looks closely at it. "But what is it used for?" she wonders aloud as she tries to figure it out by examining it carefully.\n----\nLore Finder\nLore: magic devices`,
-      `***\n"We should take a break," says the barbarian as he pulls out a flask of whiskey and starts drinking from it greedily. "Let's rest up for a bit." He then buries his face into his arm and passes out immediately. "Wake me up when we're done," he moans. His speech slurs and he drools on himself slightly as he sleeps deeply.\n----\nLore Finder\nLore: barbarians, whiskey`,
-      `***\n"I think I can make some money selling this thing to the king," says the wizard proudly as he shows off his creation. He points to a long tube filled with liquid. It's attached to a small tank where he keeps his potions stored safely away. He uses a glass vial to fill a second container with a greenish fluid. Then he pours the contents into a large bottle which he seals tightly before handing it to the knight next to him.\n----\nLore Finder\nLore: potion making`,
-      `***\nThe old woman stands on the street corner looking at you accusingly. Her eyes look like they might start bleeding at any moment due to her age. "I told you I'd be able to find someone better than those fools! What did I tell you?"\n----\nLore Finder\nLore: none`,
-      `***\n"You're lucky that we're in the middle of a city," says the ranger as she looks around at the crowd of people passing through the streets of the city. "Otherwise I'd have killed you already for what you've done." She turns towards you and glares at you with an angry expression on her face. "I'm going to let my companion handle this one," she says as she hands you over to the rogue next to her who looks like he's ready to cut your head off right away.\n----\nLore Finder\nLore: thieves guilds, rogues`,
+      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nLore Finder\nProcess: Broken Common is special. Lore is common.\nLore: common`,
+      `***\nYou're cold as you enter the mansion. You came here to catch the ghost of this dead noblewoman and prove that she was murdered.\n----\nLore Finder\nProcess: Ghosts are interesting. Mansion is special. Lore is ghosts, mansion.\nLore: ghosts, mansion\n`,
+      `***\n"Excuse me, what are planes of existence?" asks the Princess. The barbarian of the party tries to explain it, but only confuses everyone more as he speaks in a language no one understands but himself.\n----\nLore Finder\nProcess: Planes of exsitence is special. Princess is special. Barbarians is special. Languages is special. Lore is planes of existence, princess, barbarians, languages.\nLore: planes of existence, princess, barbarians, languages`,
+      `***\nA mysterious woman in a dark cloak approaches you as you enter a tavern, her face obscured by shadows cast by lantern light in the tavern windows. Her voice low as she whispers in your ear, "Solve this for the brotherhood."\nShe hands you a note and walks away into the darkness outside as you notice it's written in ancient writing.\n----\nLore Finder\nProcess: Brotherhood is special. Myterious woman is special. Anceint Writing is special. Lore is brotherhood, mysterious woman, ancient writing.\nLore: brotherhood, mysterious woman, ancient writing`,
+      `***\nThe man in front of you looks at you with a sneer on his face and says, "I don't know why I let him talk me into hiring these adventurers. They don't even know what an owlbear is!"\nMark raises his hand. "Are you calling us stupid?"\n----\nLore Finder\nProcess: Owlbear is special. Mark is special. Adventurers is special. Lore is owlbear, Mark, adventurers.\nLore: owlbear, Mark, adventurers`,
+      `***\nA snowflake falls onto your face as you drop into the snow. Your heavy breaths are visible as steam clouds in front of you as you try to catch your breath.\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nLore Finder\nProcess: Golem is special. Lore is golems.\nLore: golems`,
+      `***\n"Does someone remember the name of the town we visited two weeks ago?" asks the bard. "I'm sure I had it written somewhere..."\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\nYou did it, you stole the beholder's tombstone! But now, the alarm is going. You climb upon the roof, but the constructs almost reached you.\n----\nLore Finder\nProcess: Beholder is special. Alarm is special. Lore is beholder, alarm system.\nLore: beholder, alarm system`,
+      `***\nThe elephant screams at you and stomps its feet angrily on the ground. Its trunk snaps toward you threateningly. The creature's massive bulk towers over you and its sharp tusks point downward toward you like spears aimed directly at your heart.\n----\nLore Finder\nProcess: Elephants is special. Lore is elephants.\nLore: elephants`,
+      `***\nYou've never seen a demon before, but you've heard stories about them being able to control minds and bend people to their will. This one seems pretty docile though - it just sits there watching you. Maybe it won't eat you after all?\n----\nLore Finder\nProcess: Demons is special. Demons eating is special. Lore is demons, demons eating habits.\nLore: demons, demons eating habits`,
+      `***\nYou arrive at the destroyed taverns. Countless bodies lie scattered around the place, many of them belonging to adventurers who were unlucky enough to be here when this happened. "What in god's name..." you say.\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\nYou dance with your party until you accidentally bump into the drunk next to you. You try to apologize, but he doesn't seem to listen to anything anyone says. Instead he takes a swing on you.\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\nThe annoying adventurers party chants for their drinks again, this time louder than ever before. The innkeeper stacked all their drinks onto a single tray for you to bring them. "This is too much," you say, but he just shrugs at you.\n----\nLore Finder\nProcess: Adventurer party is special. Drink chanting is special. Innkeeper is special. Lore is adventurer party, drink chanting, innkeepers\nLore: adventurer party, drink chanting, innkeepers`,
+      `***\n"You want me to fight a dragon?! Are you insane?" asks the fighter with tears streaming down her cheeks. She throws herself at your feet begging for mercy. "Please... please kill me instead..." she whimpers pathetically. It would have been funny if it wasn't so pathetic. You kick her out of your room without another word.\n----\nLore Finder\nProcess: Dragons is special. Lore is dragons.\nLore: dragons`,
+      `***\n"What kind of treasure do we expect from this dungeon?" asks the wizard. The barbarian grunts something unintelligible while the ranger laughs at him and shakes her head in disbelief. "It has a dragon lair inside it! How could it not have any treasure?!" she says excitedly. You're not convinced by her words.\n----\nLore Finder\nProcess: Dungeon is special. Wizard is special. Dragon lair is special. Lore is dungeons, wizards dragon lair.\nLore: dungeons, wizards, dragon lair`,
+      `***\n"How does it feel to know that your entire village is doomed because of your incompetence?" asks the man behind the desk as he stares coldly at you. He continues to speak even though he knows he isn't going to get a response out of you. "You couldn't save your own wife and daughter, let alone an entire village full of innocent villagers!"\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\n"What is this strange device?" asks the mage as she holds up a strange metal contraption made entirely out of gears and levers that are connected by thin wires and pulleys. "It's obviously magical in nature." she says as she looks closely at it. "But what is it used for?" she wonders aloud as she tries to figure it out by examining it carefully.\n----\nLore Finder\nProcess: Magic devices is special. Lore is magic devices.\nLore: magic devices`,
+      `***\n"We should take a break," says the barbarian as he pulls out a flask of whiskey and starts drinking from it greedily. "Let's rest up for a bit." He then buries his face into his arm and passes out immediately. "Wake me up when we're done," he moans. His speech slurs and he drools on himself slightly as he sleeps deeply.\n----\nLore Finder\nProcess: Barbarian is special. Whiskey is special. Lore is barbarians, whiskey.\nLore: barbarians, whiskey`,
+      `***\n"I think I can make some money selling this thing to the king," says the wizard proudly as he shows off his creation. He points to a long tube filled with liquid. It's attached to a small tank where he keeps his potions stored safely away. He uses a glass vial to fill a second container with a greenish fluid. Then he pours the contents into a large bottle which he seals tightly before handing it to the knight next to him.\n----\nLore Finder\nProcess: Potions is special. Lore is potions.\nLore: potions`,
+      `***\nThe old woman stands on the street corner looking at you accusingly. Her eyes look like they might start bleeding at any moment due to her age. "I told you I'd be able to find someone better than those fools! What did I tell you?"\n----\nLore Finder\nProcess: Nothing is special. Lore is none.\nLore: none`,
+      `***\n"You're lucky that we're in the middle of a city," says the ranger as she looks around at the crowd of people passing through the streets of the city. "Otherwise I'd have killed you already for what you've done." She turns towards you and glares at you with an angry expression on her face. "I'm going to let my companion handle this one," she says as she hands you over to the rogue next to her who looks like he's ready to cut your head off right away.\n----\nLore Finder\nProcess: City is special. Ranger is special. Companion is special. Lore is cities, rangers, companions.\nLore: cities, rangers, companions`,
     ],
   });
   const [loreWriter, setLoreWriter] = useState({
@@ -1298,6 +1297,12 @@ export default function Home() {
       })
       .catch((err) => {
         console.log(err);
+        setHealthMessage(
+          "Something went wrong generating, please try again. Check your credentials!"
+        );
+        setHealthMessageOpen(true);
+        setGenerating(false);
+        return null;
       });
     if (response.data) {
       const lastOutput = response.data.text;
@@ -1305,18 +1310,21 @@ export default function Home() {
       evalStory(
         loreFinder[genre],
         story,
-        lastOutput + "\n----\nLore Finder\nLore:",
+        lastOutput + "\n----\nLore Finder\nProcess:",
         "Lore Finder"
       ).then((res) => {
         // logic for lore creation
-        // get first line which are the keys
-        let keys = res.match(/.*/g)[0];
+        // get first line which is the process
+        const process = res.match(/.*/g)[0];
+        // get lore from "Lore: " line
+        let keys = res.match(/(?<=Lore: ).*/g)[0];
         // remove first whitespace if there is one
         if (keys[0] === " ") {
           keys = keys.slice(1);
         }
         // split keys into array
         keys = keys.split(", ");
+        console.log("PROCESS:", process);
         console.log("KEYS:", keys);
         if (keys[0] !== "none") {
           keys.forEach((key) => {
@@ -1504,7 +1512,7 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-            <h1>AIdventure Time</h1>
+            <h1 color="white">AIdventure Time</h1>
             <CircularProgress color="secondary" />
           </Box>
         </main>
@@ -1536,7 +1544,7 @@ export default function Home() {
             anchorOrigin={{ vertical: "top", horizontal: "left" }}
           >
             <Alert
-              onClose={() => seHealthtMessageOpen(false)}
+              onClose={() => setHealthMessageOpen(false)}
               severity="error"
               sx={{ width: "100%" }}
             >

@@ -14,6 +14,7 @@ export default function StatDisplay({
   XP,
   setXP,
   difficulty,
+  index,
 }) {
   const [canUpgrade, setCanUpgrade] = useState(false);
   const [canDowngrade, setCanDowngrade] = useState(false);
@@ -106,7 +107,7 @@ export default function StatDisplay({
     upgrade,
   ]);
   return (
-    <Accordion style={{ width: "100%" }}>
+    <Accordion style={{ width: "100%" }} key={index}>
       <AccordionSummary
         expandIcon={<FaMinus />}
         aria-controls="panel1a-content"
@@ -118,9 +119,14 @@ export default function StatDisplay({
       <div className={styles.stat}>
         <div className={styles.statDescription}>{description}</div>
         <div className={styles.statKeywords}>
-          {keywords.map((keyword) => {
+          {keywords.map((keyword, index) => {
             return (
-              <Chip label={keyword} className={styles.keyword} color="info" />
+              <Chip
+                label={keyword}
+                className={styles.keyword}
+                color="info"
+                key={index}
+              />
             );
           })}
         </div>

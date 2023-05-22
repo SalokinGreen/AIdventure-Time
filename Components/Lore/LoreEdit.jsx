@@ -75,7 +75,7 @@ export default function LoreEdit({ lore, setLore, activeLore, setActiveLore }) {
             html={active.content}
             disabled={false}
             onChange={handleContentChange}
-            tagName="LoreEntry"
+            // tagName="LoreEntry"
           />
         </div>
         <div className={styles.editKeywordsArea}>

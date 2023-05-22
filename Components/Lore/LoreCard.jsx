@@ -10,14 +10,16 @@ export default function LoreCard({
   keywords,
   id,
   setActiveLore,
+  index,
 }) {
   return (
-    <div className={styles.card} onClick={() => setActiveLore(id)}>
+    <div className={styles.card} onClick={() => setActiveLore(id)} key={index}>
       {image !== "" && (
         <CardMedia
           component="img"
           height="140"
           image={image}
+          key={index}
           alt="green iguana"
           className={styles.cardImage}
         />
@@ -41,7 +43,7 @@ export default function LoreCard({
         <ContentEditable
           html={content}
           disabled={true}
-          tagName="lore"
+          // tagName="lore"
           className={styles.cardContent}
         />
       </CardContent>

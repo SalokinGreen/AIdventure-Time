@@ -130,7 +130,7 @@ export default function Stats({
                 </p>
               </div>
               <div className={styles.statsContainer}>
-                {primary.map((stat) => {
+                {primary.map((stat, index) => {
                   return (
                     <StatDisplay
                       title={stat.name}
@@ -143,6 +143,7 @@ export default function Stats({
                       setXP={setXP}
                       type={stat.type}
                       difficulty={difficulty}
+                      index={index}
                     />
                   );
                 })}
@@ -157,7 +158,7 @@ export default function Stats({
                 </p>
               </div>
               <div className={styles.statsContainer}>
-                {secondary.map((stat) => {
+                {secondary.map((stat, index) => {
                   return (
                     <StatDisplay
                       title={stat.name}
@@ -170,6 +171,7 @@ export default function Stats({
                       type={stat.type}
                       setXP={setXP}
                       difficulty={difficulty}
+                      index={index}
                     />
                   );
                 })}
@@ -392,7 +394,7 @@ export default function Stats({
           <Box>
             <div className={styles.settingsContainer}>
               {sideMenu ? (
-                <div classname={styles.sideMenu}>
+                <div className={styles.sideMenu}>
                   <div
                     className={styles.sideMenuButton}
                     onClick={() => setSideMenu(false)}
@@ -423,7 +425,7 @@ export default function Stats({
                   className={styles.openSideMenu}
                   onClick={() => setSideMenu(true)}
                 >
-                  <BiArrowFromLeft size={30} />
+                  <BiArrowFromLeft size={30} color="white" />
                 </div>
               )}
               {activeStat && (
