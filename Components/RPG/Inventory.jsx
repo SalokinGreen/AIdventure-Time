@@ -10,7 +10,7 @@ import {
 import { uuid } from "uuidv4";
 
 import styles from "../../Styles/Inventory.module.css";
-function Inventory({ open, setOpen, inventory, setInventory }) {
+function Inventory({ open, setOpen, inventory, setInventory, type }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [sideMenu, setSideMenu] = useState(true);
   const [keyword, setKeyword] = useState("");
@@ -42,13 +42,15 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
         ...prev,
         {
           id: uuid(),
-          name: "New Item",
+          name: "New",
           description: "Description",
           attributes: "",
           uses: 0,
           priority: 0,
           keywords: [],
           active: true,
+          energyCost: 0,
+          bonus: 0,
         },
       ];
     });
@@ -75,7 +77,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 onClick={() => setSideMenu(false)}
                 className={styles.listItem}
               >
-                <ListItemText primary="Close Inventory" />
+                <ListItemText primary="Close" />
               </ListItem>
               {inventory.map((item) => (
                 <ListItem
@@ -92,7 +94,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 onClick={() => handleAddItem()}
                 className={styles.listItem}
               >
-                <ListItemText primary="Add Item" />
+                <ListItemText primary="Add" />
               </ListItem>
             </List>
           ) : (
@@ -102,7 +104,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 onClick={() => setSideMenu(true)}
                 className={styles.listItem}
               >
-                <ListItemText primary="Open Inventory" />
+                <ListItemText primary="Open" />
               </ListItem>
             </List>
           )}
@@ -110,7 +112,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
         {selectedItem && (
           <div className={styles.item}>
             <Typography variant="h5" gutterBottom color={"white"}>
-              Item Name
+              Name
             </Typography>
             <input
               type="text"
@@ -138,36 +140,82 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
               }
               required
             />
-            <Typography variant="h5" gutterBottom color={"white"}>
-              Attributes
-            </Typography>
-            <input
-              type="text"
-              placeholder="Attributes"
-              className={styles.input}
-              value={selectedItem.attributes}
-              onChange={(e) =>
-                setSelectedItem({
-                  ...selectedItem,
-                  attributes: e.target.value,
-                })
-              }
-            />
-            <Typography variant="h5" gutterBottom color={"white"}>
-              Uses
-            </Typography>
-            <input
-              type="number"
-              placeholder="Uses"
-              className={styles.input}
-              value={selectedItem.uses}
-              onChange={(e) =>
-                setSelectedItem({
-                  ...selectedItem,
-                  uses: e.target.value,
-                })
-              }
-            />
+            {type === "inventory" && (
+              <Typography variant="h5" gutterBottom color={"white"}>
+                Attributes
+              </Typography>
+            )}
+            {type === "inventory" && (
+              <input
+                type="text"
+                placeholder="Attributes"
+                className={styles.input}
+                value={selectedItem.attributes}
+                onChange={(e) =>
+                  setSelectedItem({
+                    ...selectedItem,
+                    attributes: e.target.value,
+                  })
+                }
+              />
+            )}
+            {type === "inventory" && (
+              <Typography variant="h5" gutterBottom color={"white"}>
+                Uses
+              </Typography>
+            )}
+            {type === "inventory" && (
+              <input
+                type="number"
+                placeholder="Uses"
+                className={styles.input}
+                value={selectedItem.uses}
+                onChange={(e) =>
+                  setSelectedItem({
+                    ...selectedItem,
+                    uses: e.target.value,
+                  })
+                }
+              />
+            )}
+            {type === "abilities" && (
+              <Typography variant="h5" gutterBottom color={"white"}>
+                Energy Cost
+              </Typography>
+            )}
+            {type === "abilities" && (
+              <input
+                type="number"
+                placeholder="Energy Cost"
+                className={styles.input}
+                value={selectedItem.energyCost}
+                onChange={(e) =>
+                  setSelectedItem({
+                    ...selectedItem,
+                    energyCost: e.target.value,
+                  })
+                }
+              />
+            )}
+            {type === "abilities" && (
+              <Typography variant="h5" gutterBottom color={"white"}>
+                Bonus
+              </Typography>
+            )}
+            {type === "abilities" && (
+              <input
+                type="number"
+                placeholder="Bonus"
+                className={styles.input}
+                value={selectedItem.bonus}
+                onChange={(e) =>
+                  setSelectedItem({
+                    ...selectedItem,
+                    bonus: e.target.value,
+                  })
+                }
+              />
+            )}
             <Typography variant="h5" gutterBottom color={"white"}>
               Priority
             </Typography>
@@ -247,7 +295,7 @@ function Inventory({ open, setOpen, inventory, setInventory }) {
                 setSelectedItem(null);
               }}
             >
-              Delete Item
+              Delete
             </button>
           </div>
         )}

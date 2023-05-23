@@ -1,6 +1,15 @@
 import checkForKeys from "../checkForKeys";
 
-function skillCheck(input, stats, difficulty, inventory, health, DC) {
+function skillCheck(
+  input,
+  stats,
+  difficulty,
+  inventory,
+  health,
+  DC,
+  item,
+  ability
+) {
   // return false if no input
   if (!input || input === "") {
     return false;
@@ -19,12 +28,6 @@ function skillCheck(input, stats, difficulty, inventory, health, DC) {
   ) {
     disadvantage = true;
   }
-  // sort inventory by priority. 0 is the lowest priority
-  inventory.sort((a, b) => b.priority - a.priority);
-  // Go through inventory to see if there is an item used
-  let item = inventory.find((item) => {
-    return checkForKeys(input, item.keywords) && item.uses > 0 && item.active;
-  });
 
   // if item, give advantage
   if (item) {
@@ -57,21 +60,43 @@ function skillCheck(input, stats, difficulty, inventory, health, DC) {
   // if no stat found, return false
   if (!stat) {
     return false;
+  } else {
+    // console.log("stat found:", stat);
   }
 
   // if stat found, add level to roll
-  roll += stat.level;
-
+  // check if level string
+  if (typeof stat.level === "string") {
+    // if level is string, turn it into a number
+    roll += parseInt(stat.level);
+  } else {
+    roll += stat.level;
+  }
   // For each co, check if the name is in stats, if so, add level to roll
   if (stat.co) {
     stat.co.forEach((x) => {
       const foundStat = stats.find((y) => checkForKeys(y.name, [x]));
       if (foundStat) {
-        roll += foundStat.level;
+        // check if level string
+        if (typeof foundStat.level === "string") {
+          // if level is string, turn it into a number
+          roll += parseInt(foundStat.level);
+        } else {
+          roll += foundStat.level;
+        }
       }
     });
   }
-
+  // if ability, add ability modifier to roll
+  if (ability) {
+    // check if ability is string
+    if (typeof ability.bonus === "string") {
+      // if ability is string, turn it into a number
+      ability.bonus = parseInt(ability.bonus);
+    } else {
+      roll += ability.bonus;
+    }
+  }
   // Determine outcome
   const outcome = roll >= DC ? stat.outcomes.success : stat.outcomes.failure;
   // deactive item if skill check failed

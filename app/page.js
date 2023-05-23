@@ -391,11 +391,11 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [profile, setProfile] = useState({
     name: "James",
-    race: "Human",
-    occupation: "Bard",
+    race: "human",
+    occupation: "bard",
     mental: "You're an adventurous bard who loves to travel and explore.",
     appearance: "You're quite handsome.",
-    prose: "You're James the great Bard.",
+    prose: "You're James the great bard.",
   });
   // RPG - Text-Adventure
   // message
@@ -723,13 +723,17 @@ export default function Home() {
     },
   ]);
   const [openInventory, setOpenInventory] = useState(false);
-
+  // remove equipment
   const [equipment, setEquipment] = useState({
     weapon: [],
     armor: [],
     consumable: [],
     ammo: [],
   });
+  // Abilities
+  const [abilities, setAbilities] = useState([]);
+  const [skillTree, setSkillTree] = useState([]);
+  const [openAbilities, setOpenAbilities] = useState(false);
   // Difficulty
   const [difficulty, setDifficulty] = useState(1);
   const [difficultyName, setDifficultyName] = useState({
@@ -759,6 +763,10 @@ export default function Home() {
     "Despite your best efforts",
   ]);
   const [health, setHealth] = useState(100);
+  const [maxHealth, setMaxHealth] = useState(100);
+  const [energy, setEnergy] = useState(100);
+  const [maxEnergy, setMaxEnergy] = useState(100);
+  const [energyWord, setEnergyWord] = useState("mana");
   // Location / Map
   const [location, setLocation] = useState("home");
   const [locationName, setLocationName] = useState("Home");
@@ -803,6 +811,8 @@ export default function Home() {
   // Main Settings
   const [model, setModel] = useState("cassandra-lit-6-9b");
   const [models, setModels] = useState("GooseAI");
+  const [evalModel, setEvalModel] = useState("cassandra-lit-6-9b");
+
   const [verbosity, setVerbosity] = useState(0);
   const [verbosityValue, setVerbosityValue] = useState(null);
   // Advanced Settings
@@ -829,6 +839,33 @@ export default function Home() {
     { name: "Top-A", active: false, value: 4 },
     { name: "Typical Sampling", active: false, value: 5 },
   ]);
+  const [evalSettings, setEvalSettings] = useState({
+    tokens: 100,
+    temperature: 0.63,
+    topP: 0.975,
+    topK: 0,
+    tfs: 0.975,
+    topA: 1.0,
+    typicalP: 1.0,
+    repetitionP: 1.148125,
+    presenceP: 1.0,
+    frequencyPenalty: 0.0,
+    repetitionP: 0.0,
+    repetitionPR: 2048,
+    repetitionPS: 0.09,
+    orderItems: [
+      { name: "Nucleus", active: true, value: 2 },
+      { name: "Top-K", active: true, value: 1 },
+      { name: "Tail-Free Sampling", active: true, value: 3 },
+
+      { name: "Temperature", active: true, value: 0 },
+      { name: "Top-A", active: false, value: 4 },
+      { name: "Typical Sampling", active: false, value: 5 },
+    ],
+    biases: [],
+    bans: [],
+    stopSequences: [],
+  });
   // saves
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -1062,7 +1099,8 @@ export default function Home() {
         prompts,
         story,
         input,
-        model,
+        model: evalModel,
+        settings: evalSettings,
         type,
         gooseKey,
         naiKey,
@@ -1111,7 +1149,7 @@ export default function Home() {
       setGenerating(true);
     }
     // the conditions to check for
-    let check, pick, link, movingTo, newLocation;
+    let check, item, ability, pick, link, movingTo, newLocation;
     // if retry remove last generation from story
     if (retry) {
       story.pop();
@@ -1146,6 +1184,23 @@ export default function Home() {
       });
       // check if moving to a new location
       newLocation = checkForKeys(input, newLocationArray);
+      // check if item is being used
+      const sorted = inventory.sort((a, b) => b.priority - a.priority);
+      item = sorted.find((item) => {
+        return (
+          checkForKeys(input, item.keywords) && item.uses > 0 && item.active
+        );
+      });
+      // check if ability is used
+      const sortedAbilities = abilities.sort((a, b) => b.priority - a.priority);
+      ability = sortedAbilities.find((ability) => {
+        return (
+          checkForKeys(input, ability.keywords) &&
+          ability.energyCost <= energy &&
+          ability.active
+        );
+      });
+
       if (check) {
         const neW = "Process:";
         const evaluation =
@@ -1164,7 +1219,17 @@ export default function Home() {
           DC = parseInt(evaluation.match(/(?<=DC: ).*/g)[0]);
           console.log("reasoning:", reasoning, "\nDC:", DC);
         }
-        check = skillCheck(input, stats, difficulty, inventory, health, DC);
+        check = skillCheck(
+          input,
+          stats,
+          difficulty,
+          inventory,
+          health,
+          DC,
+          item,
+          ability
+        );
+        console.log("check:", check);
         if (check.item) {
           // if item is used, lower its uses by 1
           setInventory(
@@ -1177,6 +1242,10 @@ export default function Home() {
           );
           setMessage(`You used ${check.item.name}!`);
           setMessageOpen(true);
+          item = check.item;
+        }
+        if (ability) {
+          // if ability is used, take the energy cost from the player
         }
       } else if (pick) {
         // pick up item
@@ -1291,8 +1360,11 @@ export default function Home() {
         extra: {
           equipment,
           inventory,
+          abilities,
           check,
           pick,
+          item,
+          ability,
           link,
           movingTo,
           location: locationName,
@@ -1324,6 +1396,7 @@ export default function Home() {
         return;
       });
     if (response.data) {
+      console.log("data:", response.data);
       const lastOutput = response.data.text;
       // check for lore and generate it
       evalStory(
@@ -1333,6 +1406,11 @@ export default function Home() {
         "Lore Finder"
       ).then((res) => {
         // logic for lore creation
+        // if res doesn't include "Lore: " then there is no lore
+        if (!res.includes("Lore:")) {
+          console.log("no lore:", res);
+          return;
+        }
         // get first line which is the process
         const process = res.match(/.*/g)[0];
         // get lore from "Lore: " line
@@ -1654,6 +1732,9 @@ export default function Home() {
           setOpenInventory={setOpenInventory}
           models={models}
           setModels={setModels}
+          openAbilities={openAbilities}
+          setOpenAbilities={setOpenAbilities}
+          q
         />
         <Lore
           lore={lore}
@@ -1690,12 +1771,32 @@ export default function Home() {
           setTitle={setTitle}
           profile={profile}
           setProfile={setProfile}
+          health={health}
+          setHealth={setHealth}
+          energy={energy}
+          setEnergy={setEnergy}
+          energyWord={energyWord}
+          setEnergyWord={setEnergyWord}
+          playerLevel={playerLevel}
+          setPlayerLevel={setPlayerLevel}
+          abilities={abilities}
+          setAbilities={setAbilities}
+          skillTree={skillTree}
+          setSkillTree={setSkillTree}
         />
         <Inventory
           open={openInventory}
           setOpen={setOpenInventory}
           inventory={inventory}
           setInventory={setInventory}
+          type="inventory"
+        />
+        <Inventory
+          open={openAbilities}
+          setOpen={setOpenAbilities}
+          inventory={abilities}
+          setInventory={setAbilities}
+          type="abilities"
         />
         <Map map={map} setMap={setMap} open={openMap} setOpen={setOpenMap} />
 

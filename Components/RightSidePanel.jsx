@@ -13,7 +13,7 @@ import { IoClose, IoBody } from "react-icons/io5";
 import { useTheme } from "@mui/material/styles";
 import { AiFillSave } from "react-icons/ai";
 import { BsMapFill } from "react-icons/bs";
-import { GiBackpack } from "react-icons/gi";
+import { GiBackpack, GiMagicPalm } from "react-icons/gi";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Counter from "./Front/Counter";
 import styles from "../Styles/RightSidePanel.module.css";
@@ -84,6 +84,8 @@ export default function RightSidePanel({
   setOpenInventory,
   models,
   setModels,
+  openAbilities,
+  setOpenAbilities,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [gooseOpen, setGooseOpen] = useState(false);
@@ -233,6 +235,21 @@ export default function RightSidePanel({
                     <GiBackpack size={"3rem"} />
                   </Button>
                 </div>
+                <div className={styles.container}>
+                  <div className={styles.title}>Abilities</div>
+                  <div className={styles.description}>
+                    You're a wizard, James! Or are you?
+                  </div>
+                  <Button
+                    className={styles.buttonSave}
+                    variant="contained"
+                    color={model === "euterpe-v2" ? "warning" : "info"}
+                    onClick={() => setOpenAbilities(true)}
+                  >
+                    <GiMagicPalm size={"3rem"} />
+                  </Button>
+                </div>
+
                 <div className={styles.container}>
                   <div className={styles.title}>Map</div>
                   <div className={styles.description}>

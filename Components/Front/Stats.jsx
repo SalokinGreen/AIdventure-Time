@@ -38,6 +38,18 @@ export default function Stats({
   setTitle,
   profile,
   setProfile,
+  health,
+  setHealth,
+  energy,
+  setEnergy,
+  playerLevel,
+  setPlayerLevel,
+  energyWord,
+  setEnergyWord,
+  abilities,
+  setAbilities,
+  skillTree,
+  setSkillTree,
 }) {
   const [tab, setTab] = useState(0);
   const [sideMenu, setSideMenu] = useState(true);
@@ -118,6 +130,7 @@ export default function Stats({
           <Tab label="Stats" className={styles.tab} />
           <Tab label="You" className={styles.tab} />
           <Tab label="Settings" className={styles.tab} />
+          <Tab label="Abilities" className={styles.tab} />
         </Tabs>
         {tab === 0 && (
           <Box className={styles.tabContainer}>
@@ -543,6 +556,7 @@ export default function Stats({
                                 size="small"
                                 className={styles.textField}
                                 color="info"
+                                type="number"
                                 value={activeStat.level}
                                 onChange={(e) =>
                                   setActiveStat({
@@ -604,6 +618,7 @@ export default function Stats({
                                 size="small"
                                 className={styles.textField}
                                 color="info"
+                                type="number"
                                 value={activeStat.priority}
                                 onChange={(e) =>
                                   setActiveStat({

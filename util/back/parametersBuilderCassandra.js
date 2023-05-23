@@ -1,5 +1,5 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
-const defaultBans = ["31", "11930"];
+const defaultBans = ["31", "11930", "11", "9"];
 const defaultBias = [];
 function adjustLogprob(verbosity, logprob) {
   const adjustment = -verbosity * 0.1;
@@ -9,25 +9,25 @@ function adjustLogprob(verbosity, logprob) {
   return adjustedLogprob;
 }
 
-export default function parametersBuilderCassandra(params, count) {
+export default function parametersBuilderCassandra(params) {
   let bans = {};
   let bias = {};
   let stop = [];
   if (params.verbosity === 1) {
     bias = {
-      198: 0.1 - count * 0.01,
+      198: 0.1 * 0.01,
     };
   } else if (params.verbosity === 2) {
     bias = {
-      198: -1.5 - count * 0.01,
+      198: -1.5 * 0.01,
     };
   } else if (params.verbosity === 3) {
     bias = {
-      198: -2.5 - count * 0.01,
+      198: -2.5 * 0.01,
     };
   } else {
     bias = {
-      198: 0 - count * 0.01,
+      198: 0 * 0.01,
     };
   }
   // bans

@@ -50,6 +50,7 @@ export default function contextBuilderPile(
   let newLocation = "";
   let failureContext = "";
   let itemContext = "";
+  let abilityContext = "";
   let ATTG = "[ ";
   let profileContext = "----\nprotagonist\n";
   // how many tokens are and can be used
@@ -81,10 +82,21 @@ export default function contextBuilderPile(
       tokens += tokenizer.encode(`\n ${extra.failMessage}`).length;
       failureContext = `\n${extra.failMessage}`;
     }
-    // add item if there
-    if (extra.check.item) {
-      itemContext = `\n[ You used ${extra.check.item.name}: ${extra.check.item.description} ]\n`;
+  }
+  // add item if there
+  if (extra.item) {
+    if (extra.check && !extra.check.result) {
+    } else {
+      itemContext = `\n[ You use your ${extra.item.name}: ${extra.item.description} ]\n`;
       tokens += tokenizer.encode(itemContext).length;
+    }
+  }
+  // add ability if there
+  if (extra.ability) {
+    if (extra.check && !extra.check.result) {
+    } else {
+      abilityContext = `\n[ You use ${extra.ability.name}: ${extra.ability.description} ]\n`;
+      tokens += tokenizer.encode(abilityContext).length;
     }
   }
   if (extra.pick) {
@@ -130,6 +142,36 @@ export default function contextBuilderPile(
   // appearance
   if (extra.profile.appearance && extra.profile.appearance !== "") {
     profileContext += `Appearance: ${extra.profile.appearance}\n`;
+  }
+  // gear
+  if (extra.inventory && extra.inventory.length > 0) {
+    let found = false;
+    let gear = "";
+    extra.inventory.forEach((i) => {
+      if (i.active) {
+        found = true;
+        gear += `${i.name}, `;
+      }
+    });
+    if (found) {
+      gear = gear.slice(0, -2);
+      profileContext += `Gear: ${gear}\n`;
+    }
+  }
+  // abilities
+  if (extra.abilities && extra.abilities.length > 0) {
+    let found = false;
+    let abilities = "";
+    extra.abilities.forEach((a) => {
+      if (a.active) {
+        found = true;
+        abilities += `${a.name}, `;
+      }
+    });
+    if (found) {
+      abilities = abilities.slice(0, -2);
+      profileContext += `Abilities: ${abilities}\n`;
+    }
   }
   // prose
   if (extra.profile.prose && extra.profile.prose !== "") {
@@ -223,12 +265,11 @@ export default function contextBuilderPile(
   if (type !== "story" && input) {
     context += "\n";
   }
-
   // put context together
   context =
     ATTG +
-    profileContext +
     memoryContext +
+    profileContext +
     loreContext +
     "***\n" +
     locationContext +
@@ -237,6 +278,7 @@ export default function contextBuilderPile(
     checkContext +
     newLocation +
     itemContext +
+    abilityContext +
     failureContext;
 
   if (context[0] === "\n") {
@@ -261,5 +303,6 @@ export default function contextBuilderPile(
   }
   // return context
   console.log(tokens);
+  console.log(context);
   return context;
 }

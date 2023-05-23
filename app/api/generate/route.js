@@ -264,6 +264,7 @@ const novelAIlist = ["krake-v2", "euterpe-v2"];
 export async function POST(request) {
   let text, logprobs, verbosityValue;
   const req = await request.json();
+
   const input = contextBuilderPile(
     req.story,
     req.type,
@@ -274,10 +275,11 @@ export async function POST(request) {
     req.extra,
     req.parameters.tokens
   );
+
   if (novelAIlist.includes(req.model)) {
     console.log(input);
-    const params = parametersBuilderEuterpe(req.parameters);
-    console.log(params);
+    const params = parametersBuilderEuterpe(req.parameters, req.model);
+    // console.log(params);
     const response = await axios
       .post(
         "https://api.novelai.net/ai/generate",
@@ -298,13 +300,9 @@ export async function POST(request) {
         console.log(err);
         return NextResponse.json(err);
       });
-    console.log(response.data);
-    return NextResponse.json(response.data.output);
+    text = response.data.output;
   } else {
-    const count = input.split(">").length - 1;
-    console.log(input);
-    console.log("count: " + count);
-    const params = parametersBuilderCassandra(req.parameters, count);
+    const params = parametersBuilderCassandra(req.parameters);
     // console.log(params);
     const response = await axios
       .post(
@@ -408,7 +406,6 @@ export async function POST(request) {
     verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];
     // console.log(logprobs);
     // console.log(verbosityValue);
-
-    return NextResponse.json({ text, verbosityValue, logprobs });
   }
+  return NextResponse.json({ text, verbosityValue, logprobs });
 }
