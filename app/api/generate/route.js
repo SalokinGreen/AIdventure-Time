@@ -260,7 +260,7 @@ const parameters = {
   num_logprobs: 10,
   order: [2, 1, 3, 0],
 };
-const novelAIlist = ["krake-v2", "euterpe-v2"];
+const novelAIlist = ["kayra-v1", "clio-v1"];
 export async function POST(request) {
   let text, logprobs, verbosityValue;
   const req = await request.json();
@@ -277,7 +277,6 @@ export async function POST(request) {
   );
 
   if (novelAIlist.includes(req.model)) {
-    console.log(input);
     const params = parametersBuilderEuterpe(req.parameters, req.model);
     // console.log(params);
     const response = await axios
@@ -301,6 +300,10 @@ export async function POST(request) {
         return NextResponse.json(err);
       });
     text = response.data.output;
+    // remove ">" from the end of the text
+    if (text.endsWith("\n>")) {
+      text = text.slice(0, -2);
+    }
   } else {
     const params = parametersBuilderCassandra(req.parameters);
     // console.log(params);
@@ -394,18 +397,19 @@ export async function POST(request) {
       text = response.data.choices[0].text;
       logprobs = response.data.choices[0].logprobs;
     }
-    // add "Location: " to the beginning of the text if newLocation true
-    if (req.extra.newLocation) {
-      text = "Location:" + text;
-    } else if (req.extra.check && !req.extra.check.result) {
-      text = req.extra.failMessage + text;
-    } else if (req.extra.pick) {
-      text = req.extra.pick.description + text;
-    }
+
     // get last logprob
     verbosityValue = logprobs.top_logprobs[logprobs.tokens.length - 1];
     // console.log(logprobs);
     // console.log(verbosityValue);
+  }
+  // add "Location: " to the beginning of the text if newLocation true
+  if (req.extra.newLocation) {
+    text = "Location:" + text;
+  } else if (req.extra.check && !req.extra.check.result) {
+    text = req.extra.failMessage + text;
+  } else if (req.extra.pick) {
+    text = req.extra.pick.description + text;
   }
   return NextResponse.json({ text, verbosityValue, logprobs });
 }

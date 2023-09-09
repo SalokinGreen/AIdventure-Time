@@ -26,7 +26,7 @@ import HealthBar from "./Front/HealthBar";
 import Knob from "./Settings/Knob";
 import GooseaiModal from "./GooseaiModal";
 const gooseModels = ["cassandra-lit-2-8b", "cassandra-lit-6-9b"];
-const novelaiModels = ["euterpe-v2", "krake-v2"];
+const novelaiModels = ["kayra-v1", "clio-v1"];
 export default function RightSidePanel({
   openSetting,
   setOpenSetting,
@@ -86,6 +86,16 @@ export default function RightSidePanel({
   setModels,
   openAbilities,
   setOpenAbilities,
+  cfg_scale,
+  setCfg_scale,
+  phrase_rep_pen,
+  setPhrase_rep_pen,
+  top_g,
+  setTop_g,
+  mirostat_tau,
+  setMirostat_tau,
+  mirostat_lr,
+  setMirostat_lr,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [gooseOpen, setGooseOpen] = useState(false);
@@ -395,7 +405,7 @@ export default function RightSidePanel({
                     aria-label="NovelAI"
                     onClick={() => {
                       setModels("NovelAI");
-                      setModel("euterpe-v2");
+                      setModel("kayra-v1");
                     }}
                   >
                     NovelAI
@@ -564,6 +574,36 @@ export default function RightSidePanel({
                   step={0.01}
                   model={model}
                 />
+                <Slid
+                  title={"Top G"}
+                  description={""}
+                  value={top_g}
+                  setValue={setTop_g}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  model={model}
+                />
+                <Slid
+                  title={"Mirostat Tau"}
+                  description={""}
+                  value={mirostat_tau}
+                  setValue={setMirostat_tau}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  model={model}
+                />
+                <Slid
+                  title={"Mirostat Lr"}
+                  description={""}
+                  value={mirostat_lr}
+                  setValue={setMirostat_lr}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  model={model}
+                />
                 <Order
                   model={model}
                   setOrder={setOrderItems}
@@ -611,6 +651,67 @@ export default function RightSidePanel({
                   step={0.05}
                   model={model}
                 />
+                <Slid
+                  title={"Cfg Scale"}
+                  description={""}
+                  value={cfg_scale}
+                  setValue={setCfg_scale}
+                  min={0}
+                  max={3}
+                  step={0.05}
+                  model={model}
+                />
+                <div className={styles.title}>Phrase Rep Pen</div>
+                <Select
+                  value={phrase_rep_pen}
+                  onChange={(e) => {
+                    setPhrase_rep_pen(e.target.value);
+                  }}
+                  className={styles.select}
+                >
+                  <MenuItem
+                    value={"Off"}
+                    active={"Off" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Off
+                  </MenuItem>
+                  <MenuItem
+                    value={"very_light"}
+                    active={"very_light" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Very light
+                  </MenuItem>
+                  <MenuItem
+                    value={"light"}
+                    active={"light" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Light
+                  </MenuItem>
+                  <MenuItem
+                    value={"medium"}
+                    active={"medium" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Medium
+                  </MenuItem>
+                  <MenuItem
+                    value={"aggressive"}
+                    active={"aggressive" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Aggressive
+                  </MenuItem>
+                  <MenuItem
+                    value={"very_aggressive"}
+                    active={"very_aggressive" === phrase_rep_pen}
+                    className={styles.selectItem}
+                  >
+                    Very aggressive
+                  </MenuItem>
+                </Select>
               </div>
             </>
           )}

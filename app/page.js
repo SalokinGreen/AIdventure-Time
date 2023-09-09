@@ -488,26 +488,26 @@ export default function Home() {
   });
   const [damageFinder, setDamageFinder] = useState({
     Fantasy: [
-      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nPlayer Health Detector\nProcess: The player did not fight. The player did not take damage. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nPlayer Health Detector\nProcess: The player got hit. A golem is very strong. The damage is high.\nPlayer Damage Taken: high`,
-      `***\nYour blade sinks into the throat of the guard, but he still manages to scream out his warning as blood spills down over your armor. Your blade pulls free as his body hits the ground with a wet thud. You wipe it on your shirt and look up at the guardsman.\n----\nPlayer Health Detector\nProcess: The player attacks the guard. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nYou dodge the first two arrows, but as you turn around, you're not quick enough and take one to the left arm. It makes an annoying little ping noise as it passes through your armor. But then the third arrow flies past your head and strikes the stone wall behind you.\n----\nPlayer Health Detector\nProcess: The player got hit. An arrow is small. The damage is low.\nPlayer Damage Taken: low`,
-      `***\nYou jump away from the creature's claws, but they still catch your shoulder and send you spinning to the side. Your sword comes loose from your hand as you fall onto your backside. The creature looms above you, its claws ready to strike again.\n----\nPlayer Health Detector\nProcess: The player got hit. The creature sounds dangerous. The damage is medium.\nPlayer Damage Taken: medium`,
-      `***\nYour sword slices deep into the creature's belly, and it lets out an awful gurgle as it tries to bring itself upright again. Its claws scrape along the floor as it falls backwards, slamming into the floor hard enough to make the whole room shake.\n----\nPlayer Health Detector\nProcess: The player did the attack. The player dodged all attacks. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nYou swing your sword upwards just in time to block one of the incoming blows, and feel a jolt run up your arm. Your attacker is so close that you can smell its breath, and it snarls angrily at you, trying to force its way inside your guard.\n----\nPlayer Health Detector\nProcess: The player took damage while blocking. The player blocked damage. The damage is low.\nPlayer Damage Taken: low`,
-      `***\nYour opponent's axe smashes into the top of your shoulder, knocking you off balance and forcing you to stagger backwards.\n----\nPlayer Health Detector\nProcess: The player got hit by the weapon. The attack was successful. The damage is medium.\nPlayer Damage Taken: medium`,
-      `***\n"So, what are you doing later?" asks the Princess with a spark in her eyes. "I'm sure we could find something fun for us both." You try to think of a witty reply, but all you manage is some incoherent mumbling. She smiles at you and walks away, leaving you alone once more.\n----\nPlayer Health Detector\nProcess: The player talked to the princess. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nYou duck under the blow aimed at your head and step forward, swinging your hammer at the goblin's legs. It stumbles sideways but doesn't let go of its weapon, which brings you face to face with it.\n----\nPlayer Health Detector\nProcess: The player fought the goblin. The goblin died. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nYou roll for your life, but you're not faster than the dragon's breath and end up being scorched by its flame instead. You're thrown clear of the flames, only to be knocked aside by the dragon's tail. As you land heavily on your back, you realize that this isn't going to help your situation any.\n----\nPlayer Health Detector\nProcess: The player got attacked by the dragon. The attack was successful. The damage is high.\nPlayer Damage Taken: high`,
-      `***\nYour sword slides across the scorpion's carapace, slicing deep into its hide without penetrating too deeply. It snaps its tail at you but misses.\n----\nPlayer Health Detector\nProcess: The player attacked the scorpion. The scorpion missed its attack on the player. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nThe drunk runs into you. "Ey, fuck you!" he says before turning around and throwing up on himself again. You grab him by his shirt collar and haul him upright again, giving him a shake to try and make him focus on your words rather than his puke-filled mouth. "Listen here," you say slowly and clearly, but he gives you a right hook.\n----\nPlayer Health Detector\nProcess: The player got attacked by the drunkard. The attack is successful. The damage is low.\nPlayer Damage Taken: low`,
-      `***\nThe goblin's blade cuts deep into your flesh, and blood spills over your armor as it bites deeper, tearing open your skin like butter made from raw meat. You can hear bones cracking within your armor as you struggle to keep hold of your weapon, even as the pain becomes unbearable.\n----\nPlayer Health Detector\nProcess: The player was hit by an enemy weapon. The enemy was a goblin. The damage is medium.\nPlayer Damage Taken: medium`,
-      `***\nThe annoying village child screams at you again as she kicks your shins with her bare feet and tries to trip you up as you move through town.\n----\nPlayer Health Detector\nProcess: The player was attacked by a small child. A child is weak. The damage is low.\nPlayer Damage Taken: low`,
-      `***\nYou raise your shield up just in time to stop the sword strike aimed at your chest and knock it aside with a loud clang! You take a step forward, raising your own blade as another guard steps up beside his injured companion.\n----\nPlayer Health Detector\nProcess: The player fought another guard. The player defeated another guard in melee combat. The damage is none.\nPlayer Damage Taken: none`,
-      `***\n"What do we have here?" asks the man with his hand outstretched towards you. "Looks like we caught ourselves a pretty little thief." He takes your dagger from you as his companion approaches with his sword raised high above his head.\n----\nPlayer Health Detector\nProcess: Nobody attacked anybody else or did anything else interesting. There is no change in state or status information. The damage is none.\nPlayer Damage Taken: none`,
-      `***\nThe wizard points with his staff at you, chanting a spell as he does so. A ball of fire forms at his fingertip, and it flies through the air straight towards you! You're just able to dive out of the way in time as it explodes against the stone wall behind you, showering sparks everywhere and blasting your away.\n----\nPlayer Health Detector\nProcess: The wizard cast a spell at the player. The wizard's spell hit the player. The damage is high.\nPlayer Damage Taken: high`,
-      `***\nThe guardsman's sword strikes home, driving through your armor and sinking deep into your side with an agonizing stab that nearly knocks the breath from you entirely. You cry out in pain as he withdraws his blade and drives it in again, cutting further into your flesh as blood pours down over your breastplate and onto the floor beneath you.\n----\nPlayer Health Detector\nProcess: The player was attacked by a guardsman's weapon while wearing light armor or unarmored (unarmored). The damage is medium.\nPlayer Damage Taken: medium`,
-      `***\nYour sword slices through the goblin's neck with ease, severing its spine in one smooth movement, and leaving a gurgling mess behind you as it falls to the floor, twitching violently before dying completely.\n----\nPlayer Health Detector\nProcess: The player killed a goblin with their sword successfully. The damage is none.\nPlayer Damage Taken: none`,
+      `***\n"Do you job!" The man screams at you in broken Common. "Do you job or I'll have you flayed alive! Do you hear me?"\nTears form in your eyes as you turn around, seeing the great boulder before you.\n----\nYour Health Detector\nProcess: The player did not fight. The player did not take damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe golem's fist cracks loudly against your armor, making you fly back and crash into the wall. As you drop, you can see that there's a big hole where you hit.\n----\nYour Health Detector\nProcess: The player got hit. A golem is very strong. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nYour blade sinks into the throat of the guard, but he still manages to scream out his warning as blood spills down over your armor. Your blade pulls free as his body hits the ground with a wet thud. You wipe it on your shirt and look up at the guardsman.\n----\nYour Health Detector\nProcess: The player attacks the guard. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou dodge the first two arrows, but as you turn around, you're not quick enough and take one to the left arm. It makes an annoying little ping noise as it passes through your armor. But then the third arrow flies past your head and strikes the stone wall behind you.\n----\nYour Health Detector\nProcess: The player got hit. An arrow is small. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYou jump away from the creature's claws, but they still catch your shoulder and send you spinning to the side. Your sword comes loose from your hand as you fall onto your backside. The creature looms above you, its claws ready to strike again.\n----\nYour Health Detector\nProcess: The player got hit. The creature sounds dangerous. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nYour sword slices deep into the creature's belly, and it lets out an awful gurgle as it tries to bring itself upright again. Its claws scrape along the floor as it falls backwards, slamming into the floor hard enough to make the whole room shake.\n----\nYour Health Detector\nProcess: The player did the attack. The player dodged all attacks. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou swing your sword upwards just in time to block one of the incoming blows, and feel a jolt run up your arm. Your attacker is so close that you can smell its breath, and it snarls angrily at you, trying to force its way inside your guard.\n----\nYour Health Detector\nProcess: The player took damage while blocking. The player blocked damage. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYour opponent's axe smashes into the top of your shoulder, knocking you off balance and forcing you to stagger backwards.\n----\nYour Health Detector\nProcess: The player got hit by the weapon. The attack was successful. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\n"So, what are you doing later?" asks the Princess with a spark in her eyes. "I'm sure we could find something fun for us both." You try to think of a witty reply, but all you manage is some incoherent mumbling. She smiles at you and walks away, leaving you alone once more.\n----\nYour Health Detector\nProcess: The player talked to the princess. The player dodged all damage. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou duck under the blow aimed at your head and step forward, swinging your hammer at the goblin's legs. It stumbles sideways but doesn't let go of its weapon, which brings you face to face with it.\n----\nYour Health Detector\nProcess: The player fought the goblin. The goblin died. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nYou roll for your life, but you're not faster than the dragon's breath and end up being scorched by its flame instead. You're thrown clear of the flames, only to be knocked aside by the dragon's tail. As you land heavily on your back, you realize that this isn't going to help your situation any.\n----\nYour Health Detector\nProcess: The player got attacked by the dragon. The attack was successful. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nYour sword slides across the scorpion's carapace, slicing deep into its hide without penetrating too deeply. It snaps its tail at you but misses.\n----\nYour Health Detector\nProcess: The player attacked the scorpion. The scorpion missed its attack on the player. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe drunk runs into you. "Ey, fuck you!" he says before turning around and throwing up on himself again. You grab him by his shirt collar and haul him upright again, giving him a shake to try and make him focus on your words rather than his puke-filled mouth. "Listen here," you say slowly and clearly, but he gives you a right hook.\n----\nYour Health Detector\nProcess: The player got attacked by the drunkard. The attack is successful. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nThe goblin's blade cuts deep into your flesh, and blood spills over your armor as it bites deeper, tearing open your skin like butter made from raw meat. You can hear bones cracking within your armor as you struggle to keep hold of your weapon, even as the pain becomes unbearable.\n----\nYour Health Detector\nProcess: The player was hit by an enemy weapon. The enemy was a goblin. The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nThe annoying village child screams at you again as she kicks your shins with her bare feet and tries to trip you up as you move through town.\n----\nYour Health Detector\nProcess: The player was attacked by a small child. A child is weak. The damage is low.\nPlayer Damage Taken: low`,
+      `***\nYou raise your shield up just in time to stop the sword strike aimed at your chest and knock it aside with a loud clang! You take a step forward, raising your own blade as another guard steps up beside his injured companion.\n----\nYour Health Detector\nProcess: The player fought another guard. The player defeated another guard in melee combat. The damage is none.\nPlayer Damage Taken: none`,
+      `***\n"What do we have here?" asks the man with his hand outstretched towards you. "Looks like we caught ourselves a pretty little thief." He takes your dagger from you as his companion approaches with his sword raised high above his head.\n----\nYour Health Detector\nProcess: Nobody attacked anybody else or did anything else interesting. There is no change in state or status information. The damage is none.\nPlayer Damage Taken: none`,
+      `***\nThe wizard points with his staff at you, chanting a spell as he does so. A ball of fire forms at his fingertip, and it flies through the air straight towards you! You're just able to dive out of the way in time as it explodes against the stone wall behind you, showering sparks everywhere and blasting your away.\n----\nYour Health Detector\nProcess: The wizard cast a spell at the player. The wizard's spell hit the player. The damage is high.\nPlayer Damage Taken: high`,
+      `***\nThe guardsman's sword strikes home, driving through your armor and sinking deep into your side with an agonizing stab that nearly knocks the breath from you entirely. You cry out in pain as he withdraws his blade and drives it in again, cutting further into your flesh as blood pours down over your breastplate and onto the floor beneath you.\n----\nYour Health Detector\nProcess: The player was attacked by a guardsman's weapon while wearing light armor or unarmored (unarmored). The damage is medium.\nPlayer Damage Taken: medium`,
+      `***\nYour sword slices through the goblin's neck with ease, severing its spine in one smooth movement, and leaving a gurgling mess behind you as it falls to the floor, twitching violently before dying completely.\n----\nYour Health Detector\nProcess: The player killed a goblin with their sword successfully. The damage is none.\nPlayer Damage Taken: none`,
     ],
   });
   const [damageDetector, setDamageDetector] = useState({
@@ -777,6 +777,7 @@ export default function Home() {
     "move to",
     "travel to",
     "enter the",
+    "check location",
   ]);
   const [map, setMap] = useState([
     {
@@ -810,7 +811,7 @@ export default function Home() {
   // Main Settings
   const [model, setModel] = useState("cassandra-lit-6-9b");
   const [models, setModels] = useState("GooseAI");
-  const [evalModel, setEvalModel] = useState("cassandra-lit-6-9b");
+  const [evalModel, setEvalModel] = useState("clio-v1");
 
   const [verbosity, setVerbosity] = useState(0);
   const [verbosityValue, setVerbosityValue] = useState(null);
@@ -830,6 +831,11 @@ export default function Home() {
   const [frequencyP, setFrequencyP] = useState(0);
   const [repetitionPS, setRepetitionPS] = useState(0.09);
   const [repetitionPR, setRepetitionPR] = useState(2048);
+  const [cfg_scale, setCfg_scale] = useState(0.0);
+  const [phrase_rep_pen, setPhrase_rep_pen] = useState("very_aggressive");
+  const [top_g, setTop_g] = useState(1.0);
+  const [mirostat_tau, setMirostat_tau] = useState(0.0);
+  const [mirostat_lr, setMirostat_lr] = useState(0.0);
   const [orderItems, setOrderItems] = useState([
     { name: "Nucleus", active: true, value: 2 },
     { name: "Top-K", active: true, value: 1 },
@@ -837,6 +843,9 @@ export default function Home() {
     { name: "Temperature", active: true, value: 0 },
     { name: "Top-A", active: false, value: 4 },
     { name: "Typical Sampling", active: false, value: 5 },
+    { name: "CFG", active: false, value: 6 },
+    { name: "Top-G", active: false, value: 7 },
+    { name: "Mirostat", active: false, value: 8 },
   ]);
   const [evalSettings, setEvalSettings] = useState({
     tokens: 100,
@@ -896,6 +905,11 @@ export default function Home() {
     frequencyP,
     repetitionPS,
     repetitionPR,
+    cfg_scale,
+    phrase_rep_pen,
+    top_g,
+    mirostat_lr,
+    mirostat_tau,
     orderItems,
     verbosity,
     verbosityValue,
@@ -940,6 +954,11 @@ export default function Home() {
         frequencyP,
         repetitionPS,
         repetitionPR,
+        cfg_scale,
+        phrase_rep_pen,
+        top_g,
+        mirostat_lr,
+        mirostat_tau,
         orderItems,
         verbosity,
         verbosityValue,
@@ -991,6 +1010,11 @@ export default function Home() {
         frequencyP,
         repetitionPS,
         repetitionPR,
+        cfg_scale,
+        phrase_rep_pen,
+        top_g,
+        mirostat_lr,
+        mirostat_tau,
         orderItems,
         verbosity,
         verbosityValue,
@@ -1031,6 +1055,11 @@ export default function Home() {
     setFrequencyP(save.state.frequencyP);
     setRepetitionPS(save.state.repetitionPS);
     setRepetitionPR(save.state.repetitionPR);
+    setCfg_scale(save.state.cfg_scale);
+    setPhrase_rep_pen(save.state.phrase_rep_pen);
+    setTop_g(save.state.top_g);
+    setMirostat_lr(save.state.mirostat_lr);
+    setMirostat_tau(save.state.mirostat_tau);
     setOrderItems(save.state.orderItems);
     setVerbosity(save.state.verbosity);
     setVerbosityValue(save.state.verbosityValue);
@@ -1064,6 +1093,11 @@ export default function Home() {
     // setFrequencyP(0);
     // setRepetitionPS(0);
     // setRepetitionPR(0);
+    // setCfg_scale(0);
+    // setPhrase_rep_pen("Off");
+    // setTop_g(0);
+    // setMirostat_lr(0);
+    // setMirostat_tau(0);
     // setOrderItems([
     //   { name: "Nucleus", active: true, value: 2 },
     //   { name: "Top-K", active: true, value: 1 },
@@ -1071,7 +1105,11 @@ export default function Home() {
     //   { name: "Temperature", active: true, value: 0 },
     //   { name: "Top-A", active: false, value: 4 },
     //   { name: "Typical Sampling", active: false, value: 5 },
+    //   { name: "CFG", active: false, value: 6 },
+    //   { name: "Top-G", active: false, value: 7 },
+    //   { name: "Mirostat", active: false, value: 8 },
     // ]);
+
     setVerbosity(2);
     setScore(0);
     setHighScore(0);
@@ -1242,8 +1280,7 @@ export default function Home() {
           setMessage(`You used ${check.item.name}!`);
           setMessageOpen(true);
           item = check.item;
-        }
-        if (ability) {
+        } else if (ability) {
           // if ability is used, take the energy cost from the player
         }
       } else if (pick) {
@@ -1318,6 +1355,7 @@ export default function Home() {
         // move to existing location
       } else if (newLocation) {
         // move to new location
+        console.log("New location");
       }
     }
     let key;
@@ -1326,7 +1364,7 @@ export default function Home() {
     } else {
       key = localStorage.getItem("gooseai-key");
     }
-
+    console.log(phrase_rep_pen);
     const response = await axios
       .post("/api/generate", {
         story,
@@ -1355,6 +1393,11 @@ export default function Home() {
           order: orderItems,
           verbosity,
           verbosityValue,
+          cfg_scale,
+          phrase_rep_pen,
+          top_g,
+          mirostat_tau,
+          mirostat_lr,
         },
         extra: {
           equipment,
@@ -1401,7 +1444,8 @@ export default function Home() {
       evalStory(
         loreFinder[genre],
         story,
-        lastOutput + "\n----\nLore Finder\nProcess:",
+        lastOutput +
+          "\n----\n{ Write the lore about something special and interesting if there is anything. Ignore normal or everyday stuff. }\nLore Finder\nProcess:",
         "Lore Finder"
       ).then((res) => {
         // logic for lore creation
@@ -1575,11 +1619,12 @@ export default function Home() {
     const response = await evalStory(
       damageFinder[genre],
       story,
-      lastOutput + "\n----\nPlayer Health Detector\nProcess:",
+      lastOutput +
+        "\n----\n{ Find the damage that the player, you, takes, ignore everyone else's damge. }\nYour Health Detector\nProcess:",
       "Lore Finder"
     );
     console.log(response);
-    if (!response.includes("Damage:")) {
+    if (!response.includes("Damage Taken:")) {
       return false;
     }
     // get the "Damage:" line
@@ -1712,7 +1757,7 @@ export default function Home() {
           score={score}
           highScore={highScore}
           location={locationName}
-          setLocation={setLocation}
+          setLocation={setLocationName}
           health={health}
           setOpenStats={setOpenStats}
           stats={stats}
@@ -1733,7 +1778,16 @@ export default function Home() {
           setModels={setModels}
           openAbilities={openAbilities}
           setOpenAbilities={setOpenAbilities}
-          q
+          cfg_scale={cfg_scale}
+          setCfg_scale={setCfg_scale}
+          phrase_rep_pen={phrase_rep_pen}
+          setPhrase_rep_pen={setPhrase_rep_pen}
+          top_g={top_g}
+          setTop_g={setTop_g}
+          mirostat_tau={mirostat_tau}
+          setMirostat_tau={setMirostat_tau}
+          mirostat_lr={mirostat_lr}
+          setMirostat_lr={setMirostat_lr}
         />
         <Lore
           lore={lore}

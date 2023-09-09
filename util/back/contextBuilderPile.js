@@ -1,10 +1,8 @@
 import Tokenizer from "./tokenizers/PileTokenizer";
 import TokenizerService from "./tokenizers/gptTokenizer";
 const modelContextSize = {
-  "euterpe-v2": 2048,
-  "krake-v2": 2048,
-  "cassandra-lit-6-9b": 2048,
-  "cassandra-lit-2-8b": 2048,
+  "kayra-v1": 8000,
+  "clio-v1": 8000,
 };
 export default function contextBuilderPile(
   story,
@@ -271,7 +269,7 @@ export default function contextBuilderPile(
     memoryContext +
     profileContext +
     loreContext +
-    "***\n" +
+    "***\n[ Style: text-adventure ]\n" +
     locationContext +
     context +
     inputContext +
@@ -304,5 +302,6 @@ export default function contextBuilderPile(
   // return context
   console.log(tokens);
   console.log(context);
+  console.log("<ENDOFCONTEXT>");
   return context;
 }
