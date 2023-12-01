@@ -129,8 +129,8 @@ export default function Stats({
         >
           <Tab label="Stats" className={styles.tab} />
           <Tab label="You" className={styles.tab} />
+          <Tab label="Skills" className={styles.tab} />
           <Tab label="Settings" className={styles.tab} />
-          <Tab label="Abilities" className={styles.tab} />
         </Tabs>
         {tab === 0 && (
           <Box className={styles.tabContainer}>

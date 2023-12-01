@@ -1024,6 +1024,9 @@ export default function Home() {
         equipment,
         stats,
         health,
+        maxHealth,
+        energy,
+        maxEnergy,
         location,
         difficulty,
         stats,
@@ -1068,6 +1071,9 @@ export default function Home() {
     setInventory(save.state.inventory);
     setStats(save.state.stats);
     setHealth(save.state.health);
+    setMaxHealth(save.state.maxHealth);
+    setEnergy(save.state.energy);
+    setMaxEnergy(save.state.maxEnergy);
     setLocation(save.state.location);
     setDifficulty(save.state.difficulty);
     setStats(save.state.stats);
@@ -1122,6 +1128,9 @@ export default function Home() {
     });
     setStats(defaultStats);
     setHealth(100);
+    setMaxHealth(100);
+    setEnergy(100);
+    setMaxEnergy(100);
     setLocation("Home");
     setDifficulty(2);
     setMessageNumber(0);
@@ -1466,7 +1475,19 @@ export default function Home() {
         keys = keys.split(", ");
         console.log("PROCESS:", process);
         console.log("KEYS:", keys);
-        if (keys[0] !== "none") {
+        const none = [
+          "none",
+          "None",
+          "NONE",
+          "none.",
+          "None.",
+          "NONE.",
+          "None is special",
+          "None is special.",
+          "none is special",
+          "none is special.",
+        ];
+        if (!none.includes(keys[0])) {
           keys.forEach((key) => {
             generateLores(key, lastOutput);
           });
@@ -1759,6 +1780,7 @@ export default function Home() {
           location={locationName}
           setLocation={setLocationName}
           health={health}
+          energy={energy}
           setOpenStats={setOpenStats}
           stats={stats}
           setStats={setStats}

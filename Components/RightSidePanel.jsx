@@ -75,6 +75,7 @@ export default function RightSidePanel({
   location,
   setLocation,
   health,
+  energy,
   setOpenStats,
   difficulty,
   setDifficulty,
@@ -205,6 +206,11 @@ export default function RightSidePanel({
                     Your health is important, take care of yourself!
                   </div>
                   <HealthBar health={health} />
+                  <div className={styles.title}>Energy</div>
+                  <div className={styles.description}>
+                    You need energy to do stuff, don't forget to eat!
+                  </div>
+                  <HealthBar health={energy} />
                 </div>
                 <div className={styles.container}>
                   <div className={styles.title}>Location</div>
@@ -617,7 +623,7 @@ export default function RightSidePanel({
                   value={repetitionPR}
                   setValue={setRepetitionPR}
                   min={0}
-                  max={4096}
+                  max={8000}
                   step={1}
                   model={model}
                 />
